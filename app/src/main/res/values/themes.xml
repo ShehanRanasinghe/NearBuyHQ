@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme - Light theme with coral/blue accent -->
     <style name="Theme.NearBuyHQ" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color - Coral Red -->
@@ -14,5 +14,15 @@
         <item name="android:navigationBarColor">@color/bg_white</item>
         <!-- Window background - Light grey -->
         <item name="android:windowBackground">@color/bg_light_grey</item>
+    </style>
+
+    <!-- Splash Screen – full screen, deep blue -->
+    <style name="Theme.NearBuyHQ.Splash" parent="Theme.NearBuyHQ">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/deep_blue</item>
+        <item name="android:navigationBarColor">@color/deep_blue_dark</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
     </style>
 </resources>

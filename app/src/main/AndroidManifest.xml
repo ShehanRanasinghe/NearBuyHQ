@@ -15,9 +15,13 @@
         <activity
             android:name=".Dashboard"
             android:exported="false" />
+
+        <!-- SPLASH SCREEN – Main launcher -->
         <activity
-            android:name=".Welcome"
-            android:exported="true">
+            android:name=".SplashScreen"
+            android:exported="true"
+            android:theme="@style/Theme.NearBuyHQ.Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,8 +29,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Welcome"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".Login"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

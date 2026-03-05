@@ -56,4 +56,8 @@
 
     <!-- Bottom Nav -->
     <color name="nav_inactive">#FF9CA3AF</color>
+
+    <!-- Splash screen additional colors -->
+    <color name="white_alpha_20">#33FFFFFF</color>
+    <color name="white_alpha_10">#1AFFFFFF</color>
 </resources>

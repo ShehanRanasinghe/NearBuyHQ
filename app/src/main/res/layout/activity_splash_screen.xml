@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_splash"
+    tools:context=".SplashScreen">
+
+    <!-- Decorative large circle – top right -->
+    <View
+        android:id="@+id/circle_top_right"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:background="@drawable/circle_accent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="-60dp"
+        android:layout_marginEnd="-60dp" />
+
+    <!-- Decorative medium circle – bottom left -->
+    <View
+        android:id="@+id/circle_bottom_left"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:background="@drawable/circle_accent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="-40dp"
+        android:layout_marginStart="-40dp" />
+
+    <!-- Decorative small circle – bottom right -->
+    <View
+        android:id="@+id/circle_bottom_right"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:background="@drawable/circle_accent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="120dp"
+        android:layout_marginEnd="24dp" />
+
+    <!-- Center group: logo + name + tagline -->
+    <LinearLayout
+        android:id="@+id/centerGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Logo art: concentric glow rings + sparkle dots + logo image -->
+        <FrameLayout
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center">
+
+            <!-- Outermost faint ring -->
+            <View
+                android:layout_width="210dp"
+                android:layout_height="210dp"
+                android:background="@drawable/bg_logo_ring_outer"
+                android:layout_gravity="center" />
+
+            <!-- Mid glow ring -->
+            <View
+                android:layout_width="168dp"
+                android:layout_height="168dp"
+                android:background="@drawable/bg_logo_ring_mid"
+                android:layout_gravity="center" />
+
+            <!-- Inner solid circle behind logo -->
+            <View
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:background="@drawable/bg_logo_circle"
+                android:layout_gravity="center" />
+
+            <!-- Sparkle dot – top left -->
+            <View
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:background="@drawable/dot_coral"
+                android:layout_gravity="top|start"
+                android:layout_marginTop="28dp"
+                android:layout_marginStart="30dp" />
+
+            <!-- Sparkle dot – top right -->
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:background="@drawable/dot_white"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="26dp" />
+
+            <!-- Sparkle dot – bottom left -->
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:background="@drawable/dot_white"
+                android:layout_gravity="bottom|start"
+                android:layout_marginBottom="36dp"
+                android:layout_marginStart="24dp" />
+
+            <!-- Sparkle dot – bottom right coral -->
+            <View
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_coral"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="30dp"
+                android:layout_marginEnd="28dp" />
+
+            <!-- Sparkle dot – mid left -->
+            <View
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:background="@drawable/dot_white"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="8dp" />
+
+            <!-- Sparkle dot – mid right -->
+            <View
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:background="@drawable/dot_coral"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Logo image centered -->
+            <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:src="@drawable/nearbuy_logo"
+                android:contentDescription="NearBuyHQ Logo"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter" />
+
+        </FrameLayout>
+
+        <!-- App name -->
+        <TextView
+            android:id="@+id/tvAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.05"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center" />
+
+        <!-- Red underline accent bar -->
+        <View
+            android:id="@+id/accentBar"
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:background="#FF5A4F"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center" />
+
+        <!-- Tagline -->
+        <TextView
+            android:id="@+id/tvTagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_tagline"
+            android:textColor="#B0C8E0"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:letterSpacing="0.03"
+            android:layout_marginTop="12dp"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+    <!-- Loading indicator pinned near the bottom -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminateTint="@color/coral_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="72dp" />
+
+    <!-- Version label -->
+    <TextView
+        android:id="@+id/tvVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v1.0"
+        android:textColor="#60FFFFFF"
+        android:textSize="11sp"
+        android:fontFamily="sans-serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="28dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

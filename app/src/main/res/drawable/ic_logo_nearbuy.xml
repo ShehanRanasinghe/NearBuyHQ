@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+
+    <!-- Outer glow circle -->
+    <path
+        android:fillColor="#33FFFFFF"
+        android:pathData="M48,4 C72.3,4 92,23.7 92,48 C92,72.3 72.3,92 48,92 C23.7,92 4,72.3 4,48 C4,23.7 23.7,4 48,4Z" />
+
+    <!-- Inner circle -->
+    <path
+        android:fillColor="#1AFFFFFF"
+        android:pathData="M48,12 C67.9,12 84,28.1 84,48 C84,67.9 67.9,84 48,84 C28.1,84 12,67.9 12,48 C12,28.1 28.1,12 48,12Z" />
+
+    <!-- Shopping bag handle -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M36,40 C36,31 39,25 48,25 C57,25 60,31 60,40" />
+
+    <!-- Shopping bag body -->
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M30,40 L66,40 L63,66 C62.5,69.5 59.5,72 56,72 L40,72 C36.5,72 33.5,69.5 33,66 Z" />
+
+    <!-- Bag stripe lines -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:pathData="M38,50 L58,50" />
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:pathData="M38,57 L58,57" />
+
+    <!-- Location pin on bag -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,42 C50.2,42 52,43.8 52,46 C52,49 48,54 48,54 C48,54 44,49 44,46 C44,43.8 45.8,42 48,42Z" />
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M48,44.5 C49.1,44.5 50,45.4 50,46.5 C50,47.6 49.1,48.5 48,48.5 C46.9,48.5 46,47.6 46,46.5 C46,45.4 46.9,44.5 48,44.5Z" />
+
+</vector>
+

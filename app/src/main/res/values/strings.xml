@@ -111,4 +111,7 @@
     <string name="rank_1">1</string>
     <string name="rank_2">2</string>
     <string name="rank_3">3</string>
+
+    <!-- Splash Screen -->
+    <string name="app_tagline">Your Neighbourhood, Delivered.</string>
 </resources>
