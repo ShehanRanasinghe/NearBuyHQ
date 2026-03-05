@@ -15,12 +15,13 @@ import androidx.core.content.ContextCompat;
 public class Dashboard extends AppCompatActivity {
 
     // Bottom navigation views
-    private LinearLayout navDashboard, navShops, navProducts, navOrders, navProfile;
-    private ImageView navDashboardIcon, navShopsIcon, navProductsIcon, navOrdersIcon, navProfileIcon;
-    private TextView navDashboardText, navShopsText, navProductsText, navOrdersText, navProfileText;
+    private LinearLayout navDashboard, navProducts, navOrders, navAnalytics, navProfile;
+    private ImageView navDashboardIcon, navProductsIcon, navOrdersIcon, navAnalyticsIcon, navProfileIcon;
+    private TextView navDashboardText, navProductsText, navOrdersText, navAnalyticsText, navProfileText;
 
     // Quick action buttons
-    private LinearLayout btnAddShop, btnAddProduct, btnManageOrders, btnManagePrices, btnDeliveries, btnSettings;
+    private LinearLayout btnAddProduct, btnManageInventory, btnCreatePromotion;
+    private LinearLayout btnManageOrders, btnUpdateLocation, btnViewReports;
 
     // Top bar icons
     private ImageView btnSearch, btnNotifications, btnProfile;
@@ -29,11 +30,11 @@ public class Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set status bar color to match the dark theme
+        // Set status bar color to match the deep blue header
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.dashboard_surface));
-        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.nav_bar_bg));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.deep_blue));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bg_white));
 
         setContentView(R.layout.activity_dashboard);
 
@@ -51,30 +52,30 @@ public class Dashboard extends AppCompatActivity {
     private void initViews() {
         // Bottom navigation
         navDashboard = findViewById(R.id.navDashboard);
-        navShops = findViewById(R.id.navShops);
         navProducts = findViewById(R.id.navProducts);
         navOrders = findViewById(R.id.navOrders);
+        navAnalytics = findViewById(R.id.navAnalytics);
         navProfile = findViewById(R.id.navProfile);
 
         navDashboardIcon = findViewById(R.id.navDashboardIcon);
-        navShopsIcon = findViewById(R.id.navShopsIcon);
         navProductsIcon = findViewById(R.id.navProductsIcon);
         navOrdersIcon = findViewById(R.id.navOrdersIcon);
+        navAnalyticsIcon = findViewById(R.id.navAnalyticsIcon);
         navProfileIcon = findViewById(R.id.navProfileIcon);
 
         navDashboardText = findViewById(R.id.navDashboardText);
-        navShopsText = findViewById(R.id.navShopsText);
         navProductsText = findViewById(R.id.navProductsText);
         navOrdersText = findViewById(R.id.navOrdersText);
+        navAnalyticsText = findViewById(R.id.navAnalyticsText);
         navProfileText = findViewById(R.id.navProfileText);
 
         // Quick actions
-        btnAddShop = findViewById(R.id.btnAddShop);
         btnAddProduct = findViewById(R.id.btnAddProduct);
+        btnManageInventory = findViewById(R.id.btnManageInventory);
+        btnCreatePromotion = findViewById(R.id.btnCreatePromotion);
         btnManageOrders = findViewById(R.id.btnManageOrders);
-        btnManagePrices = findViewById(R.id.btnManagePrices);
-        btnDeliveries = findViewById(R.id.btnDeliveries);
-        btnSettings = findViewById(R.id.btnSettings);
+        btnUpdateLocation = findViewById(R.id.btnUpdateLocation);
+        btnViewReports = findViewById(R.id.btnViewReports);
 
         // Top bar
         btnSearch = findViewById(R.id.btnSearch);
@@ -89,15 +90,15 @@ public class Dashboard extends AppCompatActivity {
 
             if (id == R.id.navDashboard) {
                 setNavActive(navDashboardIcon, navDashboardText);
-            } else if (id == R.id.navShops) {
-                setNavActive(navShopsIcon, navShopsText);
-                Toast.makeText(this, "Shops", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.navProducts) {
                 setNavActive(navProductsIcon, navProductsText);
                 Toast.makeText(this, "Products", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.navOrders) {
                 setNavActive(navOrdersIcon, navOrdersText);
                 Toast.makeText(this, "Orders", Toast.LENGTH_SHORT).show();
+            } else if (id == R.id.navAnalytics) {
+                setNavActive(navAnalyticsIcon, navAnalyticsText);
+                Toast.makeText(this, "Analytics", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.navProfile) {
                 setNavActive(navProfileIcon, navProfileText);
                 Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
@@ -105,54 +106,54 @@ public class Dashboard extends AppCompatActivity {
         };
 
         navDashboard.setOnClickListener(navClickListener);
-        navShops.setOnClickListener(navClickListener);
         navProducts.setOnClickListener(navClickListener);
         navOrders.setOnClickListener(navClickListener);
+        navAnalytics.setOnClickListener(navClickListener);
         navProfile.setOnClickListener(navClickListener);
     }
 
     private void resetNavSelection() {
-        int inactiveColor = ContextCompat.getColor(this, R.color.text_hint_dark);
+        int inactiveColor = ContextCompat.getColor(this, R.color.nav_inactive);
 
         navDashboardIcon.setColorFilter(inactiveColor);
-        navShopsIcon.setColorFilter(inactiveColor);
         navProductsIcon.setColorFilter(inactiveColor);
         navOrdersIcon.setColorFilter(inactiveColor);
+        navAnalyticsIcon.setColorFilter(inactiveColor);
         navProfileIcon.setColorFilter(inactiveColor);
 
         navDashboardText.setTextColor(inactiveColor);
-        navShopsText.setTextColor(inactiveColor);
         navProductsText.setTextColor(inactiveColor);
         navOrdersText.setTextColor(inactiveColor);
+        navAnalyticsText.setTextColor(inactiveColor);
         navProfileText.setTextColor(inactiveColor);
 
         navDashboardText.setTypeface(null);
-        navShopsText.setTypeface(null);
         navProductsText.setTypeface(null);
         navOrdersText.setTypeface(null);
+        navAnalyticsText.setTypeface(null);
         navProfileText.setTypeface(null);
     }
 
     private void setNavActive(ImageView icon, TextView text) {
-        int activeColor = ContextCompat.getColor(this, R.color.amber_primary);
+        int activeColor = ContextCompat.getColor(this, R.color.coral_primary);
         icon.setColorFilter(activeColor);
         text.setTextColor(activeColor);
         text.setTypeface(null, android.graphics.Typeface.BOLD);
     }
 
     private void setupQuickActions() {
-        btnAddShop.setOnClickListener(v ->
-                Toast.makeText(this, "Add Shop", Toast.LENGTH_SHORT).show());
         btnAddProduct.setOnClickListener(v ->
                 Toast.makeText(this, "Add Product", Toast.LENGTH_SHORT).show());
+        btnManageInventory.setOnClickListener(v ->
+                Toast.makeText(this, "Manage Inventory", Toast.LENGTH_SHORT).show());
+        btnCreatePromotion.setOnClickListener(v ->
+                Toast.makeText(this, "Create Promotion", Toast.LENGTH_SHORT).show());
         btnManageOrders.setOnClickListener(v ->
-                Toast.makeText(this, "Manage Orders", Toast.LENGTH_SHORT).show());
-        btnManagePrices.setOnClickListener(v ->
-                Toast.makeText(this, "Manage Prices", Toast.LENGTH_SHORT).show());
-        btnDeliveries.setOnClickListener(v ->
-                Toast.makeText(this, "Deliveries", Toast.LENGTH_SHORT).show());
-        btnSettings.setOnClickListener(v ->
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, "View Orders", Toast.LENGTH_SHORT).show());
+        btnUpdateLocation.setOnClickListener(v ->
+                Toast.makeText(this, "Update Shop Location", Toast.LENGTH_SHORT).show());
+        btnViewReports.setOnClickListener(v ->
+                Toast.makeText(this, "View Reports", Toast.LENGTH_SHORT).show());
     }
 
     private void setupTopBarActions() {

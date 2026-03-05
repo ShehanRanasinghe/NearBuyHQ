@@ -1,33 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- NearBuyHQ Dashboard Theme Colors -->
-    <color name="dashboard_bg">#FF121212</color>
-    <color name="dashboard_surface">#FF1E1E1E</color>
-    <color name="dashboard_card">#FF2A2A2A</color>
-    <color name="dashboard_card_border">#FF3A3A3A</color>
-    <color name="amber_primary">#FFF5A623</color>
-    <color name="amber_dark">#FFE8951A</color>
-    <color name="amber_light">#FFFFC857</color>
-    <color name="amber_surface">#33F5A623</color>
-    <color name="text_primary_dark">#FFFFFFFF</color>
-    <color name="text_secondary_dark">#B3FFFFFF</color>
-    <color name="text_hint_dark">#66FFFFFF</color>
-    <color name="nav_bar_bg">#FF1A1A1A</color>
-    <color name="divider_dark">#1AFFFFFF</color>
-    <color name="stat_green">#FF4CAF50</color>
-    <color name="stat_green_bg">#1A4CAF50</color>
-    <color name="stat_blue">#FF2196F3</color>
-    <color name="stat_blue_bg">#1A2196F3</color>
-    <color name="stat_orange">#FFFF9800</color>
-    <color name="stat_orange_bg">#1AFF9800</color>
-    <color name="stat_red">#FFF44336</color>
-    <color name="stat_red_bg">#1AF44336</color>
+    <!-- ===== NearBuyHQ Theme Colors ===== -->
+
+    <!-- Primary Accent - Coral Red -->
+    <color name="coral_primary">#FFFF5A4F</color>
+    <color name="coral_dark">#FFE04840</color>
+    <color name="coral_light">#FFFF8A80</color>
+    <color name="coral_surface">#1AFF5A4F</color>
+
+    <!-- Header - Deep Blue -->
+    <color name="deep_blue">#FF2E4F6F</color>
+    <color name="deep_blue_dark">#FF1E3A55</color>
+    <color name="deep_blue_light">#FF3D6A8E</color>
+
+    <!-- Backgrounds -->
+    <color name="bg_light_grey">#FFF2F3F5</color>
+    <color name="bg_white">#FFFFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_dark_primary">#FF1A1A2E</color>
+    <color name="text_dark_secondary">#FF6B7280</color>
+    <color name="text_dark_hint">#FF9CA3AF</color>
+    <color name="text_on_dark_secondary">#B3FFFFFF</color>
+
+    <!-- Divider -->
+    <color name="divider_dark">#FFE5E7EB</color>
+
+    <!-- Stat Card Colors -->
+    <color name="stat_green">#FF10B981</color>
+    <color name="stat_green_bg">#1A10B981</color>
+    <color name="stat_blue">#FF3B82F6</color>
+    <color name="stat_blue_bg">#1A3B82F6</color>
+    <color name="stat_orange">#FFF59E0B</color>
+    <color name="stat_orange_bg">#1AF59E0B</color>
+    <color name="stat_red">#FFEF4444</color>
+    <color name="stat_red_bg">#1AEF4444</color>
+
+    <!-- Status Colors -->
+    <color name="status_open">#FF10B981</color>
+    <color name="status_open_bg">#1A10B981</color>
+    <color name="status_pending">#FFF59E0B</color>
+    <color name="status_pending_bg">#1AF59E0B</color>
+    <color name="status_processing">#FF3B82F6</color>
+    <color name="status_processing_bg">#1A3B82F6</color>
+    <color name="status_completed">#FF10B981</color>
+    <color name="status_completed_bg">#1A10B981</color>
+
+    <!-- Alert Colors -->
+    <color name="alert_warning">#FFF59E0B</color>
+    <color name="alert_warning_bg">#1AF59E0B</color>
+    <color name="alert_danger">#FFEF4444</color>
+    <color name="alert_danger_bg">#1AEF4444</color>
+
+    <!-- Bottom Nav -->
+    <color name="nav_inactive">#FF9CA3AF</color>
 </resources>
