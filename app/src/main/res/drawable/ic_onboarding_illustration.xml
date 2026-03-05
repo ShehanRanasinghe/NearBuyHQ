@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="280dp"
+    android:height="220dp"
+    android:viewportWidth="280"
+    android:viewportHeight="220">
+
+    <!-- Background glow ellipse -->
+    <path
+        android:fillColor="#1AFF5A4F"
+        android:pathData="M140,110 C200,110 240,85 240,60 C240,35 200,15 140,15 C80,15 40,35 40,60 C40,85 80,110 140,110Z" />
+
+    <!-- Store building -->
+    <path
+        android:fillColor="#1E3A52"
+        android:pathData="M55,160 L225,160 L225,80 L55,80 Z" />
+
+    <!-- Store roof -->
+    <path
+        android:fillColor="#2E4F6F"
+        android:pathData="M45,80 L235,80 L235,68 L45,68 Z" />
+
+    <!-- Roof triangle top -->
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M140,40 L235,68 L45,68 Z" />
+
+    <!-- Roof ridge cap -->
+    <path
+        android:fillColor="#E04840"
+        android:pathData="M132,40 L148,40 L148,68 L132,68 Z" />
+
+    <!-- Store sign board -->
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M80,95 L200,95 L200,120 L80,120 Z"
+        android:strokeColor="#E04840"
+        android:strokeWidth="1" />
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M80,95 L200,95 L200,120 L80,120 Z" />
+
+    <!-- Sign board text lines (decorative) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M95,104 L165,104 L165,107 L95,107 Z" />
+    <path
+        android:fillColor="#FFD4D1"
+        android:pathData="M95,111 L145,111 L145,114 L95,114 Z" />
+
+    <!-- Door -->
+    <path
+        android:fillColor="#0D2438"
+        android:pathData="M116,160 L164,160 L164,128 C164,125 162,123 159,123 L121,123 C118,123 116,125 116,128 Z" />
+
+    <!-- Door handle -->
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M150,143 L155,143 L155,145 L150,145 Z" />
+
+    <!-- Left window -->
+    <path
+        android:fillColor="#B0D4F1"
+        android:pathData="M68,128 L104,128 L104,155 L68,155 Z" />
+    <path
+        android:fillColor="#2E4F6F"
+        android:pathData="M84,128 L86,128 L86,155 L84,155 Z" />
+    <path
+        android:fillColor="#2E4F6F"
+        android:pathData="M68,140 L104,140 L104,142 L68,142 Z" />
+
+    <!-- Right window -->
+    <path
+        android:fillColor="#B0D4F1"
+        android:pathData="M176,128 L212,128 L212,155 L176,155 Z" />
+    <path
+        android:fillColor="#2E4F6F"
+        android:pathData="M192,128 L194,128 L194,155 L192,155 Z" />
+    <path
+        android:fillColor="#2E4F6F"
+        android:pathData="M176,140 L212,140 L212,142 L176,142 Z" />
+
+    <!-- Ground / pavement -->
+    <path
+        android:fillColor="#253F5A"
+        android:pathData="M30,160 L250,160 L250,170 L30,170 Z" />
+    <path
+        android:fillColor="#1E3A52"
+        android:pathData="M20,170 L260,170 L260,178 L20,178 Z" />
+
+    <!-- Left tree trunk -->
+    <path
+        android:fillColor="#6B4226"
+        android:pathData="M35,158 L39,158 L39,145 L35,145 Z" />
+    <!-- Left tree leaves -->
+    <path
+        android:fillColor="#2D9E5F"
+        android:pathData="M37,130 C37,130 22,138 22,148 C22,155 28,158 37,158 C46,158 52,155 52,148 C52,138 37,130 37,130Z" />
+    <path
+        android:fillColor="#38C272"
+        android:pathData="M37,118 C37,118 26,128 26,137 C26,143 30,146 37,146 C44,146 48,143 48,137 C48,128 37,118 37,118Z" />
+
+    <!-- Right tree trunk -->
+    <path
+        android:fillColor="#6B4226"
+        android:pathData="M241,158 L245,158 L245,145 L241,145 Z" />
+    <!-- Right tree leaves -->
+    <path
+        android:fillColor="#2D9E5F"
+        android:pathData="M243,130 C243,130 228,138 228,148 C228,155 234,158 243,158 C252,158 258,155 258,148 C258,138 243,130 243,130Z" />
+    <path
+        android:fillColor="#38C272"
+        android:pathData="M243,118 C243,118 232,128 232,137 C232,143 236,146 243,146 C250,146 254,143 254,137 C254,128 243,118 243,118Z" />
+
+    <!-- Shopping cart icon (top right accent) -->
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M218,30 L230,30 L234,48 L218,48 Z" />
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M215,30 L216,30 L217,25 L213,25 Z" />
+    <path
+        android:fillColor="#FF7B72"
+        android:pathData="M220,52 C220,53.1 220.9,54 222,54 C223.1,54 224,53.1 224,52 C224,50.9 223.1,50 222,50 C220.9,50 220,50.9 220,52Z" />
+    <path
+        android:fillColor="#FF7B72"
+        android:pathData="M229,52 C229,53.1 229.9,54 231,54 C232.1,54 233,53.1 233,52 C233,50.9 232.1,50 231,50 C229.9,50 229,50.9 229,52Z" />
+
+    <!-- Stars / sparkle accents -->
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M60,35 L62,41 L68,41 L63,45 L65,51 L60,47 L55,51 L57,45 L52,41 L58,41 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M200,25 L201.5,29 L206,29 L202.5,31.5 L204,35 L200,32.5 L196,35 L197.5,31.5 L194,29 L198.5,29 Z" />
+    <path
+        android:fillColor="#FFD4D1"
+        android:pathData="M90,22 L91,25 L94,25 L91.5,27 L92.5,30 L90,28.5 L87.5,30 L88.5,27 L86,25 L89,25 Z" />
+
+    <!-- Location pin accent -->
+    <path
+        android:fillColor="#FF5A4F"
+        android:pathData="M140,52 C143.3,52 146,54.7 146,58 C146,63 140,70 140,70 C140,70 134,63 134,58 C134,54.7 136.7,52 140,52Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M138,58 C138,56.9 138.9,56 140,56 C141.1,56 142,56.9 142,58 C142,59.1 141.1,60 140,60 C138.9,60 138,59.1 138,58Z" />
+
+</vector>
+
