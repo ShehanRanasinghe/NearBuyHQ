@@ -1,3 +1,58 @@
 <resources>
     <string name="app_name">NearBuyHQ</string>
+
+    <!-- Dashboard Top Bar -->
+    <string name="admin_panel">Admin Panel</string>
+    <string name="logo_desc">NearBuyHQ Logo</string>
+    <string name="search">Search</string>
+    <string name="notifications">Notifications</string>
+    <string name="profile">Profile</string>
+
+    <!-- Welcome Banner -->
+    <string name="welcome_back">Welcome back,</string>
+    <string name="admin">Admin</string>
+    <string name="dashboard_subtitle">Manage your shops, products &amp; orders from here.</string>
+
+    <!-- Section Titles -->
+    <string name="overview">OVERVIEW</string>
+    <string name="quick_actions">QUICK ACTIONS</string>
+    <string name="recent_activity">RECENT ACTIVITY</string>
+    <string name="view_all">View All</string>
+
+    <!-- Stat Cards -->
+    <string name="stat_zero">0</string>
+    <string name="stat_revenue_zero">$0.00</string>
+    <string name="shops">Shops</string>
+    <string name="products">Products</string>
+    <string name="orders">Orders</string>
+    <string name="revenue">Revenue</string>
+
+    <!-- Quick Actions -->
+    <string name="add_shop">Add Shop</string>
+    <string name="add_product">Add Product</string>
+    <string name="manage_orders">Manage Orders</string>
+    <string name="prices">Prices</string>
+    <string name="manage_prices">Manage Prices</string>
+    <string name="deliveries">Deliveries</string>
+    <string name="settings">Settings</string>
+
+    <!-- Bottom Navigation -->
+    <string name="dashboard">Dashboard</string>
+
+    <!-- Recent Activity (sample data) -->
+    <string name="shop_added_desc">Shop Added</string>
+    <string name="product_added_desc">Product Added</string>
+    <string name="order_desc">Order</string>
+    <string name="price_updated_desc">Price Updated</string>
+    <string name="new_shop_registered">New shop registered</string>
+    <string name="sample_shop_name">FreshMart - Downtown Branch</string>
+    <string name="two_hours_ago">2h ago</string>
+    <string name="new_product_added">New product added</string>
+    <string name="sample_product">Organic Milk 1L - $3.49</string>
+    <string name="five_hours_ago">5h ago</string>
+    <string name="order_completed">Order completed</string>
+    <string name="sample_order">Order #1042 - Delivered</string>
+    <string name="one_day_ago">1d ago</string>
+    <string name="price_updated">Price updated</string>
+    <string name="sample_price_change">White Bread - $2.99 → $2.49</string>
 </resources>
