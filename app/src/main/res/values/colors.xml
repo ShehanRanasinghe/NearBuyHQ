@@ -2,33 +2,33 @@
 <resources>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- ===== NearBuyHQ Theme Colors ===== -->
 
-    <!-- Primary Accent - Coral Red -->
+
+
     <color name="coral_primary">#FFFF5A4F</color>
     <color name="coral_dark">#FFE04840</color>
     <color name="coral_light">#FFFF8A80</color>
     <color name="coral_surface">#1AFF5A4F</color>
 
-    <!-- Header - Deep Blue -->
+
     <color name="deep_blue">#FF2E4F6F</color>
     <color name="deep_blue_dark">#FF1E3A55</color>
     <color name="deep_blue_light">#FF3D6A8E</color>
 
-    <!-- Backgrounds -->
+
     <color name="bg_light_grey">#FFF2F3F5</color>
     <color name="bg_white">#FFFFFFFF</color>
 
-    <!-- Text Colors -->
+
     <color name="text_dark_primary">#FF1A1A2E</color>
     <color name="text_dark_secondary">#FF6B7280</color>
     <color name="text_dark_hint">#FF9CA3AF</color>
     <color name="text_on_dark_secondary">#B3FFFFFF</color>
 
-    <!-- Divider -->
+
     <color name="divider_dark">#FFE5E7EB</color>
 
-    <!-- Stat Card Colors -->
+
     <color name="stat_green">#FF10B981</color>
     <color name="stat_green_bg">#1A10B981</color>
     <color name="stat_blue">#FF3B82F6</color>
@@ -38,7 +38,7 @@
     <color name="stat_red">#FFEF4444</color>
     <color name="stat_red_bg">#1AEF4444</color>
 
-    <!-- Status Colors -->
+
     <color name="status_open">#FF10B981</color>
     <color name="status_open_bg">#1A10B981</color>
     <color name="status_pending">#FFF59E0B</color>
@@ -48,16 +48,16 @@
     <color name="status_completed">#FF10B981</color>
     <color name="status_completed_bg">#1A10B981</color>
 
-    <!-- Alert Colors -->
+
     <color name="alert_warning">#FFF59E0B</color>
     <color name="alert_warning_bg">#1AF59E0B</color>
     <color name="alert_danger">#FFEF4444</color>
     <color name="alert_danger_bg">#1AEF4444</color>
 
-    <!-- Bottom Nav -->
+
     <color name="nav_inactive">#FF9CA3AF</color>
 
-    <!-- Splash screen additional colors -->
+
     <color name="white_alpha_20">#33FFFFFF</color>
     <color name="white_alpha_10">#1AFFFFFF</color>
 

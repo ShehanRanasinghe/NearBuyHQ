@@ -51,18 +51,18 @@ public class OrderList extends AppCompatActivity {
     }
 
     private void loadSampleData() {
-        allOrders.add(new Order("00123", "John Don",     "Pending",    24.50, "Mar 04, 2026"));
-        allOrders.add(new Order("00124", "Sarah Miller", "Processing", 18.00, "Mar 04, 2026"));
-        allOrders.add(new Order("00125", "Carlos Ruiz",  "Delivered",  45.75, "Mar 03, 2026"));
-        allOrders.add(new Order("00126", "Aisha Khan",   "Pending",    12.30, "Mar 03, 2026"));
-        allOrders.add(new Order("00127", "Tom Bradley",  "Delivered",  33.00, "Mar 02, 2026"));
-        allOrders.add(new Order("00128", "Nina Patel",   "Cancelled",   8.90, "Mar 02, 2026"));
-        allOrders.add(new Order("00129", "Lucas Green",  "Processing", 55.20, "Mar 01, 2026"));
-        allOrders.add(new Order("00130", "Emma Wilson",  "Delivered",  29.40, "Mar 01, 2026"));
-        allOrders.add(new Order("00131", "Jake Lee",     "Pending",    16.60, "Feb 28, 2026"));
-        allOrders.add(new Order("00132", "Priya Singh",  "Delivered",  22.10, "Feb 28, 2026"));
-        allOrders.add(new Order("00133", "Omar Hassan",  "Pending",    37.80, "Feb 27, 2026"));
-        allOrders.add(new Order("00134", "Amy Clark",    "Delivered",  14.25, "Feb 27, 2026"));
+        allOrders.add(new Order("00123", "Sanduni Saumya",     "Pending",    24.50, "Mar 04, 2026"));
+        allOrders.add(new Order("00124", "Hiruni Pramodya", "Processing", 18.00, "Mar 04, 2026"));
+        allOrders.add(new Order("00125", "Sithara Kavindi",  "Delivered",  45.75, "Mar 03, 2026"));
+        allOrders.add(new Order("00126", "Thiloka Indiwari",   "Pending",    12.30, "Mar 03, 2026"));
+        allOrders.add(new Order("00127", "Vihangi",  "Delivered",  33.00, "Mar 02, 2026"));
+        allOrders.add(new Order("00128", "Shehan",   "Cancelled",   8.90, "Mar 02, 2026"));
+        allOrders.add(new Order("00129", "Mahi",  "Processing", 55.20, "Mar 01, 2026"));
+        allOrders.add(new Order("00130", "Lakeesha",  "Delivered",  29.40, "Mar 01, 2026"));
+        allOrders.add(new Order("00131", "Abriru",     "Pending",    16.60, "Feb 28, 2026"));
+        allOrders.add(new Order("00132", "Senuka",  "Delivered",  22.10, "Feb 28, 2026"));
+        allOrders.add(new Order("00133", "Wathsal",  "Pending",    37.80, "Feb 27, 2026"));
+        allOrders.add(new Order("00134", "Ayuka",    "Delivered",  14.25, "Feb 27, 2026"));
     }
 
     private void setupRecyclerView() {
