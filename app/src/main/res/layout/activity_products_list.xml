@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#F2F6F5"
-    tools:context=".ProductsActivity">
+    tools:context=".Products_List">
 
 
     <LinearLayout
@@ -400,7 +400,7 @@
         android:paddingBottom="80dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        tools:listitem="@layout/item_product" />
+        tools:listitem="activity_item_product.xml" />
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
