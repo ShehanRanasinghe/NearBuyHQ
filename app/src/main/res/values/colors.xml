@@ -60,4 +60,12 @@
     <!-- Splash screen additional colors -->
     <color name="white_alpha_20">#33FFFFFF</color>
     <color name="white_alpha_10">#1AFFFFFF</color>
+
+    <color name="coral_red">#E03B2F</color>
+    <color name="navy_dark">#1B2D4F</color>
+    <color name="navy_light">#243A62</color>
+    <color name="amber_orange">#F5A623</color>
+    <color name="green_success">#27AE60</color>
+    <color name="gray_text">#9AA0AC</color>
+    <color name="bg_light">#F5F6FA</color>
 </resources>

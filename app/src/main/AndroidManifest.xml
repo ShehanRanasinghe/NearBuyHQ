@@ -13,15 +13,16 @@
         android:theme="@style/Theme.NearBuyHQ"
         tools:targetApi="31">
         <activity
-            android:name=".Dashboard"
+            android:name=".Order_List"
             android:exported="false" />
-
-        <!-- SPLASH SCREEN – Main launcher -->
+        <activity
+            android:name=".Dashboard"
+            android:exported="false" /> <!-- SPLASH SCREEN – Main launcher -->
         <activity
             android:name=".SplashScreen"
             android:exported="true"
-            android:theme="@style/Theme.NearBuyHQ.Splash"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NearBuyHQ.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +33,6 @@
             android:name=".Welcome"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Login"
             android:exported="false"
