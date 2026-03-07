@@ -151,8 +151,8 @@ public class Dashboard extends AppCompatActivity {
             startActivity(intent);
         });
         btnManageInventory.setOnClickListener(v -> {
-            // Navigate to Products List
-            Intent intent = new Intent(Dashboard.this, Products_List.class);
+            // Navigate to Inventory Management
+            Intent intent = new Intent(Dashboard.this, Inventory.class);
             startActivity(intent);
         });
         btnCreatePromotion.setOnClickListener(v ->

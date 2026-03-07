@@ -1,0 +1,233 @@
+package com.example.nearbuyhq;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Inventory extends AppCompatActivity {
+
+    private static final int LOW_STOCK_THRESHOLD = 10;
+
+    private RecyclerView recyclerInventory;
+    private InventoryAdapter adapter;
+    private EditText etSearch;
+    private ImageView ivClearSearch, btnBack;
+    private TextView chipAll, chipLowStock, chipAvailable;
+    private LinearLayout layoutLowStockWarning;
+    private TextView tvWarningMessage;
+
+    private List<InventoryItem> allItems;
+    private String currentFilter = "All";
+
+    // ── DATA MODEL ─────────────────────────────────────────────────────────
+    static class InventoryItem {
+        String name;
+        String brand;
+        String category;
+        String unit;
+        int currentStock;
+        int totalStock;
+        int iconRes;
+
+        InventoryItem(String name, String brand, String category, String unit,
+                      int currentStock, int totalStock, int iconRes) {
+            this.name         = name;
+            this.brand        = brand;
+            this.category     = category;
+            this.unit         = unit;
+            this.currentStock = currentStock;
+            this.totalStock   = totalStock;
+            this.iconRes      = iconRes;
+        }
+
+        boolean isLowStock(int threshold) {
+            return currentStock > 0 && currentStock <= threshold;
+        }
+
+        boolean isOutOfStock() {
+            return currentStock == 0;
+        }
+
+        int getStockPercentage() {
+            if (totalStock == 0) return 0;
+            return Math.min(100, (currentStock * 100) / totalStock);
+        }
+    }
+
+    // ── LIFECYCLE ──────────────────────────────────────────────────────────
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.deep_blue));
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.bg_white));
+
+        setContentView(R.layout.activity_inventory);
+
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+
+        initViews();
+        loadSampleData();
+        showLowStockWarning();
+        setupRecyclerView();
+        setupSearch();
+        setupFilterChips();
+        setupBackButton();
+    }
+
+    // ── INIT ───────────────────────────────────────────────────────────────
+    private void initViews() {
+        recyclerInventory      = findViewById(R.id.recyclerInventory);
+        etSearch               = findViewById(R.id.etSearch);
+        ivClearSearch          = findViewById(R.id.ivClearSearch);
+        btnBack                = findViewById(R.id.btnBack);
+        chipAll                = findViewById(R.id.chipAll);
+        chipLowStock           = findViewById(R.id.chipLowStock);
+        chipAvailable          = findViewById(R.id.chipAvailable);
+        layoutLowStockWarning  = findViewById(R.id.layoutLowStockWarning);
+        tvWarningMessage       = findViewById(R.id.tvWarningMessage);
+    }
+
+    // ── SAMPLE DATA ────────────────────────────────────────────────────────
+    private void loadSampleData() {
+        allItems = new ArrayList<>();
+        // Same product – different brands tracked independently
+        allItems.add(new InventoryItem("Coconut Oil",    "Parachute",     "Oils & Fats",   "bottle", 12,  30, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Coconut Oil",    "KLF Nirmal",    "Oils & Fats",   "bottle",  0,  30, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Samba Rice",     "Organic Farms", "Rice & Grains", "kg",     45, 100, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Basmati Rice",   "India Gate",    "Rice & Grains", "kg",     80, 100, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Tomatoes",       "Farm Fresh",    "Vegetables",    "kg",      8,  50, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Tomatoes",       "Local Harvest", "Vegetables",    "kg",      0,  50, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Red Onions",     "Country Fresh", "Vegetables",    "kg",      3,  60, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Green Chilies",  "Farm Direct",   "Vegetables",    "kg",      5,  40, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Turmeric Powder","Everest",       "Spices",        "kg",     15,  50, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Turmeric Powder","MDH",           "Spices",        "kg",      0,  30, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Black Pepper",   "Catch",         "Spices",        "kg",      7,  30, R.drawable.ic_eco_leaf));
+        allItems.add(new InventoryItem("Cashews",        "Happy Nuts",    "Nuts",          "kg",      9,  30, R.drawable.ic_eco_leaf));
+    }
+
+    // ── WARNING BANNER ─────────────────────────────────────────────────────
+    private void showLowStockWarning() {
+        int lowCount = 0;
+        for (InventoryItem item : allItems) {
+            if (item.isLowStock(LOW_STOCK_THRESHOLD)) lowCount++;
+        }
+        if (lowCount > 0) {
+            layoutLowStockWarning.setVisibility(View.VISIBLE);
+            tvWarningMessage.setText(lowCount + " item" + (lowCount > 1 ? "s are" : " is")
+                    + " running low on stock. Restock soon!");
+        } else {
+            layoutLowStockWarning.setVisibility(View.GONE);
+        }
+    }
+
+    // ── RECYCLERVIEW ───────────────────────────────────────────────────────
+    private void setupRecyclerView() {        adapter = new InventoryAdapter(this, allItems, LOW_STOCK_THRESHOLD);
+        recyclerInventory.setLayoutManager(new LinearLayoutManager(this));
+        recyclerInventory.setAdapter(adapter);
+    }
+
+    // ── SEARCH ─────────────────────────────────────────────────────────────
+    private void setupSearch() {
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ivClearSearch.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
+                applyFilter(s.toString(), currentFilter);
+            }
+
+            @Override public void afterTextChanged(Editable s) {}
+        });
+
+        ivClearSearch.setOnClickListener(v -> {
+            etSearch.setText("");
+            ivClearSearch.setVisibility(View.GONE);
+        });
+    }
+
+    // ── FILTER CHIPS ───────────────────────────────────────────────────────
+    private void setupFilterChips() {
+        chipAll.setOnClickListener(v       -> setFilter("All"));
+        chipLowStock.setOnClickListener(v  -> setFilter("Low Stock"));
+        chipAvailable.setOnClickListener(v -> setFilter("Out of Stock"));
+    }
+
+    private void setFilter(String filter) {
+        currentFilter = filter;
+        updateChipStyles(filter);
+        applyFilter(etSearch.getText().toString(), filter);
+    }
+
+    private void updateChipStyles(String active) {
+        int inactiveColor = Color.parseColor("#B0CDD5");
+
+        chipAll.setBackgroundResource(R.drawable.bg_chip_inactive);
+        chipLowStock.setBackgroundResource(R.drawable.bg_chip_inactive);
+        chipAvailable.setBackgroundResource(R.drawable.bg_chip_inactive);
+        chipAll.setTextColor(inactiveColor);
+        chipLowStock.setTextColor(inactiveColor);
+        chipAvailable.setTextColor(inactiveColor);
+        chipAll.setTypeface(null);
+        chipLowStock.setTypeface(null);
+        chipAvailable.setTypeface(null);
+
+        TextView activeChip;
+        switch (active) {
+            case "Low Stock":    activeChip = chipLowStock; break;
+            case "Out of Stock": activeChip = chipAvailable; break;
+            default:             activeChip = chipAll;       break;
+        }
+        activeChip.setBackgroundResource(R.drawable.bg_chip_active);
+        activeChip.setTextColor(Color.WHITE);
+        activeChip.setTypeface(null, android.graphics.Typeface.BOLD);
+    }
+
+    // ── FILTER LOGIC ───────────────────────────────────────────────────────
+    private void applyFilter(String query, String statusFilter) {
+        String q = query.toLowerCase().trim();
+        List<InventoryItem> filtered = new ArrayList<>();
+
+        for (InventoryItem item : allItems) {
+            // Search by product name, brand, OR category
+            boolean matchSearch = q.isEmpty()
+                    || item.name.toLowerCase().contains(q)
+                    || item.brand.toLowerCase().contains(q)
+                    || item.category.toLowerCase().contains(q);
+
+            boolean matchStatus;
+            switch (statusFilter) {
+                case "Low Stock":    matchStatus = item.isLowStock(LOW_STOCK_THRESHOLD); break;
+                case "Out of Stock": matchStatus = item.isOutOfStock();                  break;
+                default:             matchStatus = true;                                  break;
+            }
+
+            if (matchSearch && matchStatus) filtered.add(item);
+        }
+        adapter.updateList(filtered);
+    }
+
+    // ── BACK ───────────────────────────────────────────────────────────────
+    private void setupBackButton() {
+        btnBack.setOnClickListener(v -> onBackPressed());
+    }
+}
