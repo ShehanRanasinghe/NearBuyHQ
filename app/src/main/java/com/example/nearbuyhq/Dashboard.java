@@ -23,6 +23,7 @@ public class Dashboard extends AppCompatActivity {
     // Quick action buttons
     private LinearLayout btnAddProduct, btnManageInventory, btnCreatePromotion;
     private LinearLayout btnManageOrders, btnUpdateLocation, btnViewReports;
+    private LinearLayout btnManageShops, btnManageDeals, btnManageUsers;
 
     // Top bar icons
     private ImageView btnSearch, btnNotifications, btnProfile;
@@ -77,6 +78,9 @@ public class Dashboard extends AppCompatActivity {
         btnManageOrders = findViewById(R.id.btnManageOrders);
         btnUpdateLocation = findViewById(R.id.btnUpdateLocation);
         btnViewReports = findViewById(R.id.btnViewReports);
+        btnManageShops = findViewById(R.id.btnManageShops);
+        btnManageDeals = findViewById(R.id.btnManageDeals);
+        btnManageUsers = findViewById(R.id.btnManageUsers);
 
         // Top bar
         btnSearch = findViewById(R.id.btnSearch);
@@ -174,12 +178,26 @@ public class Dashboard extends AppCompatActivity {
             Intent intent = new Intent(Dashboard.this, Reports.class);
             startActivity(intent);
         });
-        // TODO: Add click listeners for btnManageShops, btnManageDeals, btnManageUsers
+        btnManageShops.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, ShopsList.class);
+            startActivity(intent);
+        });
+        btnManageDeals.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, DealsList.class);
+            startActivity(intent);
+        });
+        btnManageUsers.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, UsersList.class);
+            startActivity(intent);
+        });
     }
 
     private void setupTopBarActions() {
-        btnSearch.setOnClickListener(v ->
-                Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show());
+        btnSearch.setOnClickListener(v -> {
+            // Implement search - show toast for now as placeholder
+            // In future, this could open a search dialog or navigate to search page
+            Toast.makeText(this, "Search functionality - coming soon!", Toast.LENGTH_SHORT).show();
+        });
         btnNotifications.setOnClickListener(v -> {
             Intent intent = new Intent(Dashboard.this, Notifications.class);
             startActivity(intent);
