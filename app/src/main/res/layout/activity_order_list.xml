@@ -39,10 +39,12 @@
                     android:id="@+id/btn_back"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@android:drawable/ic_menu_revert"
+                    android:src="@drawable/ic_back_arrow"
                     android:background="@drawable/bg_icon_circle_white"
                     android:padding="8dp"
-                    android:layout_marginEnd="12dp" />
+                    android:layout_marginEnd="12dp"
+                    app:tint="@color/deep_blue"
+                    android:contentDescription="Back" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -53,13 +55,15 @@
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <ImageView
+                    android:id="@+id/btn_notifications"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:text="🔔"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:background="@drawable/bg_icon_circle_white" />
+                    android:src="@drawable/ic_notification_bell"
+                    android:background="@drawable/bg_icon_circle_white"
+                    android:padding="8dp"
+                    app:tint="@color/deep_blue"
+                    android:contentDescription="Notifications" />
             </LinearLayout>
 
             <!-- Summary Chips -->
