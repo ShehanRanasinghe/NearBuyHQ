@@ -2,6 +2,7 @@ package com.example.nearbuyhq;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class ShopsList extends AppCompatActivity {
     private ShopsAdapter shopsAdapter;
     private List<Shop> shopsList;
     private FloatingActionButton fabAddShop;
+    private ImageView btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class ShopsList extends AppCompatActivity {
 
         recyclerViewShops = findViewById(R.id.recyclerViewShops);
         fabAddShop = findViewById(R.id.fabAddShop);
+        btnBack = findViewById(R.id.btnBack);
 
         // Initialize sample data
         initSampleShops();
@@ -45,6 +48,9 @@ public class ShopsList extends AppCompatActivity {
             Intent intent = new Intent(ShopsList.this, AddShop.class);
             startActivity(intent);
         });
+
+        // Back button click listener
+        btnBack.setOnClickListener(v -> finish());
     }
 
     private void initSampleShops() {

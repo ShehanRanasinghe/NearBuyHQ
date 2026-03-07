@@ -2,6 +2,7 @@ package com.example.nearbuyhq;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ public class UsersList extends AppCompatActivity {
     private RecyclerView recyclerViewUsers;
     private UsersAdapter usersAdapter;
     private List<User> usersList;
+    private ImageView btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class UsersList extends AppCompatActivity {
         }
 
         recyclerViewUsers = findViewById(R.id.recyclerViewUsers);
+        btnBack = findViewById(R.id.btnBack);
 
         // Initialize sample data
         initSampleUsers();
@@ -35,6 +38,9 @@ public class UsersList extends AppCompatActivity {
         usersAdapter = new UsersAdapter(usersList, this::onUserClick);
         recyclerViewUsers.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewUsers.setAdapter(usersAdapter);
+
+        // Back button click listener
+        btnBack.setOnClickListener(v -> finish());
     }
 
     private void initSampleUsers() {

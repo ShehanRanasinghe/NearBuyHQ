@@ -1,6 +1,7 @@
 package com.example.nearbuyhq;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ public class Notifications extends AppCompatActivity {
     private RecyclerView recyclerViewNotifications;
     private NotificationsAdapter notificationsAdapter;
     private List<Notification> notificationsList;
+    private ImageView btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class Notifications extends AppCompatActivity {
         }
 
         recyclerViewNotifications = findViewById(R.id.recyclerViewNotifications);
+        btnBack = findViewById(R.id.btnBack);
 
         // Initialize sample data
         initSampleNotifications();
@@ -34,6 +37,9 @@ public class Notifications extends AppCompatActivity {
         notificationsAdapter = new NotificationsAdapter(notificationsList);
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewNotifications.setAdapter(notificationsAdapter);
+
+        // Back button click listener
+        btnBack.setOnClickListener(v -> finish());
     }
 
     private void initSampleNotifications() {
