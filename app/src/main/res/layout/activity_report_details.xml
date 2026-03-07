@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/bg_light_grey"
+    tools:context=".ReportDetails">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_recent_item"
+            android:padding="20dp"
+            android:elevation="4dp">
+
+            <TextView
+                android:id="@+id/reportType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type: Shop Violation"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/deep_blue" />
+
+            <TextView
+                android:id="@+id/reportSubject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subject: Fresh Mart"
+                android:textSize="16sp"
+                android:textColor="@color/text_dark_secondary"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/reportDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description: Details"
+                android:textSize="16sp"
+                android:textColor="@color/text_dark_secondary"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/reportStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: Pending"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnResolve"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Mark as Resolved"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_coral"
+            android:layout_marginTop="24dp" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Back"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/text_dark_secondary"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>
+

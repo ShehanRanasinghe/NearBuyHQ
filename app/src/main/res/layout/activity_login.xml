@@ -1,110 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:fillViewport="true"
+    android:background="@color/navy_dark"
     tools:context=".Login">
 
-    <!-- Logo -->
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="200dp"
-        android:layout_height="140dp"
-        android:src="@drawable/nearbuy_logo"
-        android:contentDescription="App Logo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp" />
-
-    <!-- App Name -->
-    <TextView
-        android:id="@+id/appName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NeaR BuY"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:textColor="#FF6F00"
-        app:layout_constraintTop_toBottomOf="@id/logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+        android:gravity="center_horizontal">
 
-    <!-- Slogan -->
-    <TextView
-        android:id="@+id/slogan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Shop Smarter"
-        android:textSize="16sp"
-        android:textColor="#00BFA5"
-        app:layout_constraintTop_toBottomOf="@id/appName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="4dp" />
+        <!-- Logo Section -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="180dp"
+            android:layout_height="120dp"
+            android:src="@drawable/nearbuy_logo"
+            android:contentDescription="@string/logo_desc"
+            android:layout_marginTop="60dp" />
 
-    <!-- Email -->
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        <!-- App Title -->
+        <TextView
+            android:id="@+id/appTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_title_register"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/coral_primary"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginTop="16dp" />
 
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:padding="12dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#888888"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <!-- Login Form Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="60dp">
 
-    <!-- Password -->
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#888888"
+            <!-- Username Input -->
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="@string/hint_username"
+                android:inputType="text"
+                android:autofillHints="username"
+                android:padding="16dp"
+                android:textColor="@color/text_dark_primary"
+                android:textColorHint="@color/text_dark_hint"
+                android:background="@drawable/bg_input_field"
+                android:drawablePadding="12dp"
+                android:textSize="16sp" />
 
-        android:padding="12dp"
-        app:layout_constraintTop_toBottomOf="@id/email"
-        app:layout_constraintStart_toStartOf="@id/email"
-        app:layout_constraintEnd_toEndOf="@id/email"
-        android:layout_marginTop="16dp" />
+            <!-- Password Input -->
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword"
+                android:autofillHints="password"
+                android:padding="16dp"
+                android:textColor="@color/text_dark_primary"
+                android:textColorHint="@color/text_dark_hint"
+                android:background="@drawable/bg_input_field"
+                android:drawablePadding="12dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
 
-    <!-- Login Button -->
-    <Button
-        android:id="@+id/loginBtn"
-        android:layout_width="187dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="#FF6F00"
-        android:text="LOGIN"
-        android:textColor="#FFFFFF"
-        android:textSize="19sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/password"
-        app:layout_constraintStart_toStartOf="@id/password"
-        app:layout_constraintTop_toBottomOf="@id/password" />
+            <!-- Login Button -->
+            <Button
+                android:id="@+id/loginBtn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="@string/link_log_in"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/btn_coral"
+                android:layout_marginTop="32dp"
+                android:elevation="4dp" />
 
-    <!-- Sign Up -->
-    <TextView
-        android:id="@+id/signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Don't have an account? Sign Up"
-        android:textColor="#00BFA5"
-        app:layout_constraintTop_toBottomOf="@id/loginBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
+            <!-- Sign Up Link -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dont_have_account"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/link_sign_up"
+                    android:textColor="@color/coral_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

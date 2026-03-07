@@ -1,5 +1,6 @@
 package com.example.nearbuyhq;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -22,6 +23,7 @@ public class Dashboard extends AppCompatActivity {
     // Quick action buttons
     private LinearLayout btnAddProduct, btnManageInventory, btnCreatePromotion;
     private LinearLayout btnManageOrders, btnUpdateLocation, btnViewReports;
+    private LinearLayout btnManageShops, btnManageDeals, btnManageUsers;
 
     // Top bar icons
     private ImageView btnSearch, btnNotifications, btnProfile;
@@ -76,6 +78,9 @@ public class Dashboard extends AppCompatActivity {
         btnManageOrders = findViewById(R.id.btnManageOrders);
         btnUpdateLocation = findViewById(R.id.btnUpdateLocation);
         btnViewReports = findViewById(R.id.btnViewReports);
+        btnManageShops = findViewById(R.id.btnManageShops);
+        btnManageDeals = findViewById(R.id.btnManageDeals);
+        btnManageUsers = findViewById(R.id.btnManageUsers);
 
         // Top bar
         btnSearch = findViewById(R.id.btnSearch);
@@ -92,16 +97,23 @@ public class Dashboard extends AppCompatActivity {
                 setNavActive(navDashboardIcon, navDashboardText);
             } else if (id == R.id.navProducts) {
                 setNavActive(navProductsIcon, navProductsText);
-                Toast.makeText(this, "Products", Toast.LENGTH_SHORT).show();
+                // Navigate to Products List
+                Intent intent = new Intent(Dashboard.this, Products_List.class);
+                startActivity(intent);
             } else if (id == R.id.navOrders) {
                 setNavActive(navOrdersIcon, navOrdersText);
-                Toast.makeText(this, "Orders", Toast.LENGTH_SHORT).show();
+                // Navigate to Orders List
+                Intent ordersIntent = new Intent(Dashboard.this, Order_List.class);
+                startActivity(ordersIntent);
             } else if (id == R.id.navAnalytics) {
                 setNavActive(navAnalyticsIcon, navAnalyticsText);
-                Toast.makeText(this, "Analytics", Toast.LENGTH_SHORT).show();
+                // Navigate to Analytics
+                Intent analyticsIntent = new Intent(Dashboard.this, Analytics.class);
+                startActivity(analyticsIntent);
             } else if (id == R.id.navProfile) {
                 setNavActive(navProfileIcon, navProfileText);
-                Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
+                Intent profileIntent = new Intent(Dashboard.this, ProfilePage.class);
+                startActivity(profileIntent);
             }
         };
 
@@ -142,26 +154,57 @@ public class Dashboard extends AppCompatActivity {
     }
 
     private void setupQuickActions() {
-        btnAddProduct.setOnClickListener(v ->
-                Toast.makeText(this, "Add Product", Toast.LENGTH_SHORT).show());
-        btnManageInventory.setOnClickListener(v ->
-                Toast.makeText(this, "Manage Inventory", Toast.LENGTH_SHORT).show());
-        btnCreatePromotion.setOnClickListener(v ->
-                Toast.makeText(this, "Create Promotion", Toast.LENGTH_SHORT).show());
-        btnManageOrders.setOnClickListener(v ->
-                Toast.makeText(this, "View Orders", Toast.LENGTH_SHORT).show());
+        btnAddProduct.setOnClickListener(v -> {
+            // Navigate to Add Product
+            Intent intent = new Intent(Dashboard.this, Add_Product.class);
+            startActivity(intent);
+        });
+        btnManageInventory.setOnClickListener(v -> {
+            // Navigate to Inventory Management
+            Intent intent = new Intent(Dashboard.this, Inventory.class);
+            startActivity(intent);
+        });
+        btnCreatePromotion.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, Promotions.class);
+            startActivity(intent);
+        });
+        btnManageOrders.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, Order_List.class);
+            startActivity(intent);
+        });
         btnUpdateLocation.setOnClickListener(v ->
                 Toast.makeText(this, "Update Shop Location", Toast.LENGTH_SHORT).show());
-        btnViewReports.setOnClickListener(v ->
-                Toast.makeText(this, "View Reports", Toast.LENGTH_SHORT).show());
+        btnViewReports.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, Reports.class);
+            startActivity(intent);
+        });
+        btnManageShops.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, ShopsList.class);
+            startActivity(intent);
+        });
+        btnManageDeals.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, DealsList.class);
+            startActivity(intent);
+        });
+        btnManageUsers.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, UsersList.class);
+            startActivity(intent);
+        });
     }
 
     private void setupTopBarActions() {
-        btnSearch.setOnClickListener(v ->
-                Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show());
-        btnNotifications.setOnClickListener(v ->
-                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show());
-        btnProfile.setOnClickListener(v ->
-                Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show());
+        btnSearch.setOnClickListener(v -> {
+            // Implement search - show toast for now as placeholder
+            // In future, this could open a search dialog or navigate to search page
+            Toast.makeText(this, "Search functionality - coming soon!", Toast.LENGTH_SHORT).show();
+        });
+        btnNotifications.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, Notifications.class);
+            startActivity(intent);
+        });
+        btnProfile.setOnClickListener(v -> {
+            Intent profileIntent = new Intent(Dashboard.this, ProfilePage.class);
+            startActivity(profileIntent);
+        });
     }
 }
