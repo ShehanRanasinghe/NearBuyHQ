@@ -129,4 +129,32 @@
     <!-- Login Screen -->
     <string name="dont_have_account">Don\'t have an account? </string>
     <string name="link_sign_up">Sign Up</string>
+
+    <!-- Analytics Dashboard -->
+    <string name="analytics_dashboard">Analytics Dashboard</string>
+    <string name="store_performance">Store Performance</string>
+    <string name="sales_overview">Sales Overview</string>
+    <string name="order_statistics">Order Statistics</string>
+    <string name="product_performance_analytics">Product Performance</string>
+    <string name="revenue_summary">Revenue Summary</string>
+    <string name="total_sales">Total Sales</string>
+    <string name="total_revenue">Total Revenue</string>
+    <string name="avg_order_value">Avg Order Value</string>
+    <string name="total_customers">Total Customers</string>
+    <string name="daily_sales">Daily Sales</string>
+    <string name="weekly_sales">Weekly Sales</string>
+    <string name="monthly_sales">Monthly Sales</string>
+    <string name="top_selling">Top Selling</string>
+    <string name="top_category">Top Category</string>
+    <string name="pending_orders">Pending Orders</string>
+    <string name="completed_orders">Completed Orders</string>
+    <string name="cancelled_orders">Cancelled Orders</string>
+    <string name="this_week">This Week</string>
+    <string name="this_month">This Month</string>
+    <string name="today">Today</string>
+    <string name="revenue_trend">Revenue Trend</string>
+    <string name="order_trend">Order Trend</string>
+    <string name="growth">Growth</string>
+    <string name="vs_last_week">vs Last Week</string>
+    <string name="vs_last_month">vs Last Month</string>
 </resources>

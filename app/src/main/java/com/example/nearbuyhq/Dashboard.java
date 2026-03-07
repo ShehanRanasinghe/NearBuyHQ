@@ -101,7 +101,9 @@ public class Dashboard extends AppCompatActivity {
                 Toast.makeText(this, "Orders", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.navAnalytics) {
                 setNavActive(navAnalyticsIcon, navAnalyticsText);
-                Toast.makeText(this, "Analytics", Toast.LENGTH_SHORT).show();
+                // Navigate to Analytics
+                Intent analyticsIntent = new Intent(Dashboard.this, Analytics.class);
+                startActivity(analyticsIntent);
             } else if (id == R.id.navProfile) {
                 setNavActive(navProfileIcon, navProfileText);
                 Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
