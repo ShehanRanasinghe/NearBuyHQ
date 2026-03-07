@@ -192,17 +192,8 @@ public class ProfilePage extends AppCompatActivity {
     //  Logout
     // ─────────────────────────────────────────────────────────────────────────
     private void showLogoutDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Log Out")
-                .setMessage("Are you sure you want to log out?")
-                .setPositiveButton("Log Out", (dialog, which) -> {
-                    Intent intent = new Intent(ProfilePage.this, Welcome.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+        Intent intent = new Intent(ProfilePage.this, LogoutConfirmation.class);
+        startActivity(intent);
     }
 
     // ─────────────────────────────────────────────────────────────────────────

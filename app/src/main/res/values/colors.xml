@@ -80,4 +80,9 @@
     <color name="profile_orange_btn_start">#FFA726</color>
     <color name="profile_orange_btn_end">#FB8C00</color>
     <color name="profile_logout_surface">#1AFF5A4F</color>
+
+    <!-- Additional UI Colors -->
+    <color name="success_green">#FF10B981</color>
+    <color name="error_red">#FFEF4444</color>
+    <color name="warning_orange">#FFF59E0B</color>
 </resources>

@@ -98,7 +98,9 @@ public class Dashboard extends AppCompatActivity {
                 startActivity(intent);
             } else if (id == R.id.navOrders) {
                 setNavActive(navOrdersIcon, navOrdersText);
-                Toast.makeText(this, "Orders", Toast.LENGTH_SHORT).show();
+                // Navigate to Orders List
+                Intent ordersIntent = new Intent(Dashboard.this, Order_List.class);
+                startActivity(ordersIntent);
             } else if (id == R.id.navAnalytics) {
                 setNavActive(navAnalyticsIcon, navAnalyticsText);
                 // Navigate to Analytics
@@ -162,19 +164,26 @@ public class Dashboard extends AppCompatActivity {
             Intent intent = new Intent(Dashboard.this, Promotions.class);
             startActivity(intent);
         });
-        btnManageOrders.setOnClickListener(v ->
-                Toast.makeText(this, "View Orders", Toast.LENGTH_SHORT).show());
+        btnManageOrders.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, Order_List.class);
+            startActivity(intent);
+        });
         btnUpdateLocation.setOnClickListener(v ->
                 Toast.makeText(this, "Update Shop Location", Toast.LENGTH_SHORT).show());
-        btnViewReports.setOnClickListener(v ->
-                Toast.makeText(this, "View Reports", Toast.LENGTH_SHORT).show());
+        btnViewReports.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, Reports.class);
+            startActivity(intent);
+        });
+        // TODO: Add click listeners for btnManageShops, btnManageDeals, btnManageUsers
     }
 
     private void setupTopBarActions() {
         btnSearch.setOnClickListener(v ->
                 Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show());
-        btnNotifications.setOnClickListener(v ->
-                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show());
+        btnNotifications.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, Notifications.class);
+            startActivity(intent);
+        });
         btnProfile.setOnClickListener(v -> {
             Intent profileIntent = new Intent(Dashboard.this, ProfilePage.class);
             startActivity(profileIntent);

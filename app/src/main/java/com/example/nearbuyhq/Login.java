@@ -3,6 +3,7 @@ package com.example.nearbuyhq;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,5 +32,23 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
             finish(); // Close login screen so user can't go back to it with back button
         });
+
+        // TODO: Setup forgot password link after R.java regenerates
+        // TextView forgotPassword = findViewById(R.id.forgotPassword);
+        // if (forgotPassword != null) {
+        //     forgotPassword.setOnClickListener(v -> {
+        //         Intent intent = new Intent(Login.this, ForgotPassword.class);
+        //         startActivity(intent);
+        //     });
+        // }
+
+        // Setup sign up link
+        TextView signup = findViewById(R.id.signup);
+        if (signup != null) {
+            signup.setOnClickListener(v -> {
+                Intent intent = new Intent(Login.this, Register.class);
+                startActivity(intent);
+            });
+        }
     }
 }
