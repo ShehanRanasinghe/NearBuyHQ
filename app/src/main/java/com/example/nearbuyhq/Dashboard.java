@@ -104,7 +104,8 @@ public class Dashboard extends AppCompatActivity {
                 Toast.makeText(this, "Analytics", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.navProfile) {
                 setNavActive(navProfileIcon, navProfileText);
-                Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
+                Intent profileIntent = new Intent(Dashboard.this, ProfilePage.class);
+                startActivity(profileIntent);
             }
         };
 
@@ -170,7 +171,9 @@ public class Dashboard extends AppCompatActivity {
                 Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show());
         btnNotifications.setOnClickListener(v ->
                 Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show());
-        btnProfile.setOnClickListener(v ->
-                Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show());
+        btnProfile.setOnClickListener(v -> {
+            Intent profileIntent = new Intent(Dashboard.this, ProfilePage.class);
+            startActivity(profileIntent);
+        });
     }
 }

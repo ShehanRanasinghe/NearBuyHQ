@@ -68,4 +68,16 @@
     <color name="green_success">#27AE60</color>
     <color name="gray_text">#9AA0AC</color>
     <color name="bg_light">#F5F6FA</color>
+
+    <!-- Profile Page Colors -->
+    <color name="profile_bg">#E0F4F0</color>
+    <color name="profile_teal_header">#1A3C4A</color>
+    <color name="profile_teal_accent">#4ECDC4</color>
+    <color name="profile_teal_icon_bg">#264ECDC4</color>
+    <color name="profile_orange">#FF9800</color>
+    <color name="profile_orange_light">#FFF3E0</color>
+    <color name="profile_orange_icon_bg">#26FF9800</color>
+    <color name="profile_orange_btn_start">#FFA726</color>
+    <color name="profile_orange_btn_end">#FB8C00</color>
+    <color name="profile_logout_surface">#1AFF5A4F</color>
 </resources>
