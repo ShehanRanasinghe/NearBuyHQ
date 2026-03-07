@@ -125,4 +125,8 @@
     <string name="btn_sign_up">Sign Up</string>
     <string name="already_member">Already are members? </string>
     <string name="link_log_in">Log In</string>
+
+    <!-- Login Screen -->
+    <string name="dont_have_account">Don\'t have an account? </string>
+    <string name="link_sign_up">Sign Up</string>
 </resources>
