@@ -17,6 +17,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Inventory"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Product_Details"
             android:exported="false" />
         <activity
