@@ -157,4 +157,44 @@
     <string name="growth">Growth</string>
     <string name="vs_last_week">vs Last Week</string>
     <string name="vs_last_month">vs Last Month</string>
+
+    <!-- Profile Page -->
+    <string name="my_profile">My Profile</string>
+    <string name="back">Back</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="sample_owner_name">John Doe</string>
+    <string name="shop_owner_label">Shop Owner</string>
+    <string name="account_information">ACCOUNT INFORMATION</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="shop_name_label">Shop Name</string>
+    <string name="sample_email">owner@greenmart.com</string>
+    <string name="sample_phone">+94 77 123 4567</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="logout">Log Out</string>
+
+    <!-- Profile – Shop Details -->
+    <string name="shop_details_label">SHOP DETAILS</string>
+    <string name="edit_shop_details">Edit</string>
+    <string name="store_location_label">Store Location</string>
+    <string name="store_category_label">Store Category</string>
+    <string name="opening_hours_label">Opening Hours</string>
+    <string name="website_label">Website / Social</string>
+    <string name="sample_store_location">45 Main Street, Colombo 03, Sri Lanka</string>
+    <string name="sample_store_category">Grocery &amp; Supermarket</string>
+    <string name="sample_opening_hours">Mon – Sat  8:00 AM – 9:00 PM</string>
+    <string name="sample_website">www.skgrocery.lk</string>
+
+    <!-- Profile – Branches -->
+    <string name="branches_label">BRANCHES</string>
+    <string name="add_branch_label">+ Add Branch</string>
+    <string name="edit_branch_label">Edit</string>
+    <string name="branch_icon_desc">Branch</string>
+    <string name="address_label">Address</string>
+    <string name="sample_branch1_name">Nugegoda Branch</string>
+    <string name="sample_branch1_address">12 High Level Rd, Nugegoda, Sri Lanka</string>
+    <string name="sample_branch1_phone">+94 77 234 5678</string>
+    <string name="sample_branch2_name">Kandy Branch</string>
+    <string name="sample_branch2_address">88 Peradeniya Rd, Kandy, Sri Lanka</string>
+    <string name="sample_branch2_phone">+94 77 345 6789</string>
 </resources>
