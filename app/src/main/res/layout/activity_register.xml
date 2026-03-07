@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/navy_dark"
+    tools:context=".Register">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <!-- Logo Section -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="180dp"
+            android:layout_height="120dp"
+            android:src="@drawable/nearbuy_logo"
+            android:contentDescription="@string/logo_desc"
+            android:layout_marginTop="40dp" />
+
+        <!-- App Title -->
+        <TextView
+            android:id="@+id/appTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_title_register"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/coral_primary"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Registration Form Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="40dp">
+
+            <!-- Full Name Input -->
+            <EditText
+                android:id="@+id/fullName"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="@string/hint_full_name"
+                android:inputType="textPersonName"
+                android:autofillHints="personName"
+                android:padding="16dp"
+                android:textColor="@color/text_dark_primary"
+                android:textColorHint="@color/text_dark_hint"
+                android:background="@drawable/bg_input_field"
+                android:drawablePadding="12dp"
+                android:textSize="16sp" />
+
+            <!-- Email Input -->
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
+                android:autofillHints="emailAddress"
+                android:padding="16dp"
+                android:textColor="@color/text_dark_primary"
+                android:textColorHint="@color/text_dark_hint"
+                android:background="@drawable/bg_input_field"
+                android:drawablePadding="12dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
+            <!-- Username Input -->
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="@string/hint_username"
+                android:inputType="text"
+                android:autofillHints="username"
+                android:padding="16dp"
+                android:textColor="@color/text_dark_primary"
+                android:textColorHint="@color/text_dark_hint"
+                android:background="@drawable/bg_input_field"
+                android:drawablePadding="12dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
+            <!-- Password Input -->
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword"
+                android:autofillHints="password"
+                android:padding="16dp"
+                android:textColor="@color/text_dark_primary"
+                android:textColorHint="@color/text_dark_hint"
+                android:background="@drawable/bg_input_field"
+                android:drawablePadding="12dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
+            <!-- Confirm Password Input -->
+            <EditText
+                android:id="@+id/confirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="@string/hint_confirm_password"
+                android:inputType="textPassword"
+                android:autofillHints="password"
+                android:padding="16dp"
+                android:textColor="@color/text_dark_primary"
+                android:textColorHint="@color/text_dark_hint"
+                android:background="@drawable/bg_input_field"
+                android:drawablePadding="12dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
+            <!-- Register Button -->
+            <Button
+                android:id="@+id/registerBtn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="@string/btn_sign_up"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/btn_coral"
+                android:layout_marginTop="32dp"
+                android:elevation="4dp" />
+
+            <!-- Login Link -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/already_member"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/loginLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/link_log_in"
+                    android:textColor="@color/coral_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
+
