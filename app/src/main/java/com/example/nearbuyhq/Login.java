@@ -1,6 +1,8 @@
 package com.example.nearbuyhq;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,15 @@ public class Login extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        // Setup login button navigation
+        Button loginBtn = findViewById(R.id.loginBtn);
+        loginBtn.setOnClickListener(v -> {
+            // Navigate to Dashboard
+            Intent intent = new Intent(Login.this, Dashboard.class);
+            startActivity(intent);
+            finish(); // Close login screen so user can't go back to it with back button
         });
     }
 }

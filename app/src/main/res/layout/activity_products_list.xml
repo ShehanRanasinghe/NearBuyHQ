@@ -100,7 +100,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:hint="Search products…"
-                android:hintTextColor="#7A9EA8"
+                android:textColorHint="#7A9EA8"
                 android:textColor="#1A3C4A"
                 android:textSize="14sp"
                 android:background="@null"

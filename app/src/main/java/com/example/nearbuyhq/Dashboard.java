@@ -1,5 +1,6 @@
 package com.example.nearbuyhq;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -92,7 +93,9 @@ public class Dashboard extends AppCompatActivity {
                 setNavActive(navDashboardIcon, navDashboardText);
             } else if (id == R.id.navProducts) {
                 setNavActive(navProductsIcon, navProductsText);
-                Toast.makeText(this, "Products", Toast.LENGTH_SHORT).show();
+                // Navigate to Products List
+                Intent intent = new Intent(Dashboard.this, Products_List.class);
+                startActivity(intent);
             } else if (id == R.id.navOrders) {
                 setNavActive(navOrdersIcon, navOrdersText);
                 Toast.makeText(this, "Orders", Toast.LENGTH_SHORT).show();
@@ -142,10 +145,16 @@ public class Dashboard extends AppCompatActivity {
     }
 
     private void setupQuickActions() {
-        btnAddProduct.setOnClickListener(v ->
-                Toast.makeText(this, "Add Product", Toast.LENGTH_SHORT).show());
-        btnManageInventory.setOnClickListener(v ->
-                Toast.makeText(this, "Manage Inventory", Toast.LENGTH_SHORT).show());
+        btnAddProduct.setOnClickListener(v -> {
+            // Navigate to Add Product
+            Intent intent = new Intent(Dashboard.this, Add_Product.class);
+            startActivity(intent);
+        });
+        btnManageInventory.setOnClickListener(v -> {
+            // Navigate to Products List
+            Intent intent = new Intent(Dashboard.this, Products_List.class);
+            startActivity(intent);
+        });
         btnCreatePromotion.setOnClickListener(v ->
                 Toast.makeText(this, "Create Promotion", Toast.LENGTH_SHORT).show());
         btnManageOrders.setOnClickListener(v ->

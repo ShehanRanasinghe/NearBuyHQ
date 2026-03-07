@@ -16,6 +16,16 @@
             android:name=".Dashboard"
             android:exported="false" />
 
+        <activity
+            android:name=".Products_List"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".Add_Product"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <!-- SPLASH SCREEN – Main launcher -->
         <activity
             android:name=".SplashScreen"

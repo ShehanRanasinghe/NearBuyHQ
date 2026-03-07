@@ -1,6 +1,8 @@
 package com.example.nearbuyhq;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -31,5 +33,12 @@ public class SplashScreen extends AppCompatActivity {
         );
 
         setContentView(R.layout.activity_splash_screen);
+
+        // Navigate to Welcome screen after 3 seconds
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(SplashScreen.this, Welcome.class);
+            startActivity(intent);
+            finish(); // Close splash screen so user can't go back to it
+        }, 3000); // 3 second delay
     }
 }
