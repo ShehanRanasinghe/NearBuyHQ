@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/bg_light_grey"
+    tools:context=".AddDeal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create New Deal"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/deep_blue"
+            android:layout_marginBottom="24dp" />
+
+        <EditText
+            android:id="@+id/dealTitle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Deal Title"
+            android:padding="16dp"
+            android:background="@drawable/bg_input_field"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/dealDescription"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:hint="Description"
+            android:gravity="top"
+            android:padding="16dp"
+            android:background="@drawable/bg_input_field"
+            android:layout_marginBottom="16dp" />
+
+        <Spinner
+            android:id="@+id/shopSelection"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_input_field"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/dealDiscount"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Discount (e.g., 50%)"
+            android:padding="16dp"
+            android:background="@drawable/bg_input_field"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/dealValidity"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:hint="Validity Date"
+            android:padding="16dp"
+            android:background="@drawable/bg_input_field"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Create Deal"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_coral"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Cancel"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/text_dark_secondary" />
+
+    </LinearLayout>
+
+</ScrollView>
+
