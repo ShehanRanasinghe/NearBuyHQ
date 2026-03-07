@@ -155,8 +155,10 @@ public class Dashboard extends AppCompatActivity {
             Intent intent = new Intent(Dashboard.this, Products_List.class);
             startActivity(intent);
         });
-        btnCreatePromotion.setOnClickListener(v ->
-                Toast.makeText(this, "Create Promotion", Toast.LENGTH_SHORT).show());
+        btnCreatePromotion.setOnClickListener(v -> {
+            Intent intent = new Intent(Dashboard.this, Promotions.class);
+            startActivity(intent);
+        });
         btnManageOrders.setOnClickListener(v ->
                 Toast.makeText(this, "View Orders", Toast.LENGTH_SHORT).show());
         btnUpdateLocation.setOnClickListener(v ->
