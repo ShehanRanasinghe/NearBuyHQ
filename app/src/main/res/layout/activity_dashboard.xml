@@ -81,7 +81,7 @@
             android:layout_width="38dp"
             android:layout_height="38dp"
             android:padding="7dp"
-            android:src="@android:drawable/ic_popup_reminder"
+            android:src="@drawable/ic_notification_bell"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/notifications"
             android:layout_marginEnd="4dp"

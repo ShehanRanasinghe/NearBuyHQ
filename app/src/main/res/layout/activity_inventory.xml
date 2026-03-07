@@ -31,7 +31,7 @@
                 android:id="@+id/btnBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_menu"
+                android:src="@drawable/ic_back_arrow"
                 android:tint="#FFFFFF"
                 android:padding="4dp"
                 android:contentDescription="Back" />
