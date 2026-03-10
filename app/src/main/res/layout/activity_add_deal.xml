@@ -6,86 +6,134 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="@color/bg_light_grey"
-    tools:context=".AddDeal">
+    tools:context=".discounts.AddDeal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- TOP HEADER BAR -->
+        <LinearLayout
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create New Deal"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/deep_blue"
-            android:layout_marginBottom="24dp" />
+            android:background="@drawable/bg_topbar_curved"
+            android:elevation="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="20dp">
 
-        <EditText
-            android:id="@+id/dealTitle"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:hint="Deal Title"
-            android:padding="16dp"
-            android:background="@drawable/bg_input_field"
-            android:layout_marginBottom="16dp" />
+            <!-- App Logo & Name -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/dealDescription"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:hint="Description"
-            android:gravity="top"
-            android:padding="16dp"
-            android:background="@drawable/bg_input_field"
-            android:layout_marginBottom="16dp" />
+                <ImageView
+                    android:id="@+id/imgAppLogo"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/nearbuy_logo"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/logo_desc" />
 
-        <Spinner
-            android:id="@+id/shopSelection"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/bg_input_field"
-            android:padding="16dp"
-            android:layout_marginBottom="16dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:letterSpacing="0.03"
+                    android:text="@string/app_name"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-        <EditText
-            android:id="@+id/dealDiscount"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:hint="Discount (e.g., 50%)"
-            android:padding="16dp"
-            android:background="@drawable/bg_input_field"
-            android:layout_marginBottom="16dp" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/dealValidity"
+        <!-- CONTENT AREA -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:hint="Validity Date"
-            android:padding="16dp"
-            android:background="@drawable/bg_input_field"
-            android:layout_marginBottom="24dp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <Button
-            android:id="@+id/btnSubmit"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Create Deal"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_coral"
-            android:layout_marginBottom="16dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create New Deal"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:textColor="@color/coral_primary"
+                android:layout_marginBottom="24dp"/>
 
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Cancel"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/text_dark_secondary" />
+            <EditText
+                android:id="@+id/dealTitle"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Deal Title"
+                android:padding="16dp"
+                android:background="@drawable/bg_input_field"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/dealDescription"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="Description"
+                android:gravity="top"
+                android:padding="16dp"
+                android:background="@drawable/bg_input_field"
+                android:layout_marginBottom="16dp"/>
+
+            <Spinner
+                android:id="@+id/shopSelection"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_input_field"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/dealDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Discount (e.g., 50%)"
+                android:padding="16dp"
+                android:background="@drawable/bg_input_field"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/dealValidity"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Validity Date"
+                android:padding="16dp"
+                android:background="@drawable/bg_input_field"
+                android:layout_marginBottom="24dp"/>
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Create Deal"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_coral"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Cancel"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/text_dark_secondary"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
 </ScrollView>
-
