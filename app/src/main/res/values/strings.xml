@@ -2,7 +2,7 @@
     <string name="app_name">NearBuyHQ</string>
 
     <!-- Dashboard Top Bar -->
-    <string name="admin_panel">Admin Panel</string>
+    <string name="admin_panel">Merchant</string>
     <string name="logo_desc">NearBuyHQ Logo</string>
     <string name="search">Search</string>
     <string name="notifications">Notifications</string>
@@ -36,15 +36,23 @@
 
     <!-- Quick Actions -->
     <string name="add_product">Add Product</string>
-    <string name="manage_inventory">Manage Inventory</string>
+    <string name="manage_inventory">Inventory</string>
+    <string name="discounts">Discounts</string>
     <string name="create_promotion">Create Promotion</string>
     <string name="update_location">Update Location</string>
     <string name="view_orders">View Orders</string>
     <string name="view_reports">View Reports</string>
 
+    <!-- Discounts Page -->
+    <string name="promotions_tab">Promotions</string>
+    <string name="deals_tab">Deals</string>
+    <string name="add_promotion">Add Promotion</string>
+    <string name="add_deal">Add Deal</string>
+
     <!-- Bottom Navigation -->
     <string name="dashboard">Dashboard</string>
     <string name="analytics">Analytics</string>
+    <string name="inventory">Inventory</string>
 
     <!-- Inventory Alert Samples -->
     <string name="item_milk">Whole Milk 1L</string>

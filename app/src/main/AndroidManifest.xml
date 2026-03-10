@@ -13,33 +13,33 @@
         android:theme="@style/Theme.NearBuyHQ"
         tools:targetApi="31">
         <activity
-            android:name=".ProfilePage"
+            android:name=".settings.ProfilePage"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Inventory"
+            android:name=".products.Inventory"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Product_Details"
+            android:name=".products.Product_Details"
             android:exported="false" />
         <activity
-            android:name=".Products_List"
+            android:name=".products.Products_List"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Add_Product"
+            android:name=".products.Add_Product"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Dashboard"
+            android:name=".dashboard.Dashboard"
             android:exported="false" />
         <activity
-            android:name=".Order_List"
+            android:name=".orders.Order_List"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Order_details"
+            android:name=".orders.Order_details"
             android:exported="false"
             android:screenOrientation="portrait" />
         <!-- SPLASH SCREEN – Main launcher -->
@@ -59,83 +59,87 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Login"
+            android:name=".auth.Login"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Register"
+            android:name=".auth.Register"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Analytics"
+            android:name=".dashboard.Analytics"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Promotions"
+            android:name=".discounts.Promotions"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AddEditPromotion"
+            android:name=".discounts.DiscountsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ForgotPassword"
+            android:name=".discounts.AddEditPromotion"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".OTPVerification"
+            android:name=".auth.ForgotPassword"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ShopsList"
+            android:name=".auth.OTPVerification"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ShopDetails"
+            android:name=".shops.ShopsList"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AddShop"
+            android:name=".shops.ShopDetails"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DealsList"
+            android:name=".shops.AddShop"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DealDetails"
+            android:name=".discounts.DealsList"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AddDeal"
+            android:name=".discounts.DealDetails"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UsersList"
+            android:name=".discounts.AddDeal"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UserDetails"
+            android:name=".users.UsersList"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Reports"
+            android:name=".users.UserDetails"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ReportDetails"
+            android:name=".reports.Reports"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Notifications"
+            android:name=".reports.ReportDetails"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Settings"
+            android:name=".notifications.Notifications"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LogoutConfirmation"
+            android:name=".settings.Settings"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.LogoutConfirmation"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>

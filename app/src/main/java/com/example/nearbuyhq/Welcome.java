@@ -6,6 +6,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.nearbuyhq.auth.Login;
+import com.example.nearbuyhq.auth.Register;
+
 public class Welcome extends AppCompatActivity {
 
     @Override
