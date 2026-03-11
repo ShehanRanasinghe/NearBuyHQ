@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/bg_light_grey"
-    tools:context=".Analytics">
+    tools:context=".dashboard.Analytics">
 
     <!--  TOP HEADER BAR  -->
     <LinearLayout
@@ -18,7 +18,7 @@
         android:gravity="center_vertical"
         android:paddingHorizontal="20dp"
         android:paddingVertical="14dp"
-        android:background="@color/deep_blue">
+        android:background="@drawable/bg_topbar_curved">
 
         <!-- App Logo & Name -->
         <LinearLayout
@@ -63,17 +63,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Top Right Icons -->
-        <ImageView
-            android:id="@+id/btnNotifications"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:padding="7dp"
-            android:src="@android:drawable/ic_popup_reminder"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/notifications"
-            android:layout_marginEnd="4dp"
-            app:tint="@color/white" />
+        
 
         <ImageView
             android:id="@+id/btnProfile"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F6FA"
-    tools:context=".Add_Product">
+    tools:context=".products.Add_Product">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
+
         <!-- TOP HEADER BAR -->
         <LinearLayout
             android:id="@+id/topAppBar"
@@ -28,7 +28,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="20dp"
-            android:paddingVertical="20dp">
+            android:paddingVertical="20dp"
+            android:paddingBottom="28dp">
 
             <!-- App Logo & Name -->
             <LinearLayout
@@ -51,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:letterSpacing="0.03"
-                    android:text="@string/app_name"
+                    android:text="Add New Product"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />

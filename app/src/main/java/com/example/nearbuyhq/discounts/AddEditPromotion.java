@@ -114,8 +114,8 @@ public class AddEditPromotion extends AppCompatActivity {
         }
 
         // ── Back / Save ──────────────────────────────────────────────────
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-        btnSave.setOnClickListener(v -> savePromotion());
+//        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+//        btnSave.setOnClickListener(v -> savePromotion());
     }
 
     // ── Date picker ─────────────────────────────────────────────────────────

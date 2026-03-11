@@ -34,11 +34,12 @@
                 android:contentDescription="@string/logo_desc" />
 
             <TextView
+                android:id="@+id/tvFormTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:letterSpacing="0.03"
-                android:text="@string/app_name"
+                android:text="Promotion Details"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -63,15 +64,7 @@
             android:padding="20dp">
 
             <!-- SECTION: Basic Info ─────────────────────────────────────── -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PROMOTION DETAILS"
-                android:textColor="@color/coral_primary"
-                android:textSize="21sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.12"
-                android:layout_marginBottom="10dp" />
+
 
             <!-- Card wrapping basic fields -->
             <LinearLayout
