@@ -1,8 +1,8 @@
 package com.example.nearbuyhq.shops;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -15,7 +15,7 @@ public class AddShop extends AppCompatActivity {
 
     private EditText shopName, shopOwner, shopAddress, shopContact;
     private Spinner shopCategory;
-    private Button btnSubmit, btnCancel;
+    private TextView btnSubmit, btnCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -27,6 +27,14 @@
             android:contentDescription="@string/back"
             app:tint="@color/white" />
 
+        <ImageView
+            android:id="@+id/imgAppLogo"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/nearbuy_logo"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/logo_desc" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
