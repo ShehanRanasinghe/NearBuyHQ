@@ -20,6 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.dashboard.Analytics;
+import com.example.nearbuyhq.dashboard.Dashboard;
+import com.example.nearbuyhq.orders.Order_List;
+import com.example.nearbuyhq.settings.ProfilePage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,9 @@ public class Inventory extends AppCompatActivity {
     private LinearLayout layoutLowStockWarning;
     private TextView tvWarningMessage;
     private LinearLayout btnViewProducts, btnAddProduct;
+    private LinearLayout navDashboard, navProducts, navOrders, navAnalytics, navProfile;
+    private ImageView navDashboardIcon, navProductsIcon, navOrdersIcon, navAnalyticsIcon, navProfileIcon;
+    private TextView navDashboardText, navProductsText, navOrdersText, navAnalyticsText, navProfileText;
 
     private List<InventoryItem> allItems;
     private String currentFilter = "All";
@@ -104,7 +111,7 @@ public class Inventory extends AppCompatActivity {
         recyclerInventory      = findViewById(R.id.recyclerInventory);
         etSearch               = findViewById(R.id.etSearch);
         ivClearSearch          = findViewById(R.id.ivClearSearch);
-        btnBack                = findViewById(R.id.btnBack);
+        btnBack                = findViewById(R.id.btn_back);
         chipAll                = findViewById(R.id.chipAll);
         chipLowStock           = findViewById(R.id.chipLowStock);
         chipAvailable          = findViewById(R.id.chipAvailable);
@@ -112,6 +119,25 @@ public class Inventory extends AppCompatActivity {
         tvWarningMessage       = findViewById(R.id.tvWarningMessage);
         btnViewProducts        = findViewById(R.id.btnViewProducts);
         btnAddProduct          = findViewById(R.id.btnAddProduct);
+
+        // Bottom navigation
+        navDashboard           = findViewById(R.id.navDashboard);
+        navProducts            = findViewById(R.id.navProducts);
+        navOrders              = findViewById(R.id.navOrders);
+        navAnalytics           = findViewById(R.id.navAnalytics);
+        navProfile             = findViewById(R.id.navProfile);
+
+        navDashboardIcon       = findViewById(R.id.navDashboardIcon);
+        navProductsIcon        = findViewById(R.id.navProductsIcon);
+        navOrdersIcon          = findViewById(R.id.navOrdersIcon);
+        navAnalyticsIcon       = findViewById(R.id.navAnalyticsIcon);
+        navProfileIcon         = findViewById(R.id.navProfileIcon);
+
+        navDashboardText       = findViewById(R.id.navDashboardText);
+        navProductsText        = findViewById(R.id.navProductsText);
+        navOrdersText          = findViewById(R.id.navOrdersText);
+        navAnalyticsText       = findViewById(R.id.navAnalyticsText);
+        navProfileText         = findViewById(R.id.navProfileText);
     }
 
     // ── SAMPLE DATA ────────────────────────────────────────────────────────
@@ -251,6 +277,34 @@ public class Inventory extends AppCompatActivity {
         btnAddProduct.setOnClickListener(v -> {
             Intent intent = new Intent(Inventory.this, Add_Product.class);
             startActivity(intent);
+        });
+
+        navDashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(Inventory.this, Dashboard.class);
+            startActivity(intent);
+            finish();
+        });
+
+        // Already on Inventory screen.
+        navProducts.setOnClickListener(v -> {
+        });
+
+        navOrders.setOnClickListener(v -> {
+            Intent intent = new Intent(Inventory.this, Order_List.class);
+            startActivity(intent);
+            finish();
+        });
+
+        navAnalytics.setOnClickListener(v -> {
+            Intent intent = new Intent(Inventory.this, Analytics.class);
+            startActivity(intent);
+            finish();
+        });
+
+        navProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(Inventory.this, ProfilePage.class);
+            startActivity(intent);
+            finish();
         });
     }
 

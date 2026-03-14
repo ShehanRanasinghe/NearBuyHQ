@@ -46,14 +46,7 @@
                     android:orientation="vertical"
                     android:layout_marginStart="8dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="NearBuyHQ"
-                        android:textColor="#4ECDC4"
-                        android:textSize="11sp"
-                        android:letterSpacing="0.15"
-                        android:textStyle="bold" />
+
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -64,14 +57,7 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Promo icon badge -->
-                <TextView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:text="🏷️"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:background="@drawable/bg_icon_circle_white" />
+
             </LinearLayout>
 
             <!-- Quick-stats row -->
