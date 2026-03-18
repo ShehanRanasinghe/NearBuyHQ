@@ -44,7 +44,7 @@
             android:screenOrientation="portrait" />
         <!-- SPLASH SCREEN – Main launcher -->
         <activity
-            android:name=".SplashScreen"
+            android:name=".app.startup.SplashScreen"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NearBuyHQ.Splash">
@@ -55,7 +55,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Welcome"
+            android:name=".app.startup.Welcome"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

@@ -1,4 +1,4 @@
-package com.example.nearbuyhq;
+package com.example.nearbuyhq.app.startup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.nearbuyhq.R;
 
 public class SplashScreen extends AppCompatActivity {
 

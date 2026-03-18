@@ -1,4 +1,4 @@
-package com.example.nearbuyhq;
+package com.example.nearbuyhq.app.startup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.nearbuyhq.R;
 import com.example.nearbuyhq.auth.Login;
 import com.example.nearbuyhq.auth.Register;
 
@@ -33,3 +34,4 @@ public class Welcome extends AppCompatActivity {
         });
     }
 }
+
