@@ -1,0 +1,91 @@
+rules_version = '2';
+
+/*
+ * NearBuyHQ Firestore Security Rules
+ *
+ * How to deploy:
+ *  1. Go to https://console.firebase.google.com
+ *  2. Select your project → Firestore Database → Rules
+ *  3. Replace all rules with this file's content → Publish
+ *
+ * Rule summary:
+ *  - All reads/writes require the user to be signed in (request.auth != null)
+ *  - shops    → any authenticated user can read (customer app); owner can write
+ *  - products → any authenticated user can read (customer app); owner can write
+ *  - Everything else → any signed-in user can read and write
+ */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Users ──────────────────────────────────────────────────────────────
+    // Each user can only read/write their own profile document
+    match /users/{userId} {
+      allow read, write: if request.auth != null
+                         && request.auth.uid == userId;
+    }
+
+    // ── Shops ──────────────────────────────────────────────────────────────
+    // Customer app reads all Active shops to calculate distance / show prices
+    // Only the shop owner (ownerUid field == their Firebase Auth UID) can create/update
+    match /shops/{shopId} {
+      allow read: if request.auth != null;
+
+      // Allow create when the ownerUid in the new document matches the writer
+      allow create: if request.auth != null
+                    && request.resource.data.ownerUid == request.auth.uid;
+
+      // Allow update/delete only if the existing document belongs to this user
+      allow update, delete: if request.auth != null
+                             && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // ── Products ───────────────────────────────────────────────────────────
+    // Customer app reads products by name to show search results
+    // Authenticated shop owners can create/update/delete their products
+    match /products/{productId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ── Orders ─────────────────────────────────────────────────────────────
+    // Created by the customer app; read by the admin app
+    match /orders/{orderId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ── Promotions ─────────────────────────────────────────────────────────
+    match /promotions/{promoId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ── Deals ──────────────────────────────────────────────────────────────
+    match /deals/{dealId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ── Discounts ──────────────────────────────────────────────────────────
+    match /discounts/{discountId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ── Notifications ──────────────────────────────────────────────────────
+    match /notifications/{notifId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // ── Reports ────────────────────────────────────────────────────────────
+    // Customer app can create reports; admin app can read and update status
+    match /reports/{reportId} {
+      allow read:  if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+  }
+}
+

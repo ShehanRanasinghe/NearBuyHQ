@@ -13,6 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+.env
 
 # Ignore Android Studio IDE files and build files
 .idea/
