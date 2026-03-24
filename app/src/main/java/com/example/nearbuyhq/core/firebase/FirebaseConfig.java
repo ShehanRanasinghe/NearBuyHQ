@@ -1,19 +1,23 @@
 package com.example.nearbuyhq.core.firebase;
 
+import com.example.nearbuyhq.BuildConfig;
+
 /**
  * Central Firebase switches used by the app shell.
  * Backend wiring will be added in a later step.
  */
 public final class FirebaseConfig {
 
-    private static final boolean FIREBASE_ENABLED = false;
-
     private FirebaseConfig() {
         // Utility class
     }
 
     public static boolean isFirebaseEnabled() {
-        return FIREBASE_ENABLED;
+        return BuildConfig.FIREBASE_ENABLED;
+    }
+
+    public static String getProjectId() {
+        return BuildConfig.FIREBASE_PROJECT_ID;
     }
 }
 
