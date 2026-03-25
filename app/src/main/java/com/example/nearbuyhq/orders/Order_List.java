@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.firebase.FirebaseConfig;
+import com.example.nearbuyhq.data.repository.DataCallback;
+import com.example.nearbuyhq.data.repository.OrderRepository;
 import com.example.nearbuyhq.dashboard.Analytics;
 import com.example.nearbuyhq.dashboard.Dashboard;
 import com.example.nearbuyhq.products.Inventory;
@@ -29,7 +32,12 @@ public class Order_List extends AppCompatActivity {
     private RecyclerView recyclerOrders;
     private OrderAdapter orderAdapter;
     private List<Order> orderList;
+    private List<Order> allOrders;
     private ImageView btnBack;
+    private TextView tvTotalOrders, tvPendingCount, tvDeliveredCount;
+    private TextView tabAll, tabPending, tabProcessing, tabDelivered;
+    private OrderRepository orderRepository;
+    private String activeFilter = "All";
     private LinearLayout navDashboard, navProducts, navOrders, navAnalytics, navProfile;
     private ImageView navDashboardIcon, navProductsIcon, navOrdersIcon, navAnalyticsIcon, navProfileIcon;
     private TextView navDashboardText, navProductsText, navOrdersText, navAnalyticsText, navProfileText;
@@ -54,8 +62,18 @@ public class Order_List extends AppCompatActivity {
         recyclerOrders = findViewById(R.id.recycler_orders);
         initBottomNavigationViews();
 
-        // Initialize sample data
-        initSampleOrders();
+        tvTotalOrders = findViewById(R.id.tv_total_orders);
+        tvPendingCount = findViewById(R.id.tv_pending_count);
+        tvDeliveredCount = findViewById(R.id.tv_delivered_count);
+        tabAll = findViewById(R.id.tab_all);
+        tabPending = findViewById(R.id.tab_pending);
+        tabProcessing = findViewById(R.id.tab_processing);
+        tabDelivered = findViewById(R.id.tab_delivered);
+
+        orderRepository = new OrderRepository();
+        allOrders = new ArrayList<>();
+        orderList = new ArrayList<>();
+        setupFilterTabs();
 
         // Setup RecyclerView
         orderAdapter = new OrderAdapter(this, orderList);
@@ -79,6 +97,13 @@ public class Order_List extends AppCompatActivity {
         setupBottomNavigation();
         resetNavSelection();
         setNavActive(navOrdersIcon, navOrdersText);
+        loadOrders();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadOrders();
     }
 
     private void initBottomNavigationViews() {
@@ -160,18 +185,80 @@ public class Order_List extends AppCompatActivity {
     }
 
     private void initSampleOrders() {
-        orderList = new ArrayList<>();
-        orderList.add(new Order("1001", "John Smith", "Delivered", 45.99, "2024-03-05"));
-        orderList.add(new Order("1002", "Sarah Johnson", "Processing", 78.50, "2024-03-06"));
-        orderList.add(new Order("1003", "Mike Brown", "Pending", 32.25, "2024-03-06"));
-        orderList.add(new Order("1004", "Emily Davis", "Delivered", 120.00, "2024-03-04"));
-        orderList.add(new Order("1005", "David Wilson", "Pending", 56.75, "2024-03-06"));
-        orderList.add(new Order("1006", "Lisa Anderson", "Processing", 89.99, "2024-03-05"));
-        orderList.add(new Order("1007", "James Taylor", "Delivered", 65.40, "2024-03-03"));
-        orderList.add(new Order("1008", "Maria Garcia", "Cancelled", 42.80, "2024-03-04"));
-        orderList.add(new Order("1009", "Robert Martinez", "Pending", 95.60, "2024-03-06"));
-        orderList.add(new Order("1010", "Jennifer Lee", "Processing", 38.25, "2024-03-05"));
-        orderList.add(new Order("1011", "William White", "Delivered", 145.50, "2024-03-02"));
-        orderList.add(new Order("1012", "Amanda Harris", "Pending", 73.90, "2024-03-06"));
+        allOrders.clear();
+        allOrders.add(new Order("1001", "John Smith", "Delivered", 45.99, "2024-03-05"));
+        allOrders.add(new Order("1002", "Sarah Johnson", "Processing", 78.50, "2024-03-06"));
+        allOrders.add(new Order("1003", "Mike Brown", "Pending", 32.25, "2024-03-06"));
+        allOrders.add(new Order("1004", "Emily Davis", "Delivered", 120.00, "2024-03-04"));
+        allOrders.add(new Order("1005", "David Wilson", "Pending", 56.75, "2024-03-06"));
+        allOrders.add(new Order("1006", "Lisa Anderson", "Processing", 89.99, "2024-03-05"));
+        allOrders.add(new Order("1007", "James Taylor", "Delivered", 65.40, "2024-03-03"));
+        allOrders.add(new Order("1008", "Maria Garcia", "Cancelled", 42.80, "2024-03-04"));
+        allOrders.add(new Order("1009", "Robert Martinez", "Pending", 95.60, "2024-03-06"));
+        allOrders.add(new Order("1010", "Jennifer Lee", "Processing", 38.25, "2024-03-05"));
+        allOrders.add(new Order("1011", "William White", "Delivered", 145.50, "2024-03-02"));
+        allOrders.add(new Order("1012", "Amanda Harris", "Pending", 73.90, "2024-03-06"));
+    }
+
+    private void loadOrders() {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            initSampleOrders();
+            applyOrderFilter();
+            return;
+        }
+
+        orderRepository.getOrders(new DataCallback<List<Order>>() {
+            @Override
+            public void onSuccess(List<Order> data) {
+                allOrders.clear();
+                allOrders.addAll(data);
+                applyOrderFilter();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                initSampleOrders();
+                applyOrderFilter();
+            }
+        });
+    }
+
+    private void setupFilterTabs() {
+        tabAll.setOnClickListener(v -> setFilter("All"));
+        tabPending.setOnClickListener(v -> setFilter("Pending"));
+        tabProcessing.setOnClickListener(v -> setFilter("Processing"));
+        tabDelivered.setOnClickListener(v -> setFilter("Delivered"));
+    }
+
+    private void setFilter(String filter) {
+        activeFilter = filter;
+        applyOrderFilter();
+    }
+
+    private void applyOrderFilter() {
+        orderList.clear();
+        for (Order order : allOrders) {
+            if ("All".equals(activeFilter) || activeFilter.equalsIgnoreCase(order.getStatus())) {
+                orderList.add(order);
+            }
+        }
+        orderAdapter.notifyDataSetChanged();
+        updateSummary();
+    }
+
+    private void updateSummary() {
+        int pending = 0;
+        int delivered = 0;
+        for (Order order : allOrders) {
+            if ("Pending".equalsIgnoreCase(order.getStatus())) {
+                pending++;
+            }
+            if ("Delivered".equalsIgnoreCase(order.getStatus())) {
+                delivered++;
+            }
+        }
+        tvTotalOrders.setText(String.valueOf(allOrders.size()));
+        tvPendingCount.setText(String.valueOf(pending));
+        tvDeliveredCount.setText(String.valueOf(delivered));
     }
 }

@@ -1,16 +1,33 @@
 package com.example.nearbuyhq.orders;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Order {
     private String orderId, customerName, status, orderDate;
+    private String customerPhone;
+    private String customerAddress;
     private double orderTotal;
+    private long createdAt;
+    private long updatedAt;
 
     public Order(String orderId, String customerName, String status,
                  double orderTotal, String orderDate) {
+        this(orderId, customerName, status, orderTotal, orderDate, "", "", System.currentTimeMillis(), System.currentTimeMillis());
+    }
+
+    public Order(String orderId, String customerName, String status,
+                 double orderTotal, String orderDate, String customerPhone,
+                 String customerAddress, long createdAt, long updatedAt) {
         this.orderId = orderId;
         this.customerName = customerName;
         this.status = status;
         this.orderTotal = orderTotal;
         this.orderDate = orderDate;
+        this.customerPhone = customerPhone;
+        this.customerAddress = customerAddress;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public String getOrderId()      { return orderId; }
@@ -18,4 +35,76 @@ public class Order {
     public String getStatus()       { return status; }
     public double getOrderTotal()   { return orderTotal; }
     public String getOrderDate()    { return orderDate; }
+    public String getCustomerPhone() { return customerPhone; }
+    public String getCustomerAddress() { return customerAddress; }
+    public long getCreatedAt() { return createdAt; }
+    public long getUpdatedAt() { return updatedAt; }
+
+    public void setStatus(String status) {
+        this.status = status;
+        this.updatedAt = System.currentTimeMillis();
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("customerName", customerName);
+        map.put("status", status);
+        map.put("orderTotal", orderTotal);
+        map.put("total", orderTotal);
+        map.put("orderDate", orderDate);
+        map.put("customerPhone", customerPhone);
+        map.put("customerAddress", customerAddress);
+        map.put("createdAt", createdAt);
+        map.put("updatedAt", updatedAt);
+        return map;
+    }
+
+    public static Order fromMap(String id, Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
+        return new Order(
+                id,
+                value(map.get("customerName")),
+                defaultIfEmpty(value(map.get("status")), "Pending"),
+                doubleValue(map.get("orderTotal"), map.get("total")),
+                value(map.get("orderDate")),
+                value(map.get("customerPhone")),
+                value(map.get("customerAddress")),
+                longValue(map.get("createdAt")),
+                longValue(map.get("updatedAt"))
+        );
+    }
+
+    private static String value(Object o) {
+        return o == null ? "" : String.valueOf(o).trim();
+    }
+
+    private static String defaultIfEmpty(String value, String fallback) {
+        return value.isEmpty() ? fallback : value;
+    }
+
+    private static double doubleValue(Object primary, Object secondary) {
+        if (primary instanceof Number) {
+            return ((Number) primary).doubleValue();
+        }
+        if (secondary instanceof Number) {
+            return ((Number) secondary).doubleValue();
+        }
+        return 0d;
+    }
+
+    private static long longValue(Object value) {
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+        if (value instanceof String) {
+            try {
+                return Long.parseLong((String) value);
+            } catch (NumberFormatException ignored) {
+                return 0L;
+            }
+        }
+        return 0L;
+    }
 }
