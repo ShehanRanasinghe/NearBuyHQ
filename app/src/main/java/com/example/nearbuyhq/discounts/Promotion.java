@@ -3,6 +3,9 @@ package com.example.nearbuyhq.discounts;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Promotion {
 
     public static final String TYPE_RAMADAN    = "Ramadan";
@@ -20,12 +23,22 @@ public class Promotion {
     private String productName;
     private double originalPrice;
     private boolean isActive;
+    private long createdAt;
+    private long updatedAt;
 
     public Promotion() {}
 
     public Promotion(String id, String title, String type, int discountPercentage,
                      String startDate, String endDate,
                      String productName, double originalPrice, boolean isActive) {
+        this(id, title, type, discountPercentage, startDate, endDate, productName, originalPrice,
+                isActive, System.currentTimeMillis(), System.currentTimeMillis());
+    }
+
+    public Promotion(String id, String title, String type, int discountPercentage,
+                     String startDate, String endDate,
+                     String productName, double originalPrice, boolean isActive,
+                     long createdAt, long updatedAt) {
         this.id                 = id;
         this.title              = title;
         this.type               = type;
@@ -35,6 +48,8 @@ public class Promotion {
         this.productName        = productName;
         this.originalPrice      = originalPrice;
         this.isActive           = isActive;
+        this.createdAt          = createdAt;
+        this.updatedAt          = updatedAt;
     }
 
     // ── JSON serialisation ──────────────────────────────────────────────────
@@ -63,7 +78,43 @@ public class Promotion {
                 obj.getString("endDate"),
                 obj.optString("productName", ""),
                 obj.optDouble("originalPrice", 0.0),
-                obj.optBoolean("isActive", true)
+                obj.optBoolean("isActive", true),
+                obj.optLong("createdAt", System.currentTimeMillis()),
+                obj.optLong("updatedAt", System.currentTimeMillis())
+        );
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", title);
+        map.put("type", type);
+        map.put("discountPercentage", discountPercentage);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("productName", productName);
+        map.put("originalPrice", originalPrice);
+        map.put("isActive", isActive);
+        map.put("createdAt", createdAt);
+        map.put("updatedAt", updatedAt);
+        return map;
+    }
+
+    public static Promotion fromMap(String id, Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
+        return new Promotion(
+                id,
+                value(map.get("title")),
+                value(map.get("type")),
+                intValue(map.get("discountPercentage")),
+                value(map.get("startDate")),
+                value(map.get("endDate")),
+                value(map.get("productName")),
+                doubleValue(map.get("originalPrice")),
+                booleanValue(map.get("isActive"), true),
+                longValue(map.get("createdAt")),
+                longValue(map.get("updatedAt"))
         );
     }
 
@@ -112,4 +163,63 @@ public class Promotion {
 
     public boolean isActive()                   { return isActive; }
     public void    setActive(boolean active)    { this.isActive = active; }
+
+    public long getCreatedAt() { return createdAt; }
+    public long getUpdatedAt() { return updatedAt; }
+
+    private static String value(Object value) {
+        return value == null ? "" : String.valueOf(value).trim();
+    }
+
+    private static int intValue(Object value) {
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        if (value instanceof String) {
+            try {
+                return Integer.parseInt((String) value);
+            } catch (NumberFormatException ignored) {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    private static double doubleValue(Object value) {
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        }
+        if (value instanceof String) {
+            try {
+                return Double.parseDouble((String) value);
+            } catch (NumberFormatException ignored) {
+                return 0.0;
+            }
+        }
+        return 0.0;
+    }
+
+    private static long longValue(Object value) {
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+        if (value instanceof String) {
+            try {
+                return Long.parseLong((String) value);
+            } catch (NumberFormatException ignored) {
+                return 0L;
+            }
+        }
+        return 0L;
+    }
+
+    private static boolean booleanValue(Object value, boolean fallback) {
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        if (value instanceof String) {
+            return Boolean.parseBoolean((String) value);
+        }
+        return fallback;
+    }
 }

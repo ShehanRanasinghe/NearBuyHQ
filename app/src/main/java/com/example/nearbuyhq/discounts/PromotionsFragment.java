@@ -1,12 +1,12 @@
 package com.example.nearbuyhq.discounts;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,15 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.firebase.FirebaseConfig;
+import com.example.nearbuyhq.data.repository.DataCallback;
+import com.example.nearbuyhq.data.repository.DiscountRepository;
+import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class PromotionsFragment extends Fragment {
 
@@ -33,6 +32,7 @@ public class PromotionsFragment extends Fragment {
     private List<Promotion> promotionList;
     private LinearLayout llEmptyState;
     private FloatingActionButton fabAddPromotion;
+    private DiscountRepository discountRepository;
 
     @Nullable
     @Override
@@ -44,6 +44,7 @@ public class PromotionsFragment extends Fragment {
         fabAddPromotion = view.findViewById(R.id.fabAddPromotion);
 
         promotionList = new ArrayList<>();
+        discountRepository = new DiscountRepository();
         adapter = new PromotionAdapter(promotionList, new PromotionAdapter.OnPromotionActionListener() {
             @Override
             public void onEdit(int position) {
@@ -60,10 +61,23 @@ public class PromotionsFragment extends Fragment {
                         .setTitle("Delete Promotion")
                         .setMessage("Remove \"" + p.getTitle() + "\"?\nThis cannot be undone.")
                         .setPositiveButton("Delete", (d, w) -> {
-                            promotionList.remove(position);
-                            adapter.notifyItemRemoved(position);
-                            savePromotions();
-                            toggleEmptyState();
+                            if (!FirebaseConfig.isFirebaseEnabled()) {
+                                Toast.makeText(requireContext(), "Enable Firebase to delete", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            discountRepository.deletePromotion(p.getId(), new OperationCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    promotionList.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                    toggleEmptyState();
+                                }
+
+                                @Override
+                                public void onError(Exception exception) {
+                                    Toast.makeText(requireContext(), "Delete failed: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
                         })
                         .setNegativeButton("Cancel", null)
                         .show();
@@ -83,31 +97,33 @@ public class PromotionsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadPromotions();
-        adapter.notifyDataSetChanged();
-        toggleEmptyState();
     }
 
     private void loadPromotions() {
-        promotionList.clear();
-        SharedPreferences prefs = requireActivity().getSharedPreferences(Promotions.PREFS_NAME, MODE_PRIVATE);
-        String json = prefs.getString(Promotions.PREFS_KEY, "[]");
-        try {
-            JSONArray arr = new JSONArray(json);
-            for (int i = 0; i < arr.length(); i++) {
-                promotionList.add(Promotion.fromJson(arr.getJSONObject(i)));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            promotionList.clear();
+            adapter.notifyDataSetChanged();
+            toggleEmptyState();
+            return;
         }
-    }
 
-    void savePromotions() {
-        JSONArray arr = new JSONArray();
-        for (Promotion p : promotionList) {
-            try { arr.put(p.toJson()); } catch (JSONException ignored) {}
-        }
-        requireActivity().getSharedPreferences(Promotions.PREFS_NAME, MODE_PRIVATE)
-                .edit().putString(Promotions.PREFS_KEY, arr.toString()).apply();
+        discountRepository.getPromotions(new DataCallback<List<Promotion>>() {
+            @Override
+            public void onSuccess(List<Promotion> data) {
+                promotionList.clear();
+                promotionList.addAll(data);
+                adapter.notifyDataSetChanged();
+                toggleEmptyState();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                Toast.makeText(requireContext(), "Failed to load promotions", Toast.LENGTH_SHORT).show();
+                promotionList.clear();
+                adapter.notifyDataSetChanged();
+                toggleEmptyState();
+            }
+        });
     }
 
     private void toggleEmptyState() {
