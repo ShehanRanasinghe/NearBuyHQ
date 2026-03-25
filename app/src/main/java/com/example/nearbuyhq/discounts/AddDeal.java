@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.firebase.FirebaseConfig;
+import com.example.nearbuyhq.data.repository.DiscountRepository;
+import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.dashboard.Analytics;
 import com.example.nearbuyhq.dashboard.Dashboard;
 import com.example.nearbuyhq.orders.Order_List;
@@ -26,6 +29,10 @@ public class AddDeal extends AppCompatActivity {
     private EditText dealTitle, dealDescription, dealDiscount, dealValidity;
     private Spinner shopSelection;
     private TextView btnSubmit, btnCancel;
+    private DiscountRepository discountRepository;
+    private boolean editMode;
+    private String editDealId;
+    private long originalCreatedAt;
 
     // Bottom navigation
     private LinearLayout navDashboard, navProducts, navOrders, navAnalytics, navProfile;
@@ -48,6 +55,7 @@ public class AddDeal extends AppCompatActivity {
         shopSelection = findViewById(R.id.shopSelection);
         btnSubmit = findViewById(R.id.btnSubmit);
         btnCancel = findViewById(R.id.btnCancel);
+        discountRepository = new DiscountRepository();
 
         // Bottom navigation
         navDashboard = findViewById(R.id.navDashboard);
@@ -74,10 +82,14 @@ public class AddDeal extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         shopSelection.setAdapter(adapter);
 
+        bindEditPayload(shops);
+
+        ImageView btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> finish());
+
         btnSubmit.setOnClickListener(v -> {
             if (validateInputs()) {
-                Toast.makeText(this, "Deal created successfully", Toast.LENGTH_SHORT).show();
-                finish();
+                saveDeal();
             }
         });
 
@@ -165,6 +177,79 @@ public class AddDeal extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void saveDeal() {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            Toast.makeText(this, "Enable Firebase to save deals", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        long now = System.currentTimeMillis();
+        Deal deal = new Deal(
+                editMode ? editDealId : "",
+                dealTitle.getText().toString().trim(),
+                String.valueOf(shopSelection.getSelectedItem()),
+                dealDiscount.getText().toString().trim() + "%",
+                dealDescription.getText().toString().trim(),
+                dealValidity.getText().toString().trim(),
+                editMode ? originalCreatedAt : now,
+                now
+        );
+
+        setSaving(true);
+        discountRepository.saveDeal(deal, new OperationCallback() {
+            @Override
+            public void onSuccess() {
+                setSaving(false);
+                Toast.makeText(AddDeal.this, editMode ? "Deal updated" : "Deal created successfully", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                setSaving(false);
+                Toast.makeText(AddDeal.this, "Failed to save: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void setSaving(boolean saving) {
+        btnSubmit.setEnabled(!saving);
+        btnSubmit.setAlpha(saving ? 0.6f : 1f);
+        btnSubmit.setText(saving ? "Saving..." : (editMode ? "Update Deal" : "Create Deal"));
+    }
+
+    private void bindEditPayload(String[] shops) {
+        editMode = getIntent().getBooleanExtra("is_edit", false);
+        if (!editMode) {
+            originalCreatedAt = System.currentTimeMillis();
+            return;
+        }
+
+        editDealId = getIntent().getStringExtra("deal_id");
+        originalCreatedAt = getIntent().getLongExtra("deal_created_at", System.currentTimeMillis());
+
+        dealTitle.setText(getIntent().getStringExtra("deal_title"));
+        dealDescription.setText(getIntent().getStringExtra("deal_description"));
+        String discount = getIntent().getStringExtra("deal_discount");
+        if (discount != null) {
+            dealDiscount.setText(discount.replace("%", "").replace("OFF", "").trim());
+        }
+        dealValidity.setText(getIntent().getStringExtra("deal_validity"));
+
+        String incomingShop = getIntent().getStringExtra("deal_shop");
+        if (incomingShop != null) {
+            for (int i = 0; i < shops.length; i++) {
+                if (incomingShop.equalsIgnoreCase(shops[i])) {
+                    shopSelection.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+        btnSubmit.setText("Update Deal");
     }
 }
 

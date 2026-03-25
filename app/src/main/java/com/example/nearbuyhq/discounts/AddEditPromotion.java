@@ -2,7 +2,6 @@ package com.example.nearbuyhq.discounts;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,15 +23,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.firebase.FirebaseConfig;
+import com.example.nearbuyhq.data.repository.DataCallback;
+import com.example.nearbuyhq.data.repository.DiscountRepository;
+import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.dashboard.Analytics;
 import com.example.nearbuyhq.dashboard.Dashboard;
 import com.example.nearbuyhq.orders.Order_List;
 import com.example.nearbuyhq.products.Inventory;
 import com.example.nearbuyhq.settings.ProfilePage;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,6 +56,7 @@ public class AddEditPromotion extends AppCompatActivity {
     private TextView navDashboardText, navProductsText, navOrdersText, navAnalyticsText, navProfileText;
 
     private Promotion editing; // null means creating a new promotion
+    private DiscountRepository discountRepository;
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
@@ -93,6 +93,7 @@ public class AddEditPromotion extends AppCompatActivity {
         etNotes           = findViewById(R.id.etPromoNotes);
         switchActive      = findViewById(R.id.switchPromoActive);
         btnSave           = findViewById(R.id.btnSavePromotion);
+        discountRepository = new DiscountRepository();
 
         // ── Spinner setup ────────────────────────────────────────────────
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(
@@ -152,6 +153,8 @@ public class AddEditPromotion extends AppCompatActivity {
         // ── Back / Save ──────────────────────────────────────────────────
 //        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 //        btnSave.setOnClickListener(v -> savePromotion());
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
+        btnSave.setOnClickListener(v -> savePromotion());
     }
 
     // ── Bottom Navigation ────────────────────────────────────────────────────
@@ -249,33 +252,37 @@ public class AddEditPromotion extends AppCompatActivity {
     // ── Load existing promotion for editing ──────────────────────────────────
 
     private void loadForEditing(String promoId) {
-        SharedPreferences prefs = getSharedPreferences(Promotions.PREFS_NAME, MODE_PRIVATE);
-        String json = prefs.getString(Promotions.PREFS_KEY, "[]");
-        try {
-            JSONArray arr = new JSONArray(json);
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                if (promoId.equals(obj.optString("id"))) {
-                    editing = Promotion.fromJson(obj);
-                    break;
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            Toast.makeText(this, "Enable Firebase to edit promotions", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if (editing == null) return;
+        discountRepository.getPromotion(promoId, new DataCallback<Promotion>() {
+            @Override
+            public void onSuccess(Promotion data) {
+                editing = data;
+                populateFormFromEditing();
+            }
 
+            @Override
+            public void onError(Exception exception) {
+                Toast.makeText(AddEditPromotion.this, "Failed to load promotion", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void populateFormFromEditing() {
+        if (editing == null) return;
         etTitle.setText(editing.getTitle());
         etProduct.setText(editing.getProductName());
-        if (editing.getOriginalPrice() > 0)
+        if (editing.getOriginalPrice() > 0) {
             etOriginalPrice.setText(String.valueOf(editing.getOriginalPrice()));
+        }
         etDiscount.setText(String.valueOf(editing.getDiscountPercentage()));
         tvStartDate.setText(editing.getStartDate());
         tvEndDate.setText(editing.getEndDate());
         switchActive.setChecked(editing.isActive());
 
-        // Select the matching spinner position
         for (int i = 0; i < TYPES.length; i++) {
             if (TYPES[i].equals(editing.getType())) {
                 spinnerType.setSelection(i);
@@ -325,33 +332,33 @@ public class AddEditPromotion extends AppCompatActivity {
         Promotion p = new Promotion(id, title, type, discount,
                 startDate, endDate, product, originalPrice, active);
 
-        // Persist: load → update/insert → save
-        SharedPreferences prefs = getSharedPreferences(Promotions.PREFS_NAME, MODE_PRIVATE);
-        String json = prefs.getString(Promotions.PREFS_KEY, "[]");
-        JSONArray updated = new JSONArray();
-        boolean replaced = false;
-
-        try {
-            JSONArray arr = new JSONArray(json);
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                if (id.equals(obj.optString("id"))) {
-                    updated.put(p.toJson());
-                    replaced = true;
-                } else {
-                    updated.put(obj);
-                }
-            }
-            if (!replaced) updated.put(p.toJson());
-        } catch (JSONException e) {
-            e.printStackTrace();
-            try { updated.put(p.toJson()); } catch (JSONException ignored) {}
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            Toast.makeText(this, "Enable Firebase to save promotions", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        prefs.edit().putString(Promotions.PREFS_KEY, updated.toString()).apply();
-        Toast.makeText(this,
-                editing != null ? "Promotion updated!" : "Promotion added!",
-                Toast.LENGTH_SHORT).show();
-        finish();
+        setSaving(true);
+        discountRepository.savePromotion(p, new OperationCallback() {
+            @Override
+            public void onSuccess() {
+                setSaving(false);
+                Toast.makeText(AddEditPromotion.this,
+                        editing != null ? "Promotion updated!" : "Promotion added!",
+                        Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                setSaving(false);
+                Toast.makeText(AddEditPromotion.this, "Save failed: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void setSaving(boolean saving) {
+        btnSave.setEnabled(!saving);
+        btnSave.setAlpha(saving ? 0.6f : 1f);
+        btnSave.setText(saving ? "Saving..." : (editing != null ? "Update Promotion" : "Save Promotion"));
     }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.firebase.FirebaseConfig;
+import com.example.nearbuyhq.data.repository.DataCallback;
+import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -26,6 +30,7 @@ public class DealsFragment extends Fragment {
     private List<Deal> dealsList;
     private LinearLayout llEmptyState;
     private FloatingActionButton fabAddDeal;
+    private DiscountRepository discountRepository;
 
     @Nullable
     @Override
@@ -37,10 +42,17 @@ public class DealsFragment extends Fragment {
         fabAddDeal = view.findViewById(R.id.fabAddDeal);
 
         dealsList = new ArrayList<>();
-        loadSampleDeals();
+        discountRepository = new DiscountRepository();
 
         adapter = new DealsAdapter(dealsList, deal -> {
-            // Handle deal click
+            Intent intent = new Intent(getActivity(), DealDetails.class);
+            intent.putExtra("deal_id", deal.getId());
+            intent.putExtra("deal_title", deal.getTitle());
+            intent.putExtra("deal_shop", deal.getShopName());
+            intent.putExtra("deal_discount", deal.getDiscount());
+            intent.putExtra("deal_validity", deal.getValidity());
+            intent.putExtra("deal_description", deal.getDescription());
+            startActivity(intent);
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -49,13 +61,46 @@ public class DealsFragment extends Fragment {
         fabAddDeal.setOnClickListener(v ->
                 startActivity(new Intent(getActivity(), AddDeal.class)));
 
-        toggleEmptyState();
+        loadDeals();
 
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadDeals();
+    }
+
+    private void loadDeals() {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            loadSampleDeals();
+            adapter.notifyDataSetChanged();
+            toggleEmptyState();
+            return;
+        }
+
+        discountRepository.getDeals(new DataCallback<List<Deal>>() {
+            @Override
+            public void onSuccess(List<Deal> data) {
+                dealsList.clear();
+                dealsList.addAll(data);
+                adapter.notifyDataSetChanged();
+                toggleEmptyState();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                Toast.makeText(requireContext(), "Failed to load deals", Toast.LENGTH_SHORT).show();
+                loadSampleDeals();
+                adapter.notifyDataSetChanged();
+                toggleEmptyState();
+            }
+        });
+    }
+
     private void loadSampleDeals() {
-        // Add sample deals
+        dealsList.clear();
         dealsList.add(new Deal("1", "Buy 2 Get 1 Free", "All dairy products", "20%", "March 15, 2026"));
         dealsList.add(new Deal("2", "Weekend Special", "Fresh fruits", "15%", "March 12, 2026"));
         dealsList.add(new Deal("3", "Spring Sale", "All vegetables", "25%", "March 20, 2026"));

@@ -1,7 +1,6 @@
 package com.example.nearbuyhq.discounts;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -17,22 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.example.nearbuyhq.R;
-
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.example.nearbuyhq.core.firebase.FirebaseConfig;
+import com.example.nearbuyhq.data.repository.DataCallback;
+import com.example.nearbuyhq.data.repository.DiscountRepository;
+import com.example.nearbuyhq.data.repository.OperationCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Promotions extends AppCompatActivity {
 
-    static final String PREFS_NAME = "NearBuyHQ_Promos";
-    static final String PREFS_KEY  = "promotions_json";
-
     private RecyclerView      recyclerView;
     private PromotionAdapter  adapter;
     private List<Promotion>   promotionList;
     private LinearLayout      llEmptyState;
+    private DiscountRepository discountRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +49,7 @@ public class Promotions extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fabAddPromotion);
 
         promotionList = new ArrayList<>();
+        discountRepository = new DiscountRepository();
         adapter = new PromotionAdapter(promotionList, new PromotionAdapter.OnPromotionActionListener() {
             @Override
             public void onEdit(int position) {
@@ -67,10 +66,21 @@ public class Promotions extends AppCompatActivity {
                         .setTitle("Delete Promotion")
                         .setMessage("Remove \"" + p.getTitle() + "\"?\nThis cannot be undone.")
                         .setPositiveButton("Delete", (d, w) -> {
-                            promotionList.remove(position);
-                            adapter.notifyItemRemoved(position);
-                            savePromotions();
-                            toggleEmptyState();
+                            if (!FirebaseConfig.isFirebaseEnabled()) {
+                                return;
+                            }
+                            discountRepository.deletePromotion(p.getId(), new OperationCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    promotionList.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                    toggleEmptyState();
+                                }
+
+                                @Override
+                                public void onError(Exception exception) {
+                                }
+                            });
                         })
                         .setNegativeButton("Cancel", null)
                         .show();
@@ -90,33 +100,34 @@ public class Promotions extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadPromotions();
-        adapter.notifyDataSetChanged();
-        toggleEmptyState();
     }
 
     // ── Data helpers ────────────────────────────────────────────────────────
 
     private void loadPromotions() {
-        promotionList.clear();
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String json = prefs.getString(PREFS_KEY, "[]");
-        try {
-            JSONArray arr = new JSONArray(json);
-            for (int i = 0; i < arr.length(); i++) {
-                promotionList.add(Promotion.fromJson(arr.getJSONObject(i)));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            promotionList.clear();
+            adapter.notifyDataSetChanged();
+            toggleEmptyState();
+            return;
         }
-    }
 
-    void savePromotions() {
-        JSONArray arr = new JSONArray();
-        for (Promotion p : promotionList) {
-            try { arr.put(p.toJson()); } catch (JSONException ignored) {}
-        }
-        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                .edit().putString(PREFS_KEY, arr.toString()).apply();
+        discountRepository.getPromotions(new DataCallback<List<Promotion>>() {
+            @Override
+            public void onSuccess(List<Promotion> data) {
+                promotionList.clear();
+                promotionList.addAll(data);
+                adapter.notifyDataSetChanged();
+                toggleEmptyState();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                promotionList.clear();
+                adapter.notifyDataSetChanged();
+                toggleEmptyState();
+            }
+        });
     }
 
     private void toggleEmptyState() {
