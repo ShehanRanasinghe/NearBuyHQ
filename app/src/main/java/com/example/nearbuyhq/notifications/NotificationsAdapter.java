@@ -20,6 +20,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         this.notificationsList = notificationsList;
     }
 
+    /** Replace the full list and refresh the RecyclerView (called after Firestore load). */
+    public void updateList(List<Notification> newList) {
+        this.notificationsList = newList;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
