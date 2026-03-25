@@ -20,6 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
+import com.example.nearbuyhq.core.firebase.FirebaseConfig;
+import com.example.nearbuyhq.data.repository.DataCallback;
+import com.example.nearbuyhq.data.repository.ProductRepository;
 import com.example.nearbuyhq.dashboard.Analytics;
 import com.example.nearbuyhq.dashboard.Dashboard;
 import com.example.nearbuyhq.orders.Order_List;
@@ -46,6 +50,7 @@ public class Inventory extends AppCompatActivity {
 
     private List<InventoryItem> allItems;
     private String currentFilter = "All";
+    private ProductRepository productRepository;
 
     // ── DATA MODEL ─────────────────────────────────────────────────────────
     static class InventoryItem {
@@ -97,13 +102,15 @@ public class Inventory extends AppCompatActivity {
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
         initViews();
-        loadSampleData();
+        productRepository = new ProductRepository();
+        allItems = new ArrayList<>();
         showLowStockWarning();
         setupRecyclerView();
         setupSearch();
         setupFilterChips();
         setupBackButton();
         setupNavigationButtons();
+        loadInventory();
     }
 
     // ── INIT ───────────────────────────────────────────────────────────────
@@ -140,9 +147,15 @@ public class Inventory extends AppCompatActivity {
         navProfileText         = findViewById(R.id.navProfileText);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadInventory();
+    }
+
     // ── SAMPLE DATA ────────────────────────────────────────────────────────
     private void loadSampleData() {
-        allItems = new ArrayList<>();
+        allItems.clear();
         // Same product – different brands tracked independently
         allItems.add(new InventoryItem("Coconut Oil",    "Parachute",     "Oils & Fats",   "bottle", 12,  30, R.drawable.ic_eco_leaf));
         allItems.add(new InventoryItem("Coconut Oil",    "KLF Nirmal",    "Oils & Fats",   "bottle",  0,  30, R.drawable.ic_eco_leaf));
@@ -156,6 +169,45 @@ public class Inventory extends AppCompatActivity {
         allItems.add(new InventoryItem("Turmeric Powder","MDH",           "Spices",        "kg",      0,  30, R.drawable.ic_eco_leaf));
         allItems.add(new InventoryItem("Black Pepper",   "Catch",         "Spices",        "kg",      7,  30, R.drawable.ic_eco_leaf));
         allItems.add(new InventoryItem("Cashews",        "Happy Nuts",    "Nuts",          "kg",      9,  30, R.drawable.ic_eco_leaf));
+    }
+
+    private void loadInventory() {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            loadSampleData();
+            adapter.updateList(allItems);
+            showLowStockWarning();
+            return;
+        }
+
+        String shopId = SessionManager.getInstance(this).getShopId();
+        productRepository.getProductsByShopId(shopId, "All", new DataCallback<List<ProductItem>>() {
+            @Override
+            public void onSuccess(List<ProductItem> data) {
+                allItems.clear();
+                for (ProductItem item : data) {
+                    int total = Math.max(item.getQuantity(), item.getQuantity() + 20);
+                    allItems.add(new InventoryItem(
+                            item.getName(),
+                            "NearBuyHQ",
+                            item.getCategory(),
+                            item.getUnit(),
+                            item.getQuantity(),
+                            total,
+                            R.drawable.ic_eco_leaf
+                    ));
+                }
+                adapter.updateList(allItems);
+                showLowStockWarning();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                Toast.makeText(Inventory.this, "Failed to load inventory: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                loadSampleData();
+                adapter.updateList(allItems);
+                showLowStockWarning();
+            }
+        });
     }
 
     // ── WARNING BANNER ─────────────────────────────────────────────────────
