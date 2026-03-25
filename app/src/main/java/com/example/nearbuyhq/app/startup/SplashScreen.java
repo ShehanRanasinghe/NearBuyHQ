@@ -9,8 +9,19 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.dashboard.Dashboard;
+import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * Splash screen – shown for 2.5 seconds on launch.
+ *
+ * After the delay, checks if a user is already signed in with Firebase Auth:
+ *  - Signed in  → go directly to Dashboard (skip login)
+ *  - Not signed → go to Welcome (login / register flow)
+ */
 public class SplashScreen extends AppCompatActivity {
+
+    private static final int SPLASH_DELAY_MS = 2500; // 2.5 seconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +47,22 @@ public class SplashScreen extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash_screen);
 
-        // Navigate to Welcome screen after 3 seconds
+        // Decide where to navigate after the splash delay
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreen.this, Welcome.class);
+            // Check if a Firebase user is already logged in
+            boolean isLoggedIn = FirebaseAuth.getInstance().getCurrentUser() != null;
+
+            Intent intent;
+            if (isLoggedIn) {
+                // Skip login – go straight to Dashboard
+                intent = new Intent(SplashScreen.this, Dashboard.class);
+            } else {
+                // Show the Welcome / login-register flow
+                intent = new Intent(SplashScreen.this, Welcome.class);
+            }
+
             startActivity(intent);
-            finish(); // Close splash screen so user can't go back to it
-        }, 3000); // 3 second delay
+            finish(); // Remove splash from back stack
+        }, SPLASH_DELAY_MS); // 2.5 second delay
     }
 }
