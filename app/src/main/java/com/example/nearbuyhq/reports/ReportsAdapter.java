@@ -23,7 +23,13 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportVi
 
     public ReportsAdapter(List<Report> reportsList, OnReportClickListener listener) {
         this.reportsList = reportsList;
-        this.listener = listener;
+        this.listener    = listener;
+    }
+
+    /** Replace the full list and refresh the RecyclerView (called after Firestore load). */
+    public void updateList(List<Report> newList) {
+        this.reportsList = newList;
+        notifyDataSetChanged();
     }
 
     @NonNull
