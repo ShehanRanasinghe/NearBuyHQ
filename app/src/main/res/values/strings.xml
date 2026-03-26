@@ -205,4 +205,12 @@
     <string name="sample_branch2_name">—</string>
     <string name="sample_branch2_address">—</string>
     <string name="sample_branch2_phone">—</string>
+
+    <!-- Location Picker -->
+    <string name="location_picker_title">Pick Shop Location</string>
+    <string name="search_location_hint">Search location in Sri Lanka…</string>
+    <string name="confirm_location">Confirm Location</string>
+    <string name="location_tap_hint">Tap on the map or search above to set your shop location</string>
+    <string name="pick_on_map">Map</string>
+    <string name="location_coordinates_label">Coordinates:</string>
 </resources>

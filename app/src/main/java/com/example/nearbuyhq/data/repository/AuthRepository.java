@@ -6,7 +6,7 @@ import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.remote.firebase.FirebaseCollections;
 import com.example.nearbuyhq.shops.Shop;
-import com.example.nearbuyhq.users.User;
+import com.example.nearbuyhq.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -164,6 +164,61 @@ public class AuthRepository {
                         callback.onError(new IllegalStateException("Profile not found"));
                     }
                 })
+                .addOnFailureListener(callback::onError);
+    }
+
+    /**
+     * Save all profile fields – both personal (name, phone, email) and shop
+     * (shopName, shopLocation, openingHours) – into the single users/{uid} document.
+     * No separate shop collection or shop ID needed.
+     */
+    public void updateFullProfile(String uid, String name, String phone, String email,
+                                  String shopName, String shopLocation, String openingHours,
+                                  OperationCallback callback) {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            callback.onError(new IllegalStateException("Firebase is disabled"));
+            return;
+        }
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("name",         name);
+        updates.put("phone",        phone);
+        if (email != null && !email.isEmpty()) updates.put("email", email);
+        updates.put("shopName",     shopName     != null ? shopName     : "");
+        updates.put("shopLocation", shopLocation != null ? shopLocation : "");
+        updates.put("openingHours", openingHours != null ? openingHours : "");
+        updates.put("updatedAt",    System.currentTimeMillis());
+
+        firestore.collection(FirebaseCollections.USERS)
+                .document(uid)
+                .update(updates)
+                .addOnSuccessListener(unused -> callback.onSuccess())
+                .addOnFailureListener(callback::onError);
+    }
+
+    /**
+     * Save GPS coordinates + human-readable address into the users/{uid} document.
+     * Called when the owner picks a location via LocationPickerActivity.
+     */
+    public void updateUserLocation(String uid, double latitude, double longitude,
+                                   String address, OperationCallback callback) {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            callback.onError(new IllegalStateException("Firebase is disabled"));
+            return;
+        }
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("latitude",  latitude);
+        updates.put("longitude", longitude);
+        if (address != null && !address.trim().isEmpty()) {
+            updates.put("shopLocation", address.trim());
+        }
+        updates.put("updatedAt", System.currentTimeMillis());
+
+        firestore.collection(FirebaseCollections.USERS)
+                .document(uid)
+                .update(updates)
+                .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(callback::onError);
     }
 

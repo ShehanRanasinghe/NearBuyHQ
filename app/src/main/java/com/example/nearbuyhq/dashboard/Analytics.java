@@ -22,7 +22,7 @@ import com.example.nearbuyhq.orders.Order_List;
 import com.example.nearbuyhq.products.Inventory;
 import com.example.nearbuyhq.products.ProductItem;
 import com.example.nearbuyhq.settings.ProfilePage;
-import com.example.nearbuyhq.users.User;
+import com.example.nearbuyhq.data.model.User;
 
 import java.util.List;
 import java.util.Locale;

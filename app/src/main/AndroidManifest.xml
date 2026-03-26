@@ -17,6 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NearBuyHQ"
         tools:targetApi="31">
+
+        <!-- Google Maps API Key (read from .env → BuildConfig → manifestPlaceholders) -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <activity
+            android:name=".settings.LocationPickerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".settings.ProfilePage"
             android:exported="false"
@@ -120,14 +130,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".users.UsersList"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".users.UserDetails"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".reports.Reports"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -137,10 +139,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".notifications.Notifications"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".settings.Settings"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

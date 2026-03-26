@@ -2,7 +2,7 @@ package com.example.nearbuyhq.data.repository;
 
 import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.remote.firebase.FirebaseCollections;
-import com.example.nearbuyhq.users.User;
+import com.example.nearbuyhq.data.model.User;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;

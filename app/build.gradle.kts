@@ -41,8 +41,11 @@ android {
         versionName = "1.0"
         val firebaseEnabled = envOrProperty("FIREBASE_ENABLED", "false").toBooleanStrictOrNull() ?: false
         val firebaseProjectId = envOrProperty("FIREBASE_PROJECT_ID", "")
+        val mapsApiKey = envOrProperty("GOOGLE_MAP_APIKEY", "")
         buildConfigField("boolean", "FIREBASE_ENABLED", firebaseEnabled.toString())
         buildConfigField("String", "FIREBASE_PROJECT_ID", "\"$firebaseProjectId\"")
+        buildConfigField("String", "GOOGLE_MAP_APIKEY", "\"$mapsApiKey\"")
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -78,6 +81,8 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     implementation(libs.play.services.location) // GPS for shop location capture
+    implementation(libs.play.services.maps)      // Google Maps SDK – location picker
+    implementation(libs.places)                  // Google Places SDK – location autocomplete
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("com.google.android.material:material:1.11.0")
     testImplementation(libs.junit)

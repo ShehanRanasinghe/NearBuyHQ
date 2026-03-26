@@ -10,6 +10,8 @@ constraintlayout = "2.2.1"
 firebaseBom = "34.0.0"
 googleServices = "4.4.2"
 playServicesLocation = "21.3.0"
+playServicesMaps = "18.2.0"
+places = "3.3.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -26,6 +28,10 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 # Google Play Services Location – used to capture GPS coordinates for the customer app
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+# Google Maps SDK – used for the location picker map view
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+# Google Places SDK – used for location search autocomplete
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

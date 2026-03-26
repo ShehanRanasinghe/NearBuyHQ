@@ -20,50 +20,52 @@ import com.example.nearbuyhq.R;
 import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.dashboard.Analytics;
 import com.example.nearbuyhq.dashboard.Dashboard;
+import com.example.nearbuyhq.data.model.User;
 import com.example.nearbuyhq.data.repository.AuthRepository;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.OperationCallback;
-import com.example.nearbuyhq.data.repository.ShopRepository;
 import com.example.nearbuyhq.orders.Order_List;
 import com.example.nearbuyhq.products.Inventory;
-import com.example.nearbuyhq.shops.Shop;
+
+import java.util.Locale;
 
 /**
  * Profile page – shows the logged-in shop owner's personal info and shop details.
  *
- * Data is loaded from Firebase Firestore on resume and can be edited via dialogs.
- * All changes are saved back to Firestore immediately.
+ * All data (user + shop) is stored in the single users/{uid} Firestore document.
+ * No separate shop collection or shop ID is needed.
  */
 public class ProfilePage extends AppCompatActivity {
 
-    // ── Top header views ────────────────────────────────────────────────
+    private static final int REQ_LOCATION_PICKER = 1001;
+
+    // ── Top header views ──────────────────────────────────────────────────
     private TextView tvOwnerName, tvProfileShopName;
 
-    // ── Account info views ───────────────────────────────────────────────
-    private TextView tvEmail, tvPhone, tvShopNameDetail, tvShopLocation;
+    // ── Account info views ────────────────────────────────────────────────
+    private TextView tvEmail, tvPhone, tvShopNameDetail, tvShopLocation, tvOpeningHours;
 
-    // ── Shop details views ───────────────────────────────────────────────
-    private TextView tvStoreCategory, tvOpeningHours, tvWebsite;
-
-    // ── Action buttons ───────────────────────────────────────────────────
+    // ── Action buttons ────────────────────────────────────────────────────
     private ImageView btnBack;
-    private LinearLayout btnEditProfile, btnLogout, btnEditShopDetails;
+    private LinearLayout btnEditProfile, btnLogout, btnPickLocation;
 
-    // ── Bottom navigation ────────────────────────────────────────────────
+    // ── Bottom navigation ─────────────────────────────────────────────────
     private LinearLayout navDashboard, navProducts, navOrders, navAnalytics, navProfile;
     private ImageView navDashboardIcon, navProductsIcon, navOrdersIcon, navAnalyticsIcon, navProfileIcon;
     private TextView navDashboardText, navProductsText, navOrdersText, navAnalyticsText, navProfileText;
 
-    // ── Repositories / session ───────────────────────────────────────────
+    // ── Repository / session ──────────────────────────────────────────────
     private AuthRepository authRepository;
-    private ShopRepository shopRepository;
     private SessionManager session;
+
+    // ── Location coordinates (cached for the location picker) ─────────────
+    private double shopLat = 0.0;
+    private double shopLng = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Match the teal header colour in the status bar
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.profile_teal_header));
@@ -78,139 +80,115 @@ public class ProfilePage extends AppCompatActivity {
         resetNavSelection();
         setNavActive(navProfileIcon, navProfileText);
 
-        // Load real data from Firebase
         loadProfileData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadProfileData(); // Refresh whenever we return to this screen
+        loadProfileData();
     }
 
-    // ── Init ─────────────────────────────────────────────────────────────
+    // ── Init ──────────────────────────────────────────────────────────────
 
     private void initViews() {
-        btnBack            = findViewById(R.id.btnBack);
-        btnEditProfile     = findViewById(R.id.btnEditProfile);
-        btnLogout          = findViewById(R.id.btnLogout);
-        btnEditShopDetails = findViewById(R.id.btnEditShopDetails);
+        btnBack         = findViewById(R.id.btnBack);
+        btnEditProfile  = findViewById(R.id.btnEditProfile);
+        btnLogout       = findViewById(R.id.btnLogout);
+        btnPickLocation = findViewById(R.id.btnPickLocation);
 
-        // Header
-        tvOwnerName        = findViewById(R.id.tvOwnerName);
-        tvProfileShopName  = findViewById(R.id.tvProfileShopName);
+        tvOwnerName       = findViewById(R.id.tvOwnerName);
+        tvProfileShopName = findViewById(R.id.tvProfileShopName);
+        tvEmail           = findViewById(R.id.tvEmail);
+        tvPhone           = findViewById(R.id.tvPhone);
+        tvShopNameDetail  = findViewById(R.id.tvShopNameDetail);
+        tvShopLocation    = findViewById(R.id.tvShopLocation);
+        tvOpeningHours    = findViewById(R.id.tvOpeningHours);
 
-        // Account info card
-        tvEmail            = findViewById(R.id.tvEmail);
-        tvPhone            = findViewById(R.id.tvPhone);
-        tvShopNameDetail   = findViewById(R.id.tvShopNameDetail);
-        tvShopLocation     = findViewById(R.id.tvShopLocation);
+        navDashboard = findViewById(R.id.navDashboard);
+        navProducts  = findViewById(R.id.navProducts);
+        navOrders    = findViewById(R.id.navOrders);
+        navAnalytics = findViewById(R.id.navAnalytics);
+        navProfile   = findViewById(R.id.navProfile);
 
-        // Shop details card
-        tvStoreCategory    = findViewById(R.id.tvStoreCategory);
-        tvOpeningHours     = findViewById(R.id.tvOpeningHours);
-        tvWebsite          = findViewById(R.id.tvWebsite);
+        navDashboardIcon = findViewById(R.id.navDashboardIcon);
+        navProductsIcon  = findViewById(R.id.navProductsIcon);
+        navOrdersIcon    = findViewById(R.id.navOrdersIcon);
+        navAnalyticsIcon = findViewById(R.id.navAnalyticsIcon);
+        navProfileIcon   = findViewById(R.id.navProfileIcon);
 
-        // Bottom navigation
-        navDashboard    = findViewById(R.id.navDashboard);
-        navProducts     = findViewById(R.id.navProducts);
-        navOrders       = findViewById(R.id.navOrders);
-        navAnalytics    = findViewById(R.id.navAnalytics);
-        navProfile      = findViewById(R.id.navProfile);
+        navDashboardText = findViewById(R.id.navDashboardText);
+        navProductsText  = findViewById(R.id.navProductsText);
+        navOrdersText    = findViewById(R.id.navOrdersText);
+        navAnalyticsText = findViewById(R.id.navAnalyticsText);
+        navProfileText   = findViewById(R.id.navProfileText);
 
-        navDashboardIcon  = findViewById(R.id.navDashboardIcon);
-        navProductsIcon   = findViewById(R.id.navProductsIcon);
-        navOrdersIcon     = findViewById(R.id.navOrdersIcon);
-        navAnalyticsIcon  = findViewById(R.id.navAnalyticsIcon);
-        navProfileIcon    = findViewById(R.id.navProfileIcon);
-
-        navDashboardText  = findViewById(R.id.navDashboardText);
-        navProductsText   = findViewById(R.id.navProductsText);
-        navOrdersText     = findViewById(R.id.navOrdersText);
-        navAnalyticsText  = findViewById(R.id.navAnalyticsText);
-        navProfileText    = findViewById(R.id.navProfileText);
-
-        // Repositories
         authRepository = new AuthRepository();
-        shopRepository = new ShopRepository();
         session        = SessionManager.getInstance(this);
     }
 
-    // ── Load data from Firebase ───────────────────────────────────────────
+    // ── Load data ─────────────────────────────────────────────────────────
 
     /**
-     * Load the current user's profile AND their shop details from Firestore,
-     * then populate all the TextViews on this screen.
+     * Load all profile data (user + shop) from the single users/{uid} document.
      */
     private void loadProfileData() {
-        String uid    = session.getUserId();
-        String shopId = session.getShopId();
+        String uid = session.getUserId();
 
-        // Display whatever we already have in session while we wait for Firestore
-        if (tvOwnerName    != null) tvOwnerName.setText(session.getUserName());
-        if (tvEmail        != null) tvEmail.setText(session.getUserEmail());
-        if (tvPhone        != null) tvPhone.setText(session.getUserPhone());
+        // Show cached session values while Firestore loads
+        if (tvOwnerName       != null) tvOwnerName.setText(session.getUserName());
+        if (tvEmail           != null) tvEmail.setText(session.getUserEmail());
+        if (tvPhone           != null) tvPhone.setText(
+                session.getUserPhone().isEmpty() ? "Not set" : session.getUserPhone());
         if (tvProfileShopName != null) tvProfileShopName.setText(session.getShopName());
         if (tvShopNameDetail  != null) tvShopNameDetail.setText(session.getShopName());
 
-        // ── Load fresh user profile from Firestore ─────────────────────
-        if (uid != null && !uid.isEmpty()) {
-            authRepository.getUserProfile(uid, new DataCallback<com.example.nearbuyhq.users.User>() {
-                @Override
-                public void onSuccess(com.example.nearbuyhq.users.User user) {
-                    runOnUiThread(() -> {
-                        if (tvOwnerName != null) tvOwnerName.setText(user.getName());
-                        if (tvEmail     != null) tvEmail.setText(user.getEmail());
-                        String phone = getFieldSafe(user.toMap(), "phone");
-                        if (tvPhone != null) tvPhone.setText(phone.isEmpty() ? "Not set" : phone);
-                        session.saveUserName(user.getName());
-                        session.saveUserEmail(user.getEmail());
-                        if (!phone.isEmpty()) session.saveUserPhone(phone);
-                    });
-                }
-                @Override
-                public void onError(Exception e) { /* use session data */ }
-            });
-        }
+        if (uid == null || uid.isEmpty()) return;
 
-        // ── Load shop details from Firestore ───────────────────────────
-        if (shopId != null && !shopId.isEmpty()) {
-            shopRepository.getShop(shopId, new DataCallback<Shop>() {
-                @Override
-                public void onSuccess(Shop shop) { runOnUiThread(() -> populateShopViews(shop)); }
-                @Override
-                public void onError(Exception e) { /* use defaults */ }
-            });
-        } else if (uid != null && !uid.isEmpty()) {
-            shopRepository.getShopByOwnerUid(uid, new DataCallback<Shop>() {
-                @Override
-                public void onSuccess(Shop shop) {
-                    if (shop != null) {
-                        session.saveShopId(shop.getId());
-                        session.saveShopName(shop.getName());
-                        runOnUiThread(() -> populateShopViews(shop));
-                    }
-                }
-                @Override
-                public void onError(Exception e) { /* no shop yet */ }
-            });
-        }
+        // Single Firestore read – users/{uid} now contains everything
+        authRepository.getUserProfile(uid, new DataCallback<User>() {
+            @Override
+            public void onSuccess(User user) {
+                runOnUiThread(() -> populateAllViews(user));
+            }
+            @Override
+            public void onError(Exception e) { /* keep session fallback values */ }
+        });
     }
 
-    /** Push shop data into the UI text views. */
-    private void populateShopViews(Shop shop) {
-        if (shop == null) return;
+    /** Populate every view on the screen from a fully-loaded User object. */
+    private void populateAllViews(User user) {
+        if (user == null) return;
 
-        if (tvProfileShopName != null) tvProfileShopName.setText(shop.getName());
-        if (tvShopNameDetail  != null) tvShopNameDetail.setText(shop.getName());
-        if (tvShopLocation    != null) tvShopLocation.setText(
-                shop.getLocation().isEmpty() ? "Not set" : shop.getLocation());
-        if (tvStoreCategory   != null) tvStoreCategory.setText(
-                shop.getCategory().isEmpty() ? "Not set" : shop.getCategory());
-        if (tvOpeningHours    != null) tvOpeningHours.setText(
-                shop.getOpeningHours().isEmpty() ? "Not set" : shop.getOpeningHours());
-        if (tvWebsite         != null) tvWebsite.setText(
-                shop.getWebsite().isEmpty() ? "Not set" : shop.getWebsite());
+        // ── User details ──────────────────────────────────────────────
+        if (tvOwnerName != null) tvOwnerName.setText(user.getName());
+        if (tvEmail     != null) tvEmail.setText(user.getEmail());
+        String phone = user.getPhone() != null ? user.getPhone().trim() : "";
+        if (tvPhone != null) tvPhone.setText(phone.isEmpty() ? "Not set" : phone);
+
+        // ── Shop details ──────────────────────────────────────────────
+        String shopName = user.getShopName().isEmpty() ? session.getShopName() : user.getShopName();
+        if (tvProfileShopName != null) tvProfileShopName.setText(shopName);
+        if (tvShopNameDetail  != null) tvShopNameDetail.setText(shopName);
+
+        String locText = user.getShopLocation();
+        if (locText.isEmpty() && user.hasLocation()) {
+            locText = String.format(Locale.US, "%.5f, %.5f",
+                    user.getLatitude(), user.getLongitude());
+        }
+        if (tvShopLocation != null) tvShopLocation.setText(locText.isEmpty() ? "Not set" : locText);
+        if (tvOpeningHours != null) tvOpeningHours.setText(
+                user.getOpeningHours().isEmpty() ? "Not set" : user.getOpeningHours());
+
+        // Cache coordinates for location picker
+        shopLat = user.getLatitude();
+        shopLng = user.getLongitude();
+
+        // Update session cache
+        session.saveUserName(user.getName());
+        session.saveUserEmail(user.getEmail());
+        if (!phone.isEmpty()) session.saveUserPhone(phone);
+        if (!user.getShopName().isEmpty()) session.saveShopName(user.getShopName());
     }
 
     // ── Listeners ─────────────────────────────────────────────────────────
@@ -219,106 +197,145 @@ public class ProfilePage extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
         btnEditProfile.setOnClickListener(v -> showEditProfileDialog());
         btnLogout.setOnClickListener(v -> showLogoutDialog());
-        btnEditShopDetails.setOnClickListener(v -> showEditShopDialog());
+        btnPickLocation.setOnClickListener(v -> openLocationPicker());
+    }
+
+    // ── Location Picker ───────────────────────────────────────────────────
+
+    @SuppressWarnings("deprecation")
+    private void openLocationPicker() {
+        Intent intent = new Intent(this, LocationPickerActivity.class);
+        if (shopLat != 0.0 && shopLng != 0.0) {
+            intent.putExtra(LocationPickerActivity.EXTRA_LATITUDE,  shopLat);
+            intent.putExtra(LocationPickerActivity.EXTRA_LONGITUDE, shopLng);
+        }
+        if (tvShopLocation != null) {
+            String current = tvShopLocation.getText().toString();
+            if (!current.equals("Not set") && !current.equals("—")) {
+                intent.putExtra(LocationPickerActivity.EXTRA_ADDRESS, current);
+            }
+        }
+        startActivityForResult(intent, REQ_LOCATION_PICKER);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_LOCATION_PICKER && resultCode == RESULT_OK && data != null) {
+            double lat     = data.getDoubleExtra(LocationPickerActivity.EXTRA_LATITUDE, 0.0);
+            double lng     = data.getDoubleExtra(LocationPickerActivity.EXTRA_LONGITUDE, 0.0);
+            String address = data.getStringExtra(LocationPickerActivity.EXTRA_ADDRESS);
+            if (address == null) address = "";
+
+            shopLat = lat;
+            shopLng = lng;
+
+            String display = address.isEmpty()
+                    ? String.format(Locale.US, "%.5f, %.5f", lat, lng)
+                    : address;
+            if (tvShopLocation != null) tvShopLocation.setText(display);
+
+            // Save lat/lng + address into users/{uid}
+            String uid = session.getUserId();
+            if (uid != null && !uid.isEmpty()) {
+                final String finalAddress = address;
+                authRepository.updateUserLocation(uid, lat, lng, finalAddress,
+                        new OperationCallback() {
+                            @Override
+                            public void onSuccess() {
+                                Toast.makeText(ProfilePage.this,
+                                        "Location updated successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onError(Exception e) {
+                                Toast.makeText(ProfilePage.this,
+                                        "Failed to save location", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        }
     }
 
     // ── Edit Profile dialog ───────────────────────────────────────────────
 
     private void showEditProfileDialog() {
         LinearLayout container = buildDialogContainer();
-        EditText etName  = addDialogField(container, "Owner Name",  safeText(tvOwnerName));
-        EditText etEmail = addDialogField(container, "Email",       safeText(tvEmail));
-        EditText etPhone = addDialogField(container, "Phone",       safeText(tvPhone));
+        EditText etName     = addDialogField(container, "Owner Name",  safeText(tvOwnerName));
+        EditText etEmail    = addDialogField(container, "Email",       safeText(tvEmail));
+        EditText etPhone    = addDialogField(container, "Phone",       safeText(tvPhone));
+        EditText etShopName = addDialogField(container, "Shop Name",   safeText(tvShopNameDetail));
+
+        // ── Opening Hours: two time pickers ──────────────────────────
+        String existingHours = safeText(tvOpeningHours);
+        final int[] fromTime = parseHoursTime(existingHours, true);
+        final int[] toTime   = parseHoursTime(existingHours, false);
+
+        addSectionLabel(container, "Opening Hours");
+        addSmallLabel(container, "Opens At");
+        final TextView btnFrom = addTimeButton(container, fromTime[0], fromTime[1]);
+        btnFrom.setOnClickListener(v ->
+                new android.app.TimePickerDialog(this, (tp, h, m) -> {
+                    fromTime[0] = h; fromTime[1] = m;
+                    btnFrom.setText(formatTime12h(h, m));
+                }, fromTime[0], fromTime[1], false).show());
+
+        addSmallLabel(container, "Closes At");
+        final TextView btnTo = addTimeButton(container, toTime[0], toTime[1]);
+        btnTo.setOnClickListener(v ->
+                new android.app.TimePickerDialog(this, (tp, h, m) -> {
+                    toTime[0] = h; toTime[1] = m;
+                    btnTo.setText(formatTime12h(h, m));
+                }, toTime[0], toTime[1], false).show());
 
         new AlertDialog.Builder(this)
                 .setTitle("Edit Profile")
                 .setView(container)
                 .setPositiveButton("Save", (dialog, which) -> {
-                    String newName  = etName.getText().toString().trim();
-                    String newPhone = etPhone.getText().toString().trim();
-                    String uid      = session.getUserId();
+                    String newName     = etName.getText().toString().trim();
+                    String newEmail    = etEmail.getText().toString().trim();
+                    String newPhone    = etPhone.getText().toString().trim();
+                    String newShopName = etShopName.getText().toString().trim();
+                    String newHours    = formatTime12h(fromTime[0], fromTime[1])
+                            + " \u2013 " + formatTime12h(toTime[0], toTime[1]);
+                    String uid         = session.getUserId();
 
                     if (newName.isEmpty()) {
                         Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    // Save to Firestore
-                    authRepository.updateUserProfile(uid, newName, newPhone, new OperationCallback() {
-                        @Override
-                        public void onSuccess() {
-                            // Update UI and session
-                            if (tvOwnerName != null) tvOwnerName.setText(newName);
-                            if (tvPhone     != null) tvPhone.setText(newPhone);
-                            session.saveUserName(newName);
-                            session.saveUserPhone(newPhone);
-                            Toast.makeText(ProfilePage.this, "Profile updated", Toast.LENGTH_SHORT).show();
-                        }
-                        @Override
-                        public void onError(Exception e) {
-                            Toast.makeText(ProfilePage.this, "Update failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
-    }
-
-    // ── Edit Shop Details dialog ──────────────────────────────────────────
-
-    private void showEditShopDialog() {
-        LinearLayout container = buildDialogContainer();
-        EditText etShopName = addDialogField(container, "Shop Name",       safeText(tvShopNameDetail));
-        EditText etLocation = addDialogField(container, "Store Location",  safeText(tvShopLocation));
-        EditText etCategory = addDialogField(container, "Store Category",  safeText(tvStoreCategory));
-        EditText etHours    = addDialogField(container, "Opening Hours",   safeText(tvOpeningHours));
-        EditText etWebsite  = addDialogField(container, "Website / Social",safeText(tvWebsite));
-        EditText etContact  = addDialogField(container, "Contact Number",  safeText(tvPhone));
-
-        new AlertDialog.Builder(this)
-                .setTitle("Edit Shop Details")
-                .setView(container)
-                .setPositiveButton("Save", (dialog, which) -> {
-                    String shopId = session.getShopId();
-
-                    if (shopId == null || shopId.isEmpty()) {
-                        Toast.makeText(this, "No shop found. Please add a branch first.", Toast.LENGTH_LONG).show();
-                        return;
+                    // ── Immediate UI update ───────────────────────────
+                    if (tvOwnerName != null) tvOwnerName.setText(newName);
+                    if (tvPhone     != null) tvPhone.setText(newPhone.isEmpty() ? "Not set" : newPhone);
+                    if (!newEmail.isEmpty() && tvEmail != null) tvEmail.setText(newEmail);
+                    if (!newShopName.isEmpty()) {
+                        if (tvProfileShopName != null) tvProfileShopName.setText(newShopName);
+                        if (tvShopNameDetail  != null) tvShopNameDetail.setText(newShopName);
+                        session.saveShopName(newShopName);
                     }
+                    if (tvOpeningHours != null) tvOpeningHours.setText(newHours);
+                    session.saveUserName(newName);
+                    session.saveUserPhone(newPhone);
+                    if (!newEmail.isEmpty()) session.saveUserEmail(newEmail);
 
-                    String newShopName = etShopName.getText().toString().trim();
-                    String newLocation = etLocation.getText().toString().trim();
-                    String newCategory = etCategory.getText().toString().trim();
-                    String newHours    = etHours.getText().toString().trim();
-                    String newWebsite  = etWebsite.getText().toString().trim();
-                    String newContact  = etContact.getText().toString().trim();
-
-                    // Save all shop fields to Firestore
-                    shopRepository.updateShopProfile(
-                            shopId, newShopName, newLocation, newCategory,
-                            newHours, newWebsite, newContact,
+                    // ── Persist to Firestore users/{uid} in one call ──
+                    String currentLocation = safeText(tvShopLocation);
+                    authRepository.updateFullProfile(
+                            uid, newName, newPhone, newEmail,
+                            newShopName, currentLocation, newHours,
                             new OperationCallback() {
                                 @Override
                                 public void onSuccess() {
-                                    // Update UI
-                                    if (!newShopName.isEmpty()) {
-                                        if (tvProfileShopName != null) tvProfileShopName.setText(newShopName);
-                                        if (tvShopNameDetail  != null) tvShopNameDetail.setText(newShopName);
-                                        session.saveShopName(newShopName);
-                                    }
-                                    if (!newLocation.isEmpty() && tvShopLocation  != null) tvShopLocation.setText(newLocation);
-                                    if (!newCategory.isEmpty() && tvStoreCategory != null) tvStoreCategory.setText(newCategory);
-                                    if (!newHours.isEmpty()    && tvOpeningHours  != null) tvOpeningHours.setText(newHours);
-                                    if (!newWebsite.isEmpty()  && tvWebsite       != null) tvWebsite.setText(newWebsite);
-
-                                    Toast.makeText(ProfilePage.this, "Shop details updated", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ProfilePage.this,
+                                            "Profile updated", Toast.LENGTH_SHORT).show();
                                 }
                                 @Override
                                 public void onError(Exception e) {
-                                    Toast.makeText(ProfilePage.this, "Update failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(ProfilePage.this,
+                                            "Update failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
-                            }
-                    );
+                            });
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
@@ -414,17 +431,78 @@ public class ProfilePage extends AppCompatActivity {
         return et;
     }
 
-    /** Helper: safely get a TextView's text; returns empty string for null. */
+    // ── Opening-hours helpers ─────────────────────────────────────────────
+
+    private String formatTime12h(int hour, int minute) {
+        String amPm = hour < 12 ? "AM" : "PM";
+        int h = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+        return String.format(Locale.US, "%02d:%02d %s", h, minute, amPm);
+    }
+
+    private int[] parseHoursTime(String hoursStr, boolean isFrom) {
+        int[] defaults = isFrom ? new int[]{8, 0} : new int[]{18, 0};
+        if (hoursStr == null || hoursStr.isEmpty()) return defaults;
+        String[] parts = hoursStr.split("[\u2013\u2014\\-]");
+        if (parts.length < 2) return defaults;
+        String part = isFrom ? parts[0].trim() : parts[parts.length - 1].trim();
+        try {
+            boolean isPM = part.toUpperCase().contains("PM");
+            boolean isAM = part.toUpperCase().contains("AM");
+            part = part.replaceAll("(?i)(am|pm)", "").trim();
+            String[] t = part.split(":");
+            int h = Integer.parseInt(t[0].trim());
+            int m = t.length > 1 ? Integer.parseInt(t[1].trim().replaceAll("[^0-9]", "")) : 0;
+            if (isPM && h < 12) h += 12;
+            if (isAM && h == 12) h = 0;
+            return new int[]{h, m};
+        } catch (Exception ignored) {
+            return defaults;
+        }
+    }
+
+    private void addSectionLabel(LinearLayout parent, String text) {
+        TextView tv = new TextView(this);
+        tv.setText(text);
+        tv.setTextSize(13f);
+        tv.setTextColor(ContextCompat.getColor(this, R.color.text_dark_primary));
+        tv.setTypeface(null, Typeface.BOLD);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.topMargin = dp(14);
+        parent.addView(tv, lp);
+    }
+
+    private void addSmallLabel(LinearLayout parent, String text) {
+        TextView tv = new TextView(this);
+        tv.setText(text);
+        tv.setTextSize(12f);
+        tv.setTextColor(ContextCompat.getColor(this, R.color.text_dark_secondary));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.topMargin = dp(8);
+        parent.addView(tv, lp);
+    }
+
+    private TextView addTimeButton(LinearLayout parent, int hour, int minute) {
+        TextView tv = new TextView(this);
+        tv.setText(formatTime12h(hour, minute));
+        tv.setTextSize(15f);
+        tv.setTextColor(ContextCompat.getColor(this, R.color.text_dark_primary));
+        tv.setBackgroundColor(ContextCompat.getColor(this, R.color.bg_light_grey));
+        tv.setPadding(dp(12), dp(12), dp(12), dp(12));
+        tv.setClickable(true);
+        tv.setFocusable(true);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.topMargin = dp(4);
+        parent.addView(tv, lp);
+        return tv;
+    }
+
     private String safeText(TextView tv) {
         if (tv == null) return "";
         String t = tv.getText().toString().trim();
-        return (t.equals("Not set") || t.isEmpty()) ? "" : t;
-    }
-
-    /** Helper: read an extra String field from a user toMap() result. */
-    private String getFieldSafe(java.util.Map<String, Object> map, String key) {
-        Object v = map.get(key);
-        return v == null ? "" : String.valueOf(v).trim();
+        return (t.equals("Not set") || t.equals("\u2014") || t.isEmpty()) ? "" : t;
     }
 
     private int dp(int value) {

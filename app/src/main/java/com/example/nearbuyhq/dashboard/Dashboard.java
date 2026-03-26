@@ -29,7 +29,8 @@ import com.example.nearbuyhq.products.Inventory;
 import com.example.nearbuyhq.products.ProductItem;
 import com.example.nearbuyhq.reports.Reports;
 import com.example.nearbuyhq.settings.ProfilePage;
-import com.example.nearbuyhq.users.User;
+import com.example.nearbuyhq.settings.LocationPickerActivity;
+import com.example.nearbuyhq.data.model.User;
 
 import java.util.Calendar;
 import java.util.List;
@@ -52,7 +53,7 @@ public class Dashboard extends AppCompatActivity {
 
     // ── Quick actions ─────────────────────────────────────────────────────
     private LinearLayout btnAddProduct, btnManageInventory, btnDiscounts;
-    private LinearLayout btnManageOrders, btnViewReports;
+    private LinearLayout btnManageOrders, btnViewReports, btnStoreLocationPicker;
 
     // ── Top bar icons ─────────────────────────────────────────────────────
     private ImageView btnSearch, btnNotifications;
@@ -140,6 +141,7 @@ public class Dashboard extends AppCompatActivity {
         btnDiscounts       = findViewById(R.id.btnDiscounts);
         btnManageOrders    = findViewById(R.id.btnManageOrders);
         btnViewReports     = findViewById(R.id.btnViewReports);
+        btnStoreLocationPicker = findViewById(R.id.btnStoreLocationPicker);
 
         btnSearch        = findViewById(R.id.btnSearch);
         btnNotifications = findViewById(R.id.btnNotifications);
@@ -421,6 +423,10 @@ public class Dashboard extends AppCompatActivity {
                 startActivity(new Intent(Dashboard.this, Order_List.class)));
         btnViewReports.setOnClickListener(v ->
                 startActivity(new Intent(Dashboard.this, Reports.class)));
+        if (btnStoreLocationPicker != null) {
+            btnStoreLocationPicker.setOnClickListener(v ->
+                    startActivity(new Intent(Dashboard.this, LocationPickerActivity.class)));
+        }
     }
 
     private void setupTopBarActions() {

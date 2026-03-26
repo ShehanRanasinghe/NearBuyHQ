@@ -102,6 +102,28 @@ public class ShopRepository {
     }
 
     /**
+     * Save GPS coordinates + human-readable address for a shop.
+     * Called when the admin picks a location via the LocationPickerActivity.
+     */
+    public void updateLocationWithText(String shopId, double latitude, double longitude,
+                                       String locationText, OperationCallback callback) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("latitude",     latitude);
+        updates.put("longitude",    longitude);
+        if (locationText != null && !locationText.trim().isEmpty()) {
+            updates.put("location",     locationText);
+            updates.put("address",      locationText);   // alias for customer app
+            updates.put("locationText", locationText);   // alias for customer app
+        }
+        updates.put("updatedAt", System.currentTimeMillis());
+
+        shopsRef.document(shopId)
+                .update(updates)
+                .addOnSuccessListener(unused -> callback.onSuccess())
+                .addOnFailureListener(callback::onError);
+    }
+
+    /**
      * Save GPS coordinates for a shop.
      * Called when the device obtains a location fix after the shop is registered.
      * These coordinates are used by the customer app to calculate distance.
