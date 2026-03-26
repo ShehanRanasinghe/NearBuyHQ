@@ -372,36 +372,6 @@
                             android:background="#F0F0F0"
                             android:layout_marginBottom="10dp" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="10dp">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Origin"
-                                android:textColor="#9AA0AC"
-                                android:textSize="12sp" />
-
-                            <!-- Origin info row -->
-                            <TextView
-                                android:id="@+id/tv_product_origin"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="—"
-                                android:textColor="#1B2D4F"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="#F0F0F0"
-                            android:layout_marginBottom="10dp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"

@@ -217,7 +217,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="4dp">
+                        android:layout_marginBottom="6dp">
 
                         <TextView
                             android:id="@+id/btn_cat_vegetables"
@@ -233,6 +233,30 @@
                             android:layout_marginEnd="6dp" />
 
                         <TextView
+                            android:id="@+id/btn_cat_fruits"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="🍎 Fruits"
+                            android:gravity="center"
+                            android:textColor="#E03B2F"
+                            android:textSize="11sp"
+                            android:background="@drawable/bg_cat_inactive"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:id="@+id/btn_cat_grains"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="🌾 Grains"
+                            android:gravity="center"
+                            android:textColor="#C47F3A"
+                            android:textSize="11sp"
+                            android:background="@drawable/bg_cat_inactive"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
                             android:id="@+id/btn_cat_meats"
                             android:layout_width="0dp"
                             android:layout_height="34dp"
@@ -240,6 +264,48 @@
                             android:text="🥩 Meat"
                             android:gravity="center"
                             android:textColor="#E03B2F"
+                            android:textSize="11sp"
+                            android:background="@drawable/bg_cat_inactive" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="6dp">
+
+                        <TextView
+                            android:id="@+id/btn_cat_seafood"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="🐟 Seafood"
+                            android:gravity="center"
+                            android:textColor="#2980B9"
+                            android:textSize="11sp"
+                            android:background="@drawable/bg_cat_inactive"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:id="@+id/btn_cat_dairy"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="🥛 Dairy"
+                            android:gravity="center"
+                            android:textColor="#5B7FA6"
+                            android:textSize="11sp"
+                            android:background="@drawable/bg_cat_inactive"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:id="@+id/btn_cat_bakery"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="🍞 Bakery"
+                            android:gravity="center"
+                            android:textColor="#C47F3A"
                             android:textSize="11sp"
                             android:background="@drawable/bg_cat_inactive"
                             android:layout_marginEnd="6dp" />
@@ -253,17 +319,59 @@
                             android:gravity="center"
                             android:textColor="#2980B9"
                             android:textSize="11sp"
-                            android:background="@drawable/bg_cat_inactive"
-                            android:layout_marginEnd="6dp" />
+                            android:background="@drawable/bg_cat_inactive" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
 
                         <TextView
                             android:id="@+id/btn_cat_snacks"
                             android:layout_width="0dp"
                             android:layout_height="34dp"
                             android:layout_weight="1"
-                            android:text="🍿 Snack"
+                            android:text="🍿 Snacks"
                             android:gravity="center"
                             android:textColor="#F5A623"
+                            android:textSize="11sp"
+                            android:background="@drawable/bg_cat_inactive"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:id="@+id/btn_cat_spices"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="🌶️ Spices"
+                            android:gravity="center"
+                            android:textColor="#E03B2F"
+                            android:textSize="11sp"
+                            android:background="@drawable/bg_cat_inactive"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:id="@+id/btn_cat_cleaning"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="🧹 Clean"
+                            android:gravity="center"
+                            android:textColor="#5B7FA6"
+                            android:textSize="11sp"
+                            android:background="@drawable/bg_cat_inactive"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:id="@+id/btn_cat_personal"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="🧴 Care"
+                            android:gravity="center"
+                            android:textColor="#9B59B6"
                             android:textSize="11sp"
                             android:background="@drawable/bg_cat_inactive" />
                     </LinearLayout>

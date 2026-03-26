@@ -15,6 +15,8 @@ import com.example.nearbuyhq.R;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.data.repository.ProductRepository;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class Product_Details extends AppCompatActivity {
@@ -27,6 +29,7 @@ public class Product_Details extends AppCompatActivity {
     private double productPrice;
     private String productUnit;
     private int productQuantity;
+    private long productCreatedAt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class Product_Details extends AppCompatActivity {
         productPrice = getIntent().getDoubleExtra("product_price", 0d);
         productUnit = getIntent().getStringExtra("product_unit");
         productQuantity = getIntent().getIntExtra("product_quantity", 0);
+        productCreatedAt = getIntent().getLongExtra("product_created_at", 0L);
 
         ((TextView) findViewById(R.id.tv_product_name)).setText(productName == null ? "Product" : productName);
         ((TextView) findViewById(R.id.tv_product_description)).setText(productDescription == null ? "No description" : productDescription);
@@ -59,6 +63,14 @@ public class Product_Details extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_product_price)).setText(String.format(Locale.US, "%.2f", productPrice));
         ((TextView) findViewById(R.id.tv_stock_qty)).setText(String.valueOf(productQuantity));
         ((TextView) findViewById(R.id.tv_sku)).setText(productId == null || productId.isEmpty() ? "N/A" : productId);
+
+        // Product Info section
+        ((TextView) findViewById(R.id.tv_product_category)).setText(productCategory == null || productCategory.isEmpty() ? "—" : productCategory);
+        ((TextView) findViewById(R.id.tv_product_unit)).setText(productUnit == null || productUnit.isEmpty() ? "—" : productUnit);
+        String addedDate = productCreatedAt > 0
+                ? new SimpleDateFormat("dd MMM yyyy", Locale.US).format(new Date(productCreatedAt))
+                : "—";
+        ((TextView) findViewById(R.id.tv_added_date)).setText(addedDate);
 
         TextView stockStatus = findViewById(R.id.tv_stock_status);
         if (productQuantity <= 0) {
@@ -87,7 +99,7 @@ public class Product_Details extends AppCompatActivity {
             intent.putExtra("product_price", productPrice);
             intent.putExtra("product_unit", productUnit);
             intent.putExtra("product_quantity", productQuantity);
-            intent.putExtra("product_created_at", System.currentTimeMillis());
+            intent.putExtra("product_created_at", productCreatedAt);
             startActivity(intent);
             finish();
         });

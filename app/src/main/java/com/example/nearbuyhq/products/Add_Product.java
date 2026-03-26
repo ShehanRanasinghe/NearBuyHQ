@@ -32,9 +32,17 @@ public class Add_Product extends AppCompatActivity {
     private TextView btnSave;
     private TextView btnCancel;
     private TextView catVegetables;
+    private TextView catFruits;
+    private TextView catGrains;
     private TextView catMeats;
+    private TextView catSeafood;
+    private TextView catDairy;
+    private TextView catBakery;
     private TextView catBeverages;
     private TextView catSnacks;
+    private TextView catSpices;
+    private TextView catCleaning;
+    private TextView catPersonal;
 
     private ProductRepository productRepository;
     private String selectedCategory = "Vegetables";
@@ -73,9 +81,17 @@ public class Add_Product extends AppCompatActivity {
         btnSave = findViewById(R.id.btn_save);
         btnCancel = findViewById(R.id.btn_cancel);
         catVegetables = findViewById(R.id.btn_cat_vegetables);
-        catMeats = findViewById(R.id.btn_cat_meats);
-        catBeverages = findViewById(R.id.btn_cat_beverages);
-        catSnacks = findViewById(R.id.btn_cat_snacks);
+        catFruits     = findViewById(R.id.btn_cat_fruits);
+        catGrains     = findViewById(R.id.btn_cat_grains);
+        catMeats      = findViewById(R.id.btn_cat_meats);
+        catSeafood    = findViewById(R.id.btn_cat_seafood);
+        catDairy      = findViewById(R.id.btn_cat_dairy);
+        catBakery     = findViewById(R.id.btn_cat_bakery);
+        catBeverages  = findViewById(R.id.btn_cat_beverages);
+        catSnacks     = findViewById(R.id.btn_cat_snacks);
+        catSpices     = findViewById(R.id.btn_cat_spices);
+        catCleaning   = findViewById(R.id.btn_cat_cleaning);
+        catPersonal   = findViewById(R.id.btn_cat_personal);
     }
 
     private void setupActions() {
@@ -84,30 +100,33 @@ public class Add_Product extends AppCompatActivity {
     }
 
     private void setupCategories() {
-        catVegetables.setOnClickListener(v -> {
-            selectedCategory = "Vegetables";
-            updateCategoryStyles();
-        });
-        catMeats.setOnClickListener(v -> {
-            selectedCategory = "Meat";
-            updateCategoryStyles();
-        });
-        catBeverages.setOnClickListener(v -> {
-            selectedCategory = "Beverages";
-            updateCategoryStyles();
-        });
-        catSnacks.setOnClickListener(v -> {
-            selectedCategory = "Snacks";
-            updateCategoryStyles();
-        });
+        catVegetables.setOnClickListener(v -> { selectedCategory = "Vegetables";   updateCategoryStyles(); });
+        catFruits    .setOnClickListener(v -> { selectedCategory = "Fruits";       updateCategoryStyles(); });
+        catGrains    .setOnClickListener(v -> { selectedCategory = "Grains";       updateCategoryStyles(); });
+        catMeats     .setOnClickListener(v -> { selectedCategory = "Meat";         updateCategoryStyles(); });
+        catSeafood   .setOnClickListener(v -> { selectedCategory = "Seafood";      updateCategoryStyles(); });
+        catDairy     .setOnClickListener(v -> { selectedCategory = "Dairy";        updateCategoryStyles(); });
+        catBakery    .setOnClickListener(v -> { selectedCategory = "Bakery";       updateCategoryStyles(); });
+        catBeverages .setOnClickListener(v -> { selectedCategory = "Beverages";    updateCategoryStyles(); });
+        catSnacks    .setOnClickListener(v -> { selectedCategory = "Snacks";       updateCategoryStyles(); });
+        catSpices    .setOnClickListener(v -> { selectedCategory = "Spices";       updateCategoryStyles(); });
+        catCleaning  .setOnClickListener(v -> { selectedCategory = "Cleaning";     updateCategoryStyles(); });
+        catPersonal  .setOnClickListener(v -> { selectedCategory = "Personal Care";updateCategoryStyles(); });
         updateCategoryStyles();
     }
 
     private void updateCategoryStyles() {
-        catVegetables.setBackgroundResource("Vegetables".equals(selectedCategory) ? R.drawable.bg_status_delivered : R.drawable.bg_cat_inactive);
-        catMeats.setBackgroundResource("Meat".equals(selectedCategory) ? R.drawable.bg_status_delivered : R.drawable.bg_cat_inactive);
-        catBeverages.setBackgroundResource("Beverages".equals(selectedCategory) ? R.drawable.bg_status_delivered : R.drawable.bg_cat_inactive);
-        catSnacks.setBackgroundResource("Snacks".equals(selectedCategory) ? R.drawable.bg_status_delivered : R.drawable.bg_cat_inactive);
+        TextView[] all = { catVegetables, catFruits, catGrains, catMeats,
+                           catSeafood, catDairy, catBakery, catBeverages,
+                           catSnacks, catSpices, catCleaning, catPersonal };
+        String[]   keys = { "Vegetables", "Fruits", "Grains", "Meat",
+                             "Seafood", "Dairy", "Bakery", "Beverages",
+                             "Snacks", "Spices", "Cleaning", "Personal Care" };
+        for (int i = 0; i < all.length; i++) {
+            if (all[i] == null) continue;
+            all[i].setBackgroundResource(keys[i].equals(selectedCategory)
+                    ? R.drawable.bg_status_delivered : R.drawable.bg_cat_inactive);
+        }
     }
 
     private void saveProduct() {

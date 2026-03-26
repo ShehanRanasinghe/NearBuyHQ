@@ -53,20 +53,29 @@ public class Inventory extends AppCompatActivity {
 
     // ── DATA MODEL ─────────────────────────────────────────────────────────
     static class InventoryItem {
+        String productId;
         String name;
         String brand;
         String category;
         String unit;
-        int currentStock;
-        int totalStock;
-        int iconRes;
+        String description;
+        double price;
+        long   createdAt;
+        int    currentStock;
+        int    totalStock;
+        int    iconRes;
 
-        InventoryItem(String name, String brand, String category, String unit,
+        InventoryItem(String productId, String name, String brand, String category,
+                      String unit, String description, double price, long createdAt,
                       int currentStock, int totalStock, int iconRes) {
-            this.name         = name;
-            this.brand        = brand;
-            this.category     = category;
-            this.unit         = unit;
+            this.productId   = productId;
+            this.name        = name;
+            this.brand       = brand;
+            this.category    = category;
+            this.unit        = unit;
+            this.description = description;
+            this.price       = price;
+            this.createdAt   = createdAt;
             this.currentStock = currentStock;
             this.totalStock   = totalStock;
             this.iconRes      = iconRes;
@@ -166,10 +175,14 @@ public class Inventory extends AppCompatActivity {
                     String brand = (item.getDescription() != null && !item.getDescription().isEmpty())
                             ? item.getDescription() : item.getCategory();
                     allItems.add(new InventoryItem(
+                            item.getId(),
                             item.getName(),
                             brand,
                             item.getCategory(),
                             item.getUnit(),
+                            item.getDescription() != null ? item.getDescription() : "",
+                            item.getPrice(),
+                            item.getCreatedAt(),
                             current,
                             total,
                             R.drawable.ic_eco_leaf
@@ -347,13 +360,14 @@ public class Inventory extends AppCompatActivity {
     // ── PRODUCT DETAILS ────────────────────────────────────────────────────
     private void showProductDetails(InventoryItem item) {
         Intent intent = new Intent(Inventory.this, Product_Details.class);
-        // Pass product details as extras
-        intent.putExtra("productName", item.name);
-        intent.putExtra("productBrand", item.brand);
-        intent.putExtra("productCategory", item.category);
-        intent.putExtra("currentStock", item.currentStock);
-        intent.putExtra("totalStock", item.totalStock);
-        intent.putExtra("unit", item.unit);
+        intent.putExtra("product_id",          item.productId);
+        intent.putExtra("product_name",        item.name);
+        intent.putExtra("product_description", item.description);
+        intent.putExtra("product_category",    item.category);
+        intent.putExtra("product_price",       item.price);
+        intent.putExtra("product_unit",        item.unit);
+        intent.putExtra("product_quantity",    item.currentStock);
+        intent.putExtra("product_created_at",  item.createdAt);
         startActivity(intent);
     }
 }
