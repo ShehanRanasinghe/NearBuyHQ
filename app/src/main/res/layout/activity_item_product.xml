@@ -65,7 +65,7 @@
                 android:id="@+id/tvProductName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Organic Samba Rice"
+                android:text=""
                 android:textColor="#1A3C4A"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -76,7 +76,7 @@
                 android:id="@+id/tvCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rice &amp; Grains"
+                android:text=""
                 android:textColor="#4ECDC4"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -106,7 +106,7 @@
                     android:id="@+id/tvPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="320.00"
+                    android:text="—"
                     android:textColor="#FF6B6B"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -115,7 +115,7 @@
                     android:id="@+id/tvUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" /kg"
+                    android:text=""
                     android:textColor="#7A9EA8"
                     android:textSize="11sp" />
 
@@ -146,7 +146,7 @@
                         android:id="@+id/tvStock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="42 units"
+                        android:text=""
                         android:textColor="#1A7A5E"
                         android:textSize="11sp"
                         android:textStyle="bold" />

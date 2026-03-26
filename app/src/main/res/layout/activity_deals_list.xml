@@ -69,6 +69,28 @@
 
     </LinearLayout>
 
+    <!-- SEARCH BAR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
+        <EditText
+            android:id="@+id/etSearchDeals"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:hint="Search deals…"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="8dp"
+            android:background="@drawable/bg_search_bar"
+            android:paddingHorizontal="12dp"
+            android:textSize="13sp"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:singleLine="true" />
+    </LinearLayout>
+
     <!-- Deals List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewDeals"

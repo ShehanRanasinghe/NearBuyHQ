@@ -30,10 +30,13 @@
 
             <ImageView
                 android:id="@+id/btn_back"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:src="@android:drawable/ic_menu_revert"
-                android:visibility="gone"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_back_arrow"
+                android:background="@drawable/bg_icon_circle_white"
+                android:padding="8dp"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/deep_blue"
                 android:contentDescription="Back" />
 
 

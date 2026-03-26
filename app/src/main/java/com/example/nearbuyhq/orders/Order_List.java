@@ -3,12 +3,16 @@ package com.example.nearbuyhq.orders;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -16,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.OrderRepository;
 import com.example.nearbuyhq.dashboard.Analytics;
@@ -38,6 +41,7 @@ public class Order_List extends AppCompatActivity {
     private TextView tabAll, tabPending, tabProcessing, tabDelivered;
     private OrderRepository orderRepository;
     private String activeFilter = "All";
+    private String searchQuery = "";
     private LinearLayout navDashboard, navProducts, navOrders, navAnalytics, navProfile;
     private ImageView navDashboardIcon, navProductsIcon, navOrdersIcon, navAnalyticsIcon, navProfileIcon;
     private TextView navDashboardText, navProductsText, navOrdersText, navAnalyticsText, navProfileText;
@@ -74,6 +78,19 @@ public class Order_List extends AppCompatActivity {
         allOrders = new ArrayList<>();
         orderList = new ArrayList<>();
         setupFilterTabs();
+
+        // Wire search
+        EditText etSearch = findViewById(R.id.etSearchOrders);
+        if (etSearch != null) {
+            etSearch.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+                @Override public void onTextChanged(CharSequence s, int st, int b, int c) {
+                    searchQuery = s.toString().trim().toLowerCase();
+                    applyOrderFilter();
+                }
+                @Override public void afterTextChanged(Editable s) {}
+            });
+        }
 
         // Setup RecyclerView
         orderAdapter = new OrderAdapter(this, orderList);
@@ -185,28 +202,11 @@ public class Order_List extends AppCompatActivity {
     }
 
     private void initSampleOrders() {
-        allOrders.clear();
-        allOrders.add(new Order("1001", "John Smith", "Delivered", 45.99, "2024-03-05"));
-        allOrders.add(new Order("1002", "Sarah Johnson", "Processing", 78.50, "2024-03-06"));
-        allOrders.add(new Order("1003", "Mike Brown", "Pending", 32.25, "2024-03-06"));
-        allOrders.add(new Order("1004", "Emily Davis", "Delivered", 120.00, "2024-03-04"));
-        allOrders.add(new Order("1005", "David Wilson", "Pending", 56.75, "2024-03-06"));
-        allOrders.add(new Order("1006", "Lisa Anderson", "Processing", 89.99, "2024-03-05"));
-        allOrders.add(new Order("1007", "James Taylor", "Delivered", 65.40, "2024-03-03"));
-        allOrders.add(new Order("1008", "Maria Garcia", "Cancelled", 42.80, "2024-03-04"));
-        allOrders.add(new Order("1009", "Robert Martinez", "Pending", 95.60, "2024-03-06"));
-        allOrders.add(new Order("1010", "Jennifer Lee", "Processing", 38.25, "2024-03-05"));
-        allOrders.add(new Order("1011", "William White", "Delivered", 145.50, "2024-03-02"));
-        allOrders.add(new Order("1012", "Amanda Harris", "Pending", 73.90, "2024-03-06"));
+        // Sample data removed – Firebase is the single source of truth.
+        // This method is kept as a no-op to avoid call-site changes.
     }
 
     private void loadOrders() {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            initSampleOrders();
-            applyOrderFilter();
-            return;
-        }
-
         orderRepository.getOrders(new DataCallback<List<Order>>() {
             @Override
             public void onSuccess(List<Order> data) {
@@ -217,8 +217,10 @@ public class Order_List extends AppCompatActivity {
 
             @Override
             public void onError(Exception exception) {
-                initSampleOrders();
+                // Show empty list on error rather than sample data
+                allOrders.clear();
                 applyOrderFilter();
+                Toast.makeText(Order_List.this, "Could not load orders", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -238,7 +240,11 @@ public class Order_List extends AppCompatActivity {
     private void applyOrderFilter() {
         orderList.clear();
         for (Order order : allOrders) {
-            if ("All".equals(activeFilter) || activeFilter.equalsIgnoreCase(order.getStatus())) {
+            boolean matchesFilter = "All".equals(activeFilter) || activeFilter.equalsIgnoreCase(order.getStatus());
+            boolean matchesSearch = searchQuery.isEmpty()
+                    || (order.getOrderId() != null && order.getOrderId().toLowerCase().contains(searchQuery))
+                    || (order.getCustomerName() != null && order.getCustomerName().toLowerCase().contains(searchQuery));
+            if (matchesFilter && matchesSearch) {
                 orderList.add(order);
             }
         }

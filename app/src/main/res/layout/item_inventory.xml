@@ -59,7 +59,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Product Name"
+                    android:text=""
                     android:textColor="@color/text_dark_primary"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -71,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Available"
+                    android:text=""
                     android:textColor="@color/stat_green"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -94,7 +94,7 @@
                     android:id="@+id/tvCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Category"
+                    android:text=""
                     android:textColor="#4ECDC4"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -111,7 +111,7 @@
                     android:id="@+id/tvBrand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Brand"
+                    android:text=""
                     android:textColor="#7A9EA8"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -140,7 +140,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Stock: 45 kg"
+                    android:text=""
                     android:textColor="@color/text_dark_secondary"
                     android:textSize="12sp" />
 
@@ -148,7 +148,7 @@
                     android:id="@+id/tvStockPercent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="75%"
+                    android:text=""
                     android:textColor="@color/text_dark_secondary"
                     android:textSize="12sp"
                     android:textStyle="bold" />

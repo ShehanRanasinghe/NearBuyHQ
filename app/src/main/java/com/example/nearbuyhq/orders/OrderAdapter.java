@@ -41,7 +41,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         Order order = orderList.get(position);
         holder.tvOrderId.setText("ORD-" + order.getOrderId());
         holder.tvCustomerName.setText(order.getCustomerName());
-        holder.tvOrderTotal.setText(String.format("$%.2f", order.getOrderTotal()));
+        holder.tvOrderTotal.setText(String.format("Rs. %.2f", order.getOrderTotal()));
         holder.tvOrderDate.setText(order.getOrderDate());
         holder.tvStatus.setText(order.getStatus());
 

@@ -13,7 +13,7 @@
         android:id="@+id/dealTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Deal Title"
+        android:text=""
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/text_dark_primary" />
@@ -22,7 +22,7 @@
         android:id="@+id/dealShop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Shop Name"
+        android:text=""
         android:textSize="14sp"
         android:textColor="@color/text_dark_secondary"
         android:layout_marginTop="4dp" />
@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="50% OFF"
+            android:text=""
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/coral_primary" />
@@ -47,11 +47,10 @@
             android:id="@+id/dealValidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Valid till"
+            android:text=""
             android:textSize="12sp"
             android:textColor="@color/text_dark_secondary" />
 
     </LinearLayout>
 
 </LinearLayout>
-

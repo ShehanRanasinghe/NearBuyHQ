@@ -135,16 +135,17 @@
                         android:id="@+id/txtTotalRevenue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$12,450"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp" />
 
                     <TextView
+                        android:id="@+id/txtRevenueTrend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+15% vs Last Week"
+                        android:text=""
                         android:textColor="@color/stat_green"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -183,16 +184,17 @@
                         android:id="@+id/txtTotalSales"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="342"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp" />
 
                     <TextView
+                        android:id="@+id/txtSalesTrend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+8% vs Last Week"
+                        android:text=""
                         android:textColor="@color/stat_blue"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -241,16 +243,17 @@
                         android:id="@+id/txtAvgOrderValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$36.40"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp" />
 
                     <TextView
+                        android:id="@+id/txtAvgOrderTrend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+12% vs Last Month"
+                        android:text=""
                         android:textColor="@color/stat_orange"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -289,16 +292,17 @@
                         android:id="@+id/txtTotalCustomers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1,248"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp" />
 
                     <TextView
+                        android:id="@+id/txtCustomersTrend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+24 This Week"
+                        android:text=""
                         android:textColor="@color/stat_red"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -558,7 +562,7 @@
                         android:id="@+id/txtCompletedOrders"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="284"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -591,7 +595,7 @@
                         android:id="@+id/txtPendingOrders"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="42"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -623,7 +627,7 @@
                         android:id="@+id/txtCancelledOrders"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="16"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -710,9 +714,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/txtProduct1Revenue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$2,840"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -762,9 +767,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/txtProduct2Revenue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$1,960"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -814,9 +820,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/txtProduct3Revenue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$1,740"
+                        android:text="—"
                         android:textColor="@color/text_dark_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />

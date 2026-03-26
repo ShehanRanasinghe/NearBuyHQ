@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.dashboard.Analytics;
@@ -180,10 +179,6 @@ public class AddDeal extends AppCompatActivity {
     }
 
     private void saveDeal() {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            Toast.makeText(this, "Enable Firebase to save deals", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         long now = System.currentTimeMillis();
         Deal deal = new Deal(

@@ -8,7 +8,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.example.nearbuyhq.data.repository.OperationCallback;
@@ -55,7 +54,7 @@ public class DealDetails extends AppCompatActivity {
         if (discount != null) dealDiscount.setText(discount + " OFF");
         if (validity != null) dealValidity.setText(validity);
 
-        if (FirebaseConfig.isFirebaseEnabled() && dealId != null && !dealId.trim().isEmpty()) {
+        if (dealId != null && !dealId.trim().isEmpty()) {
             discountRepository.getDeal(dealId, new DataCallback<Deal>() {
                 @Override
                 public void onSuccess(Deal data) {
@@ -93,10 +92,6 @@ public class DealDetails extends AppCompatActivity {
         btnDelete.setOnClickListener(v -> {
             if (dealId == null || dealId.trim().isEmpty()) {
                 Toast.makeText(this, "Missing deal ID", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (!FirebaseConfig.isFirebaseEnabled()) {
-                Toast.makeText(this, "Enable Firebase to delete deals", Toast.LENGTH_SHORT).show();
                 return;
             }
             discountRepository.deleteDeal(dealId, new OperationCallback() {

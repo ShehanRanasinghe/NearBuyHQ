@@ -39,7 +39,7 @@
                 android:id="@+id/tvPromoTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Promotion Title"
+                android:text=""
                 android:textColor="@color/text_dark_primary"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -50,7 +50,7 @@
                 android:id="@+id/tvPromoType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ramadan"
+                android:text=""
                 android:textColor="@color/text_dark_secondary"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -60,7 +60,7 @@
             android:id="@+id/tvPromoDiscount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20% OFF"
+            android:text=""
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textStyle="bold"
@@ -102,7 +102,7 @@
                 android:id="@+id/tvPromoProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All Products"
+                android:text=""
                 android:textColor="@color/text_dark_primary"
                 android:textSize="13sp"
                 android:maxLines="1"
@@ -114,7 +114,7 @@
             android:id="@+id/tvPromoStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Active"
+            android:text=""
             android:textColor="#FFFFFF"
             android:textSize="10sp"
             android:textStyle="bold"
@@ -141,7 +141,7 @@
             android:id="@+id/tvPromoDateRange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mar 01, 2026  –  Apr 30, 2026"
+            android:text=""
             android:textColor="@color/text_dark_secondary"
             android:textSize="12sp" />
     </LinearLayout>
@@ -172,7 +172,7 @@
                 android:id="@+id/tvPromoOriginalPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$100.00"
+                android:text=""
                 android:textColor="@color/text_dark_hint"
                 android:textSize="13sp"
                 android:layout_marginEnd="8dp" />
@@ -181,7 +181,7 @@
                 android:id="@+id/tvPromoDiscountedPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$80.00"
+                android:text=""
                 android:textColor="@color/coral_primary"
                 android:textSize="17sp"
                 android:textStyle="bold" />

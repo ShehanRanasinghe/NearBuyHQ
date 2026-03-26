@@ -26,7 +26,7 @@
                 android:id="@+id/reportType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Type: Shop Violation"
+                android:text="—"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/deep_blue" />
@@ -35,7 +35,7 @@
                 android:id="@+id/reportSubject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Subject: Fresh Mart"
+                android:text="—"
                 android:textSize="16sp"
                 android:textColor="@color/text_dark_secondary"
                 android:layout_marginTop="8dp" />
@@ -44,7 +44,7 @@
                 android:id="@+id/reportDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Description: Details"
+                android:text="—"
                 android:textSize="16sp"
                 android:textColor="@color/text_dark_secondary"
                 android:layout_marginTop="8dp" />
@@ -53,7 +53,7 @@
                 android:id="@+id/reportStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status: Pending"
+                android:text="—"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp" />
@@ -81,4 +81,3 @@
     </LinearLayout>
 
 </ScrollView>
-

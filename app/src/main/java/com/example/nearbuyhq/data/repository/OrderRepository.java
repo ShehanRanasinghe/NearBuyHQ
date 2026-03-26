@@ -8,8 +8,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class OrderRepository {
 
@@ -31,7 +34,10 @@ public class OrderRepository {
 
         String id = order.getOrderId();
         if (id == null || id.trim().isEmpty()) {
-            id = ordersRef.document().getId();
+            // Generate professional order number: ORD-YYYYMMDD-XXXX
+            String datePart = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
+            String randPart = String.format(Locale.getDefault(), "%04d", (int)(Math.random() * 9000) + 1000);
+            id = "ORD-" + datePart + "-" + randPart;
         }
 
         ordersRef.document(id)
@@ -107,6 +113,37 @@ public class OrderRepository {
         ordersRef.document(orderId)
                 .delete()
                 .addOnSuccessListener(unused -> callback.onSuccess())
+                .addOnFailureListener(callback::onError);
+    }
+
+    /**
+     * Fetch orders whose createdAt timestamp falls within [fromMs, toMs].
+     * Used by the Dashboard Business Overview date-range filter.
+     *
+     * @param fromMs start of the range in milliseconds (epoch)
+     * @param toMs   end of the range in milliseconds (epoch); pass Long.MAX_VALUE for "all time"
+     */
+    public void getOrdersByDateRange(long fromMs, long toMs, DataCallback<List<Order>> callback) {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            callback.onError(new IllegalStateException("Firebase is disabled"));
+            return;
+        }
+
+        // Use createdAt field; fall back gracefully if the field is missing (old documents)
+        Query query = ordersRef
+                .whereGreaterThanOrEqualTo("createdAt", fromMs)
+                .whereLessThanOrEqualTo("createdAt", toMs)
+                .orderBy("createdAt", Query.Direction.DESCENDING);
+
+        query.get()
+                .addOnSuccessListener(snapshots -> {
+                    List<Order> orders = new ArrayList<>();
+                    for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                        Order o = Order.fromMap(doc.getId(), doc.getData());
+                        if (o != null) orders.add(o);
+                    }
+                    callback.onSuccess(orders);
+                })
                 .addOnFailureListener(callback::onError);
     }
 }

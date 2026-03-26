@@ -13,7 +13,7 @@
         android:id="@+id/reportType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Report Type"
+        android:text=""
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/text_dark_primary" />
@@ -22,7 +22,7 @@
         android:id="@+id/reportSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Subject"
+        android:text=""
         android:textSize="14sp"
         android:textColor="@color/text_dark_secondary"
         android:layout_marginTop="4dp" />
@@ -31,7 +31,7 @@
         android:id="@+id/reportDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
+        android:text=""
         android:textSize="13sp"
         android:textColor="@color/text_dark_secondary"
         android:layout_marginTop="4dp" />
@@ -40,10 +40,9 @@
         android:id="@+id/reportStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pending"
+        android:text=""
         android:textSize="14sp"
         android:textStyle="bold"
         android:layout_marginTop="8dp" />
 
 </LinearLayout>
-

@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.example.nearbuyhq.data.repository.OperationCallback;
@@ -61,10 +60,6 @@ public class PromotionsFragment extends Fragment {
                         .setTitle("Delete Promotion")
                         .setMessage("Remove \"" + p.getTitle() + "\"?\nThis cannot be undone.")
                         .setPositiveButton("Delete", (d, w) -> {
-                            if (!FirebaseConfig.isFirebaseEnabled()) {
-                                Toast.makeText(requireContext(), "Enable Firebase to delete", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
                             discountRepository.deletePromotion(p.getId(), new OperationCallback() {
                                 @Override
                                 public void onSuccess() {
@@ -100,13 +95,6 @@ public class PromotionsFragment extends Fragment {
     }
 
     private void loadPromotions() {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            promotionList.clear();
-            adapter.notifyDataSetChanged();
-            toggleEmptyState();
-            return;
-        }
-
         discountRepository.getPromotions(new DataCallback<List<Promotion>>() {
             @Override
             public void onSuccess(List<Promotion> data) {

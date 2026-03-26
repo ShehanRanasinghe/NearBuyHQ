@@ -11,69 +11,44 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- ── Deep-blue header (same style as Products_List) ─────────── -->
+        <!-- ── Standard curved top bar (matches dashboard style) ────────── -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/deep_blue"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="48dp"
-            android:paddingBottom="20dp">
+            android:background="@drawable/bg_topbar_curved"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="20dp">
 
-            <!-- Top row: back + title + count badge -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@android:drawable/ic_menu_revert"
+                android:background="@drawable/bg_icon_circle_white"
+                android:padding="8dp"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="Back" />
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/nearbuy_logo"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/logo_desc" />
+
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:text="Promotions"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-                <ImageView
-                    android:id="@+id/btnBack"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_back_arrow"
-                    android:tint="#FFFFFF"
-                    android:padding="6dp"
-                    android:contentDescription="Back" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="8dp">
-
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Promotions"
-                        android:textColor="#FFFFFF"
-                        android:textSize="22sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <!-- Quick-stats row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🌙 Ramadan  🎄 Christmas  🎆 New Year  🪴 Thai Pongal"
-                    android:textColor="#B3FFFFFF"
-                    android:textSize="11sp" />
-            </LinearLayout>
         </LinearLayout>
 
         <!-- ── Promotions list ─────────────────────────────────────────── -->

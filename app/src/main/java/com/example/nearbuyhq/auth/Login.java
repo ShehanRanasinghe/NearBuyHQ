@@ -14,7 +14,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.AuthRepository;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.dashboard.Dashboard;
@@ -57,7 +56,7 @@ public class Login extends AppCompatActivity {
             });
         }
 
-        if (FirebaseConfig.isFirebaseEnabled() && authRepository.isLoggedIn()) {
+        if (authRepository.isLoggedIn()) {
             startActivity(new Intent(Login.this, Dashboard.class));
             finish();
         }
@@ -76,10 +75,6 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            Toast.makeText(this, "Firebase is disabled. Set FIREBASE_ENABLED=true", Toast.LENGTH_LONG).show();
-            return;
-        }
 
         setLoading(true);
         authRepository.login(usernameOrEmail, password, this, new OperationCallback() {

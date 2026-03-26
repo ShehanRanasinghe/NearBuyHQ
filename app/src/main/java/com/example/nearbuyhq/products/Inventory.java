@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
 import com.example.nearbuyhq.core.SessionManager;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.ProductRepository;
 import com.example.nearbuyhq.dashboard.Analytics;
@@ -153,59 +152,44 @@ public class Inventory extends AppCompatActivity {
         loadInventory();
     }
 
-    // ── SAMPLE DATA ────────────────────────────────────────────────────────
-    private void loadSampleData() {
-        allItems.clear();
-        // Same product – different brands tracked independently
-        allItems.add(new InventoryItem("Coconut Oil",    "Parachute",     "Oils & Fats",   "bottle", 12,  30, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Coconut Oil",    "KLF Nirmal",    "Oils & Fats",   "bottle",  0,  30, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Samba Rice",     "Organic Farms", "Rice & Grains", "kg",     45, 100, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Basmati Rice",   "India Gate",    "Rice & Grains", "kg",     80, 100, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Tomatoes",       "Farm Fresh",    "Vegetables",    "kg",      8,  50, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Tomatoes",       "Local Harvest", "Vegetables",    "kg",      0,  50, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Red Onions",     "Country Fresh", "Vegetables",    "kg",      3,  60, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Green Chilies",  "Farm Direct",   "Vegetables",    "kg",      5,  40, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Turmeric Powder","Everest",       "Spices",        "kg",     15,  50, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Turmeric Powder","MDH",           "Spices",        "kg",      0,  30, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Black Pepper",   "Catch",         "Spices",        "kg",      7,  30, R.drawable.ic_eco_leaf));
-        allItems.add(new InventoryItem("Cashews",        "Happy Nuts",    "Nuts",          "kg",      9,  30, R.drawable.ic_eco_leaf));
-    }
-
+    // ── LOAD FROM FIREBASE ─────────────────────────────────────────────────
     private void loadInventory() {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            loadSampleData();
-            adapter.updateList(allItems);
-            showLowStockWarning();
-            return;
-        }
-
         String shopId = SessionManager.getInstance(this).getShopId();
         productRepository.getProductsByShopId(shopId, "All", new DataCallback<List<ProductItem>>() {
             @Override
             public void onSuccess(List<ProductItem> data) {
                 allItems.clear();
                 for (ProductItem item : data) {
-                    int total = Math.max(item.getQuantity(), item.getQuantity() + 20);
+                    int current = item.getQuantity();
+                    // Use max of current stock or 50 as total so the progress bar is meaningful
+                    int total = Math.max(current, 50);
+                    String brand = (item.getDescription() != null && !item.getDescription().isEmpty())
+                            ? item.getDescription() : item.getCategory();
                     allItems.add(new InventoryItem(
                             item.getName(),
-                            "NearBuyHQ",
+                            brand,
                             item.getCategory(),
                             item.getUnit(),
-                            item.getQuantity(),
+                            current,
                             total,
                             R.drawable.ic_eco_leaf
                     ));
                 }
-                adapter.updateList(allItems);
-                showLowStockWarning();
+                runOnUiThread(() -> {
+                    adapter.updateList(allItems);
+                    showLowStockWarning();
+                });
             }
 
             @Override
             public void onError(Exception exception) {
-                Toast.makeText(Inventory.this, "Failed to load inventory: " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                loadSampleData();
-                adapter.updateList(allItems);
-                showLowStockWarning();
+                runOnUiThread(() -> {
+                    allItems.clear();
+                    adapter.updateList(allItems);
+                    showLowStockWarning();
+                    Toast.makeText(Inventory.this,
+                            "Could not load inventory", Toast.LENGTH_SHORT).show();
+                });
             }
         });
     }

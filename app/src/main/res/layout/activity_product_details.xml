@@ -94,11 +94,12 @@
                             android:textSize="60sp" />
                     </LinearLayout>
 
+                    <!-- Category badge -->
                     <TextView
                         android:id="@+id/tv_category_badge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rice and Grains"
+                        android:text=""
                         android:textColor="#FFFFFF"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -135,7 +136,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Samba Rice"
+                                android:text=""
                                 android:textColor="#1B2D4F"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -144,7 +145,7 @@
                                 android:id="@+id/tv_stock_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="In Stock"
+                                android:text=""
                                 android:textColor="#27AE60"
                                 android:textSize="11sp"
                                 android:textStyle="bold"
@@ -172,7 +173,7 @@
                                 android:id="@+id/tv_product_price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="285.00"
+                                android:text="—"
                                 android:textColor="#E03B2F"
                                 android:textSize="26sp"
                                 android:textStyle="bold" />
@@ -215,7 +216,7 @@
                                 android:id="@+id/tv_stock_qty"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="450"
+                                android:text="—"
                                 android:textColor="#1B2D4F"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -249,7 +250,7 @@
                                 android:id="@+id/tv_sku"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="RG-001"
+                                android:text="—"
                                 android:textColor="#1B2D4F"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -285,7 +286,7 @@
                             android:id="@+id/tv_product_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Premium quality Samba Rice sourced directly from Polonnaruwa farmers. Rich in nutrients and perfect for everyday cooking. Ideal for rice and curry, kiribath, and other traditional Sri Lankan dishes."
+                            android:text=""
                             android:textColor="#1B2D4F"
                             android:textSize="13sp"
                             android:lineSpacingExtra="4dp" />
@@ -323,10 +324,12 @@
                                 android:textColor="#9AA0AC"
                                 android:textSize="12sp" />
 
+                            <!-- Category info row -->
                             <TextView
+                                android:id="@+id/tv_product_category"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Rice and Grains"
+                                android:text="—"
                                 android:textColor="#1B2D4F"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -352,10 +355,12 @@
                                 android:textColor="#9AA0AC"
                                 android:textSize="12sp" />
 
+                            <!-- Unit info row -->
                             <TextView
+                                android:id="@+id/tv_product_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Per kg"
+                                android:text="—"
                                 android:textColor="#1B2D4F"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -381,10 +386,12 @@
                                 android:textColor="#9AA0AC"
                                 android:textSize="12sp" />
 
+                            <!-- Origin info row -->
                             <TextView
+                                android:id="@+id/tv_product_origin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Polonnaruwa, Sri Lanka"
+                                android:text="—"
                                 android:textColor="#1B2D4F"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -409,10 +416,12 @@
                                 android:textColor="#9AA0AC"
                                 android:textSize="12sp" />
 
+                            <!-- Added date info row -->
                             <TextView
+                                android:id="@+id/tv_added_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Mar 01, 2026"
+                                android:text="—"
                                 android:textColor="#1B2D4F"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />

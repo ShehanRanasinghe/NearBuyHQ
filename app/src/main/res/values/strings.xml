@@ -11,7 +11,7 @@
     <!-- Welcome Header -->
     <string name="hello_greeting">Hello,</string>
     <string name="shop_owner_name">Shop Owner</string>
-    <string name="shop_name_sample">Green Mart Grocery</string>
+    <string name="shop_name_sample">Your Shop</string>
     <string name="dashboard_subtitle">Manage your shops, products &amp; orders from here.</string>
     <string name="shop_status_open">Open</string>
 
@@ -54,68 +54,68 @@
     <string name="analytics">Analytics</string>
     <string name="inventory">Inventory</string>
 
-    <!-- Inventory Alert Samples -->
-    <string name="item_milk">Whole Milk 1L</string>
-    <string name="item_milk_stock">Only 5 left</string>
-    <string name="item_bread">White Bread</string>
-    <string name="item_bread_stock">Low stock – 3 left</string>
-    <string name="item_eggs">Farm Eggs (12pk)</string>
-    <string name="item_eggs_stock">Out of stock</string>
+    <!-- Inventory Alert Placeholders (loaded from Firebase at runtime) -->
+    <string name="item_milk">—</string>
+    <string name="item_milk_stock">—</string>
+    <string name="item_bread">—</string>
+    <string name="item_bread_stock">—</string>
+    <string name="item_eggs">—</string>
+    <string name="item_eggs_stock">—</string>
     <string name="restock">Restock</string>
 
-    <!-- Recent Order Samples -->
-    <string name="order_id_1">#ORD-1042</string>
-    <string name="order_customer_1">Sarah Johnson</string>
-    <string name="order_amount_1">$24.50</string>
+    <!-- Recent Order Placeholders (loaded from Firebase at runtime) -->
+    <string name="order_id_1">—</string>
+    <string name="order_customer_1">—</string>
+    <string name="order_amount_1">—</string>
     <string name="order_status_pending">Pending</string>
-    <string name="order_id_2">#ORD-1041</string>
-    <string name="order_customer_2">Mike Chen</string>
-    <string name="order_amount_2">$18.75</string>
+    <string name="order_id_2">—</string>
+    <string name="order_customer_2">—</string>
+    <string name="order_amount_2">—</string>
     <string name="order_status_processing">Processing</string>
-    <string name="order_id_3">#ORD-1040</string>
-    <string name="order_customer_3">Emily Davis</string>
-    <string name="order_amount_3">$32.00</string>
+    <string name="order_id_3">—</string>
+    <string name="order_customer_3">—</string>
+    <string name="order_amount_3">—</string>
     <string name="order_status_completed">Completed</string>
 
-    <!-- Product Performance Samples -->
-    <string name="top_product_1">Organic Bananas</string>
-    <string name="top_product_1_sales">142 sold</string>
-    <string name="top_product_2">Whole Milk 1L</string>
-    <string name="top_product_2_sales">98 sold</string>
-    <string name="top_product_3">White Bread</string>
-    <string name="top_product_3_sales">87 sold</string>
+    <!-- Product Performance Placeholders (loaded from Firebase at runtime) -->
+    <string name="top_product_1">—</string>
+    <string name="top_product_1_sales">—</string>
+    <string name="top_product_2">—</string>
+    <string name="top_product_2_sales">—</string>
+    <string name="top_product_3">—</string>
+    <string name="top_product_3_sales">—</string>
 
-    <!-- Promotion Samples -->
-    <string name="promo_1_title">Weekend Sale</string>
-    <string name="promo_1_discount">20% OFF</string>
-    <string name="promo_1_expiry">Expires: Mar 9, 2026</string>
-    <string name="promo_2_title">Buy 2 Get 1 Free</string>
-    <string name="promo_2_discount">B2G1</string>
-    <string name="promo_2_expiry">Expires: Mar 15, 2026</string>
+    <!-- Promotion Placeholders (loaded from Firebase at runtime) -->
+    <string name="promo_1_title">—</string>
+    <string name="promo_1_discount">—</string>
+    <string name="promo_1_expiry">—</string>
+    <string name="promo_2_title">—</string>
+    <string name="promo_2_discount">—</string>
+    <string name="promo_2_expiry">—</string>
 
-    <!-- Recent Activity (sample data) -->
+    <!-- Recent Activity Placeholders (loaded from Firebase at runtime) -->
     <string name="product_added_desc">Product Added</string>
     <string name="order_desc">Order</string>
     <string name="stock_updated_desc">Stock Updated</string>
     <string name="promo_created_desc">Promotion Created</string>
-    <string name="two_hours_ago">2h ago</string>
-    <string name="new_product_added">Product "Apple Juice" added</string>
-    <string name="sample_product">Organic Milk 1L - $3.49</string>
-    <string name="five_hours_ago">5h ago</string>
-    <string name="order_completed">Order #452 completed</string>
-    <string name="sample_order">Order #1042 - Delivered</string>
-    <string name="promo_created">Promotion "Weekend Sale" created</string>
-    <string name="sample_promo_activity">20% off all dairy products</string>
-    <string name="three_hours_ago">3h ago</string>
-    <string name="stock_updated">Stock updated for "Rice"</string>
-    <string name="sample_stock_update">Rice 5kg - restocked 50 units</string>
-    <string name="six_hours_ago">6h ago</string>
+    <string name="two_hours_ago">—</string>
+    <string name="new_product_added">—</string>
+    <string name="sample_product">—</string>
+    <string name="five_hours_ago">—</string>
+    <string name="order_completed">—</string>
+    <string name="sample_order">—</string>
+    <string name="promo_created">—</string>
+    <string name="sample_promo_activity">—</string>
+    <string name="three_hours_ago">—</string>
+    <string name="stock_updated">—</string>
+    <string name="sample_stock_update">—</string>
+    <string name="six_hours_ago">—</string>
 
-    <!-- Sample Data Values -->
-    <string name="sample_total_products">128</string>
-    <string name="sample_low_stock">12</string>
-    <string name="sample_todays_orders">24</string>
-    <string name="sample_todays_revenue">$1,245</string>
+    <!-- Stat Card Placeholders (loaded from Firebase at runtime) -->
+    <string name="sample_total_products">0</string>
+    <string name="sample_low_stock">0</string>
+    <string name="sample_todays_orders">0</string>
+    <string name="sample_todays_revenue">Rs. 0.00</string>
     <string name="rank_1">1</string>
     <string name="rank_2">2</string>
     <string name="rank_3">3</string>
@@ -170,14 +170,14 @@
     <string name="my_profile">My Profile</string>
     <string name="back">Back</string>
     <string name="profile_picture">Profile Picture</string>
-    <string name="sample_owner_name">John Doe</string>
+    <string name="sample_owner_name">—</string>
     <string name="shop_owner_label">Shop Owner</string>
     <string name="account_information">ACCOUNT INFORMATION</string>
     <string name="email">Email</string>
     <string name="phone">Phone</string>
     <string name="shop_name_label">Shop Name</string>
-    <string name="sample_email">owner@greenmart.com</string>
-    <string name="sample_phone">+94 77 123 4567</string>
+    <string name="sample_email">—</string>
+    <string name="sample_phone">—</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="logout">Log Out</string>
 
@@ -188,10 +188,10 @@
     <string name="store_category_label">Store Category</string>
     <string name="opening_hours_label">Opening Hours</string>
     <string name="website_label">Website / Social</string>
-    <string name="sample_store_location">45 Main Street, Colombo 03, Sri Lanka</string>
-    <string name="sample_store_category">Grocery &amp; Supermarket</string>
-    <string name="sample_opening_hours">Mon – Sat  8:00 AM – 9:00 PM</string>
-    <string name="sample_website">www.skgrocery.lk</string>
+    <string name="sample_store_location">—</string>
+    <string name="sample_store_category">—</string>
+    <string name="sample_opening_hours">—</string>
+    <string name="sample_website">—</string>
 
     <!-- Profile – Branches -->
     <string name="branches_label">BRANCHES</string>
@@ -199,10 +199,10 @@
     <string name="edit_branch_label">Edit</string>
     <string name="branch_icon_desc">Branch</string>
     <string name="address_label">Address</string>
-    <string name="sample_branch1_name">Nugegoda Branch</string>
-    <string name="sample_branch1_address">12 High Level Rd, Nugegoda, Sri Lanka</string>
-    <string name="sample_branch1_phone">+94 77 234 5678</string>
-    <string name="sample_branch2_name">Kandy Branch</string>
-    <string name="sample_branch2_address">88 Peradeniya Rd, Kandy, Sri Lanka</string>
-    <string name="sample_branch2_phone">+94 77 345 6789</string>
+    <string name="sample_branch1_name">—</string>
+    <string name="sample_branch1_address">—</string>
+    <string name="sample_branch1_phone">—</string>
+    <string name="sample_branch2_name">—</string>
+    <string name="sample_branch2_address">—</string>
+    <string name="sample_branch2_phone">—</string>
 </resources>

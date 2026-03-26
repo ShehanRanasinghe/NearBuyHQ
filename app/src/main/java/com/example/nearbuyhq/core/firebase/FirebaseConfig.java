@@ -13,7 +13,7 @@ public final class FirebaseConfig {
     }
 
     public static boolean isFirebaseEnabled() {
-        return BuildConfig.FIREBASE_ENABLED;
+        return true; // Firebase is always enabled in production
     }
 
     public static String getProjectId() {

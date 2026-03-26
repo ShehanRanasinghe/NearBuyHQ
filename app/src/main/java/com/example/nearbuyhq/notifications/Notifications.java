@@ -1,6 +1,9 @@
 package com.example.nearbuyhq.notifications;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -10,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
 import com.example.nearbuyhq.core.SessionManager;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.NotificationRepository;
 
@@ -33,8 +35,9 @@ public class Notifications extends AppCompatActivity {
 
     private RecyclerView recyclerViewNotifications;
     private NotificationsAdapter notificationsAdapter;
-    private List<Notification> notificationsList;
+    private List<Notification> allNotifications = new ArrayList<>();
     private ImageView btnBack;
+    private String searchQuery = "";
 
     private NotificationRepository notificationRepository;
 
@@ -50,13 +53,24 @@ public class Notifications extends AppCompatActivity {
         recyclerViewNotifications = findViewById(R.id.recyclerViewNotifications);
         btnBack = findViewById(R.id.btnBack);
 
-        // Start with empty list – will be filled by Firebase or sample data
-        notificationsList = new ArrayList<>();
-        notificationsAdapter = new NotificationsAdapter(notificationsList);
+        notificationsAdapter = new NotificationsAdapter(new ArrayList<>());
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewNotifications.setAdapter(notificationsAdapter);
 
         btnBack.setOnClickListener(v -> finish());
+
+        // Wire search
+        EditText etSearch = findViewById(R.id.etSearchNotifications);
+        if (etSearch != null) {
+            etSearch.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+                @Override public void onTextChanged(CharSequence s, int st, int b, int c) {
+                    searchQuery = s.toString().trim().toLowerCase();
+                    applySearch();
+                }
+                @Override public void afterTextChanged(Editable s) {}
+            });
+        }
 
         // Load real notifications from Firestore
         loadNotifications();
@@ -70,18 +84,12 @@ public class Notifications extends AppCompatActivity {
      * Falls back to sample data if Firebase is disabled or the call fails.
      */
     private void loadNotifications() {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            // Firebase is off (dev mode) – show sample data so the screen isn't empty
-            showSampleNotifications();
-            return;
-        }
-
         // Get the shopId saved in session after login
         String shopId = SessionManager.getInstance(this).getShopId();
 
         if (shopId == null || shopId.isEmpty()) {
-            // Shop hasn't been registered yet – show sample data
-            showSampleNotifications();
+            // No shop registered yet – show empty list
+            notificationsAdapter.updateList(new ArrayList<>());
             return;
         }
 
@@ -89,7 +97,7 @@ public class Notifications extends AppCompatActivity {
                 new DataCallback<List<Map<String, Object>>>() {
                     @Override
                     public void onSuccess(List<Map<String, Object>> data) {
-                        List<Notification> loaded = new ArrayList<>();
+                        allNotifications.clear();
                         for (Map<String, Object> map : data) {
                             // Convert Firestore map to Notification model
                             String title   = stringFrom(map, "title");
@@ -97,38 +105,37 @@ public class Notifications extends AppCompatActivity {
                             long createdAt = longFrom(map, "createdAt");
                             String time    = formatTimeAgo(createdAt);
 
-                            loaded.add(new Notification(title, message, time));
+                            allNotifications.add(new Notification(title, message, time));
                         }
-
-                        if (loaded.isEmpty()) {
-                            // No notifications yet – show placeholders
-                            showSampleNotifications();
-                        } else {
-                            notificationsAdapter.updateList(loaded);
+                        applySearch();
+                        // Show empty-state if no notifications exist
+                        if (allNotifications.isEmpty()) {
+                            Toast.makeText(Notifications.this,
+                                    "No notifications yet", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onError(Exception exception) {
-                        // Network error – fall back to sample data silently
                         Toast.makeText(Notifications.this,
                                 "Could not load notifications", Toast.LENGTH_SHORT).show();
-                        showSampleNotifications();
                     }
                 });
     }
 
-    // ── Sample / Fallback Data ───────────────────────────────────────────
-
-    /** Fill the list with placeholder notifications when Firestore is unavailable. */
-    private void showSampleNotifications() {
-        List<Notification> samples = new ArrayList<>();
-        samples.add(new Notification("New Shop Registration",   "Fresh Mart has registered on the platform",  "2 hours ago"));
-        samples.add(new Notification("Deal Expiring Soon",      "50% Off on Groceries expires today",         "5 hours ago"));
-        samples.add(new Notification("Shop Approval Needed",    "Tech Hub is waiting for approval",           "1 day ago"));
-        samples.add(new Notification("New Report",              "User reported Fashion Plaza",                "2 days ago"));
-        samples.add(new Notification("System Alert",            "Database backup completed successfully",     "3 days ago"));
-        notificationsAdapter.updateList(samples);
+    private void applySearch() {
+        if (searchQuery.isEmpty()) {
+            notificationsAdapter.updateList(new ArrayList<>(allNotifications));
+            return;
+        }
+        List<Notification> filtered = new ArrayList<>();
+        for (Notification n : allNotifications) {
+            if ((n.getTitle()   != null && n.getTitle().toLowerCase().contains(searchQuery))
+             || (n.getMessage() != null && n.getMessage().toLowerCase().contains(searchQuery))) {
+                filtered.add(n);
+            }
+        }
+        notificationsAdapter.updateList(filtered);
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────

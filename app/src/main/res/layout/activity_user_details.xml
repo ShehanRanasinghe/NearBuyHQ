@@ -26,7 +26,7 @@
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User Name"
+                android:text="—"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/deep_blue" />
@@ -35,7 +35,7 @@
                 android:id="@+id/userEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email: user@example.com"
+                android:text="—"
                 android:textSize="16sp"
                 android:textColor="@color/text_dark_secondary"
                 android:layout_marginTop="8dp" />
@@ -44,7 +44,7 @@
                 android:id="@+id/userStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status: Active"
+                android:text="—"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp" />
@@ -91,4 +91,3 @@
     </LinearLayout>
 
 </ScrollView>
-

@@ -51,11 +51,12 @@
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
+                <!-- order status header badge -->
                 <TextView
                     android:id="@+id/tv_header_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pending"
+                    android:text=""
                     android:textColor="#FFFFFF"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -113,7 +114,7 @@
                             android:id="@+id/tv_order_id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="#ORD-00123"
+                            android:text=""
                             android:textColor="#E03B2F"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -137,7 +138,7 @@
                             android:id="@+id/tv_order_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mar 04, 2026"
+                            android:text="—"
                             android:textColor="#1B2D4F"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -159,7 +160,7 @@
                             android:id="@+id/tv_order_status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pending"
+                            android:text=""
                             android:textColor="#FFFFFF"
                             android:textSize="11sp"
                             android:textStyle="bold"
@@ -217,7 +218,7 @@
                                 android:id="@+id/tv_customer_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Sanduni Saumya"
+                                android:text=""
                                 android:textColor="#1B2D4F"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -226,7 +227,7 @@
                                 android:id="@+id/tv_customer_phone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="+1 234 567 8900"
+                                android:text=""
                                 android:textColor="#9AA0AC"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -249,7 +250,7 @@
                             android:id="@+id/tv_customer_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Street no 90, North City"
+                            android:text=""
                             android:textColor="#9AA0AC"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -300,10 +301,11 @@
                             android:layout_weight="1"
                             android:orientation="vertical">
 
+                            <!-- Product name 1 -->
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Potato Chips"
+                                android:text=""
                                 android:textColor="#1B2D4F"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -311,7 +313,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$4.5/Pack  ×  1"
+                                android:text=""
                                 android:textColor="#9AA0AC"
                                 android:textSize="11sp" />
                         </LinearLayout>
@@ -319,7 +321,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$4.50"
+                            android:text=""
                             android:textColor="#1B2D4F"
                             android:textSize="13sp"
                             android:textStyle="bold" />
@@ -358,10 +360,11 @@
                             android:layout_weight="1"
                             android:orientation="vertical">
 
+                            <!-- Product name 2 -->
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Orange Juice"
+                                android:text=""
                                 android:textColor="#1B2D4F"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -369,7 +372,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$1.5/Bottle  ×  2"
+                                android:text=""
                                 android:textColor="#9AA0AC"
                                 android:textSize="11sp" />
                         </LinearLayout>
@@ -377,7 +380,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$3.00"
+                            android:text=""
                             android:textColor="#1B2D4F"
                             android:textSize="13sp"
                             android:textStyle="bold" />
@@ -416,10 +419,11 @@
                             android:layout_weight="1"
                             android:orientation="vertical">
 
+                            <!-- Product name 3 -->
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Broccoli"
+                                android:text=""
                                 android:textColor="#1B2D4F"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -427,7 +431,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="$4.5/kg  ×  1"
+                                android:text=""
                                 android:textColor="#9AA0AC"
                                 android:textSize="11sp" />
                         </LinearLayout>
@@ -435,7 +439,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$4.50"
+                            android:text=""
                             android:textColor="#1B2D4F"
                             android:textSize="13sp"
                             android:textStyle="bold" />
@@ -465,7 +469,7 @@
                             android:id="@+id/tv_total_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$12.00"
+                            android:text="—"
                             android:textColor="#E03B2F"
                             android:textSize="18sp"
                             android:textStyle="bold" />

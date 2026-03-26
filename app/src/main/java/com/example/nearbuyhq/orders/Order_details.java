@@ -11,7 +11,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.data.repository.OrderRepository;
@@ -52,7 +51,7 @@ public class Order_details extends AppCompatActivity {
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         btnUpdateStatus.setOnClickListener(v -> updateStatus());
 
-        if (FirebaseConfig.isFirebaseEnabled() && orderId != null && !orderId.isEmpty()) {
+        if (orderId != null && !orderId.isEmpty()) {
             loadOrder();
         }
     }
@@ -83,7 +82,7 @@ public class Order_details extends AppCompatActivity {
         tvOrderId.setText(orderId == null ? "#ORD-N/A" : String.format(Locale.getDefault(), "#ORD-%s", orderId));
         tvCustomerName.setText(customerName == null ? "Customer" : customerName);
         tvOrderDate.setText(date == null || date.isEmpty() ? "N/A" : date);
-        tvTotalPrice.setText(String.format(Locale.getDefault(), "$%.2f", total));
+        tvTotalPrice.setText(String.format(Locale.getDefault(), "Rs. %.2f", total));
         tvCustomerPhone.setText("N/A");
         tvCustomerAddress.setText("N/A");
         applyStatusText();
@@ -120,7 +119,7 @@ public class Order_details extends AppCompatActivity {
                 tvOrderId.setText(String.format(Locale.getDefault(), "#ORD-%s", data.getOrderId()));
                 tvCustomerName.setText(data.getCustomerName());
                 tvOrderDate.setText(data.getOrderDate());
-                tvTotalPrice.setText(String.format(Locale.getDefault(), "$%.2f", data.getOrderTotal()));
+                tvTotalPrice.setText(String.format(Locale.getDefault(), "Rs. %.2f", data.getOrderTotal()));
                 tvCustomerPhone.setText(data.getCustomerPhone().isEmpty() ? "N/A" : data.getCustomerPhone());
                 tvCustomerAddress.setText(data.getCustomerAddress().isEmpty() ? "N/A" : data.getCustomerAddress());
                 applyStatusText();
@@ -136,10 +135,6 @@ public class Order_details extends AppCompatActivity {
     private void updateStatus() {
         if (orderId == null || orderId.trim().isEmpty()) {
             Toast.makeText(this, "Missing order ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            Toast.makeText(this, "Enable Firebase to update orders", Toast.LENGTH_SHORT).show();
             return;
         }
 

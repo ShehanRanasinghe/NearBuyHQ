@@ -11,29 +11,62 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_topbar_curved"
+        android:elevation="6dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@color/deep_blue"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="20dp">
 
         <ImageView
             android:id="@+id/btnBack"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:src="@drawable/ic_back_arrow"
+            android:src="@android:drawable/ic_menu_revert"
+            android:background="@drawable/bg_icon_circle_white"
             android:padding="8dp"
             android:layout_marginEnd="12dp"
             android:contentDescription="Back" />
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/nearbuy_logo"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/logo_desc" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginStart="10dp"
             android:text="Notifications"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
+    </LinearLayout>
+
+    <!-- SEARCH BAR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
+        <EditText
+            android:id="@+id/etSearchNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:hint="Search notifications…"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="8dp"
+            android:background="@drawable/bg_search_bar"
+            android:paddingHorizontal="12dp"
+            android:textSize="13sp"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:singleLine="true" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -43,4 +76,3 @@
         android:padding="16dp" />
 
 </LinearLayout>
-

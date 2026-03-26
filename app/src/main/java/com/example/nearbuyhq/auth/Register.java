@@ -103,8 +103,10 @@ public class Register extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 setLoading(false);
-                Toast.makeText(Register.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Register.this, Login.class);
+                Toast.makeText(Register.this, "Account created! Please verify your email.", Toast.LENGTH_SHORT).show();
+                // Go to OTP/email verification screen (only on first registration)
+                Intent intent = new Intent(Register.this, OTPVerification.class);
+                intent.putExtra("email", emailStr);
                 startActivity(intent);
                 finish();
             }

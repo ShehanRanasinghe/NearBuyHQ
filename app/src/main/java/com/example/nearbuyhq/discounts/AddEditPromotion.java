@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.example.nearbuyhq.data.repository.OperationCallback;
@@ -243,7 +242,7 @@ public class AddEditPromotion extends AppCompatActivity {
             }
             double discounted = original - (original * pct / 100.0);
             tvDiscountedPrice.setText(
-                    String.format(Locale.getDefault(), "$%.2f", discounted));
+                    String.format(Locale.getDefault(), "Rs. %.2f", discounted));
         } catch (NumberFormatException e) {
             tvDiscountedPrice.setText("—");
         }
@@ -252,10 +251,6 @@ public class AddEditPromotion extends AppCompatActivity {
     // ── Load existing promotion for editing ──────────────────────────────────
 
     private void loadForEditing(String promoId) {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            Toast.makeText(this, "Enable Firebase to edit promotions", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         discountRepository.getPromotion(promoId, new DataCallback<Promotion>() {
             @Override
@@ -332,10 +327,6 @@ public class AddEditPromotion extends AppCompatActivity {
         Promotion p = new Promotion(id, title, type, discount,
                 startDate, endDate, product, originalPrice, active);
 
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            Toast.makeText(this, "Enable Firebase to save promotions", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         setSaving(true);
         discountRepository.savePromotion(p, new OperationCallback() {

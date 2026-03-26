@@ -12,7 +12,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.data.repository.ProductRepository;
 
@@ -100,10 +99,6 @@ public class Product_Details extends AppCompatActivity {
     private void deleteProduct() {
         if (productId == null || productId.trim().isEmpty()) {
             Toast.makeText(this, "Missing product ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            Toast.makeText(this, "Enable Firebase to delete products", Toast.LENGTH_SHORT).show();
             return;
         }
 

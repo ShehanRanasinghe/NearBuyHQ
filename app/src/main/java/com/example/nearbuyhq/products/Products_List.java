@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.data.repository.ProductRepository;
@@ -150,11 +149,6 @@ public class Products_List extends AppCompatActivity {
     }
 
     private void loadProducts() {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            loadFallbackData();
-            return;
-        }
-
         productRepository.getProducts("All", new DataCallback<List<ProductItem>>() {
             @Override
             public void onSuccess(List<ProductItem> data) {
@@ -165,19 +159,11 @@ public class Products_List extends AppCompatActivity {
 
             @Override
             public void onError(Exception exception) {
-                Toast.makeText(Products_List.this, "Failed to load products: " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                loadFallbackData();
+                allProducts.clear();
+                applyFilters();
+                Toast.makeText(Products_List.this, "Could not load products", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void loadFallbackData() {
-        allProducts.clear();
-        long now = System.currentTimeMillis();
-        allProducts.add(new ProductItem("1", "global", "Organic Samba Rice", "Premium local rice", "Rice & Grains", "kg", 320.00, 42, "Available", now, now));
-        allProducts.add(new ProductItem("2", "global", "Turmeric Powder", "Fresh turmeric powder", "Spices", "kg", 580.00, 8, "Low Stock", now, now));
-        allProducts.add(new ProductItem("3", "global", "Carrots", "Fresh carrots", "Vegetables", "kg", 190.00, 0, "Out of Stock", now, now));
-        applyFilters();
     }
 
     private void applyFilters() {
@@ -230,10 +216,6 @@ public class Products_List extends AppCompatActivity {
     }
 
     private void deleteProduct(ProductItem item) {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            Toast.makeText(this, "Enable Firebase to delete products", Toast.LENGTH_SHORT).show();
-            return;
-        }
         productRepository.deleteProduct(item.getId(), new OperationCallback() {
             @Override
             public void onSuccess() {

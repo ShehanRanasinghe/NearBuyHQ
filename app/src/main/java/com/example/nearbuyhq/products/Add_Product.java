@@ -14,7 +14,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.dashboard.Analytics;
 import com.example.nearbuyhq.dashboard.Dashboard;
@@ -112,10 +111,6 @@ public class Add_Product extends AppCompatActivity {
     }
 
     private void saveProduct() {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            Toast.makeText(this, "Firebase is disabled. Set FIREBASE_ENABLED=true", Toast.LENGTH_LONG).show();
-            return;
-        }
 
         String name = etProductName.getText().toString().trim();
         String description = etProductDescription.getText().toString().trim();

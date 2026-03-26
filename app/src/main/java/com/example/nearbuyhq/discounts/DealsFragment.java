@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
-import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -73,13 +72,6 @@ public class DealsFragment extends Fragment {
     }
 
     private void loadDeals() {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            loadSampleDeals();
-            adapter.notifyDataSetChanged();
-            toggleEmptyState();
-            return;
-        }
-
         discountRepository.getDeals(new DataCallback<List<Deal>>() {
             @Override
             public void onSuccess(List<Deal> data) {
@@ -92,18 +84,11 @@ public class DealsFragment extends Fragment {
             @Override
             public void onError(Exception exception) {
                 Toast.makeText(requireContext(), "Failed to load deals", Toast.LENGTH_SHORT).show();
-                loadSampleDeals();
+                dealsList.clear();
                 adapter.notifyDataSetChanged();
                 toggleEmptyState();
             }
         });
-    }
-
-    private void loadSampleDeals() {
-        dealsList.clear();
-        dealsList.add(new Deal("1", "Buy 2 Get 1 Free", "All dairy products", "20%", "March 15, 2026"));
-        dealsList.add(new Deal("2", "Weekend Special", "Fresh fruits", "15%", "March 12, 2026"));
-        dealsList.add(new Deal("3", "Spring Sale", "All vegetables", "25%", "March 20, 2026"));
     }
 
     private void toggleEmptyState() {

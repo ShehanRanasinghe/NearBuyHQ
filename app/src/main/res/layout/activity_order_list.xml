@@ -54,16 +54,6 @@
                     android:textColor="#FFFFFF"
                     android:textSize="22sp"
                     android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/btn_notifications"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/ic_notification_bell"
-                    android:background="@drawable/bg_icon_circle_white"
-                    android:padding="8dp"
-                    app:tint="@color/deep_blue"
-                    android:contentDescription="Notifications" />
             </LinearLayout>
 
             <!-- Summary Chips -->
@@ -83,7 +73,7 @@
                     android:gravity="center_horizontal">
                     <TextView android:id="@+id/tv_total_orders"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="12" android:textColor="#1B2D4F"
+                        android:text="0" android:textColor="#1B2D4F"
                         android:textSize="20sp" android:textStyle="bold" />
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="Total" android:textColor="#9AA0AC" android:textSize="10sp" />
@@ -100,7 +90,7 @@
                     android:gravity="center_horizontal">
                     <TextView android:id="@+id/tv_pending_count"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="5" android:textColor="#F5A623"
+                        android:text="0" android:textColor="#F5A623"
                         android:textSize="20sp" android:textStyle="bold" />
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="Pending" android:textColor="#9AA0AC" android:textSize="10sp" />
@@ -116,7 +106,7 @@
                     android:gravity="center_horizontal">
                     <TextView android:id="@+id/tv_delivered_count"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="7" android:textColor="#27AE60"
+                        android:text="0" android:textColor="#27AE60"
                         android:textSize="20sp" android:textStyle="bold" />
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="Delivered" android:textColor="#9AA0AC" android:textSize="10sp" />
@@ -160,6 +150,29 @@
                     android:background="@drawable/bg_tab_inactive" />
             </LinearLayout>
         </HorizontalScrollView>
+
+        <!-- SEARCH BAR -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="6dp">
+            <EditText
+                android:id="@+id/etSearchOrders"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:hint="Search orders by ID or customer…"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="8dp"
+                android:background="@drawable/bg_search_bar"
+                android:paddingHorizontal="12dp"
+                android:textSize="13sp"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:singleLine="true" />
+        </LinearLayout>
 
         <!-- ORDERS RECYCLERVIEW -->
         <androidx.recyclerview.widget.RecyclerView

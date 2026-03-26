@@ -13,7 +13,7 @@
         android:id="@+id/notificationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notification Title"
+        android:text=""
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/text_dark_primary" />
@@ -22,7 +22,7 @@
         android:id="@+id/notificationMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notification message"
+        android:text=""
         android:textSize="14sp"
         android:textColor="@color/text_dark_secondary"
         android:layout_marginTop="4dp" />
@@ -31,10 +31,9 @@
         android:id="@+id/notificationTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2 hours ago"
+        android:text=""
         android:textSize="12sp"
         android:textColor="@color/text_dark_hint"
         android:layout_marginTop="4dp" />
 
 </LinearLayout>
-

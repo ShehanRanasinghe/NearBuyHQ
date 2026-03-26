@@ -89,12 +89,12 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.View
 
             if (p.getOriginalPrice() > 0) {
                 // Strike-through original price
-                String origTxt = String.format(Locale.getDefault(), "$%.2f", p.getOriginalPrice());
+                String origTxt = String.format(Locale.getDefault(), "Rs. %.2f", p.getOriginalPrice());
                 SpannableString ss = new SpannableString(origTxt);
                 ss.setSpan(new StrikethroughSpan(), 0, origTxt.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 tvOriginalPrice.setText(ss);
                 tvDiscountedPrice.setText(
-                        String.format(Locale.getDefault(), "$%.2f", p.getDiscountedPrice()));
+                        String.format(Locale.getDefault(), "Rs. %.2f", p.getDiscountedPrice()));
                 tvOriginalPrice.setVisibility(View.VISIBLE);
                 tvDiscountedPrice.setVisibility(View.VISIBLE);
             } else {

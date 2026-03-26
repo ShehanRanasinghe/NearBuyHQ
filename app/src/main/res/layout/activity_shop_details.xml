@@ -27,7 +27,7 @@
                 android:id="@+id/shopName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Shop Name"
+                android:text=""
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/deep_blue" />
@@ -36,7 +36,7 @@
                 android:id="@+id/shopOwner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Owner: John Doe"
+                android:text="Owner: —"
                 android:textSize="16sp"
                 android:textColor="@color/text_dark_secondary"
                 android:layout_marginTop="8dp" />
@@ -45,7 +45,7 @@
                 android:id="@+id/shopLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Location: 123 Main St"
+                android:text="Location: —"
                 android:textSize="16sp"
                 android:textColor="@color/text_dark_secondary"
                 android:layout_marginTop="4dp" />
@@ -54,7 +54,7 @@
                 android:id="@+id/shopCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Category: Grocery"
+                android:text="Category: —"
                 android:textSize="16sp"
                 android:textColor="@color/text_dark_secondary"
                 android:layout_marginTop="4dp" />
@@ -63,7 +63,7 @@
                 android:id="@+id/shopStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status: Active"
+                android:text="Status: —"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/success_green"
@@ -93,4 +93,3 @@
     </LinearLayout>
 
 </ScrollView>
-
