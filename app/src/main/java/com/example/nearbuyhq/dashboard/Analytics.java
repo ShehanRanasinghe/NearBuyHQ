@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Analytics screen – shows business overview statistics loaded live from Firestore.
+ * Analytics screen – shows business overview statistics and sales bar chart loaded live from Firestore.
  *
  * Metrics shown:
  *  - Total Revenue (sum of all Delivered order totals)
@@ -103,8 +103,15 @@ public class Analytics extends AppCompatActivity {
         loadAnalyticsData();
     }
 
-    // ── Load from Firebase ────────────────────────────────────────────────
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadAnalyticsData(); // reload every time the user returns so charts stay current
+    }
 
+    // ── Data loading ──────────────────────────────────────────────────────
+
+    // Pull orders and products from Firestore, then build chart data
     /**
      * Load orders from Firestore and compute all four metrics.
      * Also loads the total customer count from the users collection.

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+// Products list screen – shows all products for the shop with search, category filter chips, and inline edit/delete support.
 public class Products_List extends AppCompatActivity {
 
     private RecyclerView rvProducts;
@@ -150,7 +151,7 @@ public class Products_List extends AppCompatActivity {
     }
 
     private void loadProducts() {
-        String userId = com.example.nearbuyhq.core.SessionManager.getInstance(this).getUserId();
+        String userId = SessionManager.getInstance(this).getUserId();
         productRepository.getProductsByShopId(userId, "All", new DataCallback<List<ProductItem>>() {
             @Override
             public void onSuccess(List<ProductItem> data) {

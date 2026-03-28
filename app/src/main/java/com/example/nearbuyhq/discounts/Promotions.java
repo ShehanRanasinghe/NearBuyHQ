@@ -25,6 +25,7 @@ import com.example.nearbuyhq.data.repository.OperationCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+// Promotions screen – shows all promotions for the shop in a RecyclerView with add/edit/delete support.
 public class Promotions extends AppCompatActivity {
 
     private RecyclerView      recyclerView;
@@ -101,10 +102,10 @@ public class Promotions extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadPromotions();
+        loadPromotions(); // refresh list when returning from add/edit screen
     }
 
-    // ── Data helpers ────────────────────────────────────────────────────────
+    // ── Firestore load ────────────────────────────────────────────────────
 
     private void loadPromotions() {
         if (!FirebaseConfig.isFirebaseEnabled()) {
@@ -133,6 +134,9 @@ public class Promotions extends AppCompatActivity {
         });
     }
 
+    // ── Empty state toggle ────────────────────────────────────────────────
+
+    // Show empty-state placeholder when the list has no promotions; hide it otherwise
     private void toggleEmptyState() {
         boolean empty = promotionList.isEmpty();
         llEmptyState.setVisibility(empty ? View.VISIBLE : View.GONE);

@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+// Deals list screen – shows all deals for the current shop with search filtering and a FAB to add new ones.
 public class DealsList extends AppCompatActivity {
 
     private RecyclerView recyclerViewDeals;
@@ -87,7 +89,7 @@ public class DealsList extends AppCompatActivity {
     }
 
     private void loadDeals() {
-        String userId = com.example.nearbuyhq.core.SessionManager.getInstance(this).getUserId();
+        String userId = SessionManager.getInstance(this).getUserId();
         discountRepository.getDealsByUserId(userId, new DataCallback<List<Deal>>() {
             @Override
             public void onSuccess(List<Deal> data) {

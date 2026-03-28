@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+// Product details screen – shows full product info from intent extras and supports editing or deleting the product.
 public class Product_Details extends AppCompatActivity {
 
     private ProductRepository productRepository;

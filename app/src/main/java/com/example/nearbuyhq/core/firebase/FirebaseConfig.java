@@ -1,23 +1,14 @@
 package com.example.nearbuyhq.core.firebase;
 
-import com.example.nearbuyhq.BuildConfig;
-
-/**
- * Central Firebase switches used by the app shell.
- * Backend wiring will be added in a later step.
- */
+// Central Firebase feature switches – controls whether live Firestore calls are made.
 public final class FirebaseConfig {
 
-    private FirebaseConfig() {
-        // Utility class
-    }
+    // Prevent instantiation of this utility class
+    private FirebaseConfig() {}
 
+    // Returns true when Firebase is active; set to false to stub out all backend calls during testing
     public static boolean isFirebaseEnabled() {
         return true; // Firebase is always enabled in production
-    }
-
-    public static String getProjectId() {
-        return BuildConfig.FIREBASE_PROJECT_ID;
     }
 }
 

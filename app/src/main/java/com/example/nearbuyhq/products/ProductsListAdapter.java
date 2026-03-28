@@ -15,6 +15,7 @@ import com.example.nearbuyhq.R;
 import java.util.ArrayList;
 import java.util.List;
 
+// RecyclerView adapter for the Products List screen – renders each product card with stock badge and wires open/edit/delete actions.
 public class ProductsListAdapter extends RecyclerView.Adapter<ProductsListAdapter.ProductViewHolder> {
 
     public interface ProductActionListener {

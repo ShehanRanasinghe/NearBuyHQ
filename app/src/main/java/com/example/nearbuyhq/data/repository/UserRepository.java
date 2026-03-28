@@ -11,6 +11,7 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+// Repository for user/shop admin queries – lists all shop owners and updates their status in Firestore.
 public class UserRepository {
 
     private final CollectionReference usersRef;

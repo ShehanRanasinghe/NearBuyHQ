@@ -17,6 +17,7 @@ import com.example.nearbuyhq.R;
 import java.util.ArrayList;
 import java.util.List;
 
+// RecyclerView adapter for the Inventory screen – binds InventoryItem rows, applies stock-level colour coding (green/red/grey) and notifies clicks.
 public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryViewHolder> {
 
     private List<Inventory.InventoryItem> items;

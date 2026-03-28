@@ -15,6 +15,7 @@ import com.example.nearbuyhq.data.repository.OperationCallback;
 
 import android.content.Intent;
 
+// Deal details screen – shows full deal info passed via Intent extras and supports editing or deleting the deal.
 public class DealDetails extends AppCompatActivity {
 
     private TextView dealTitle, dealShop, dealValidity;

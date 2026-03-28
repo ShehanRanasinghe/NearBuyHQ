@@ -22,6 +22,7 @@ import com.example.nearbuyhq.data.repository.ProductRepository;
 import com.example.nearbuyhq.orders.Order_List;
 import com.example.nearbuyhq.settings.ProfilePage;
 
+// Add/Edit product screen – validates form inputs, assigns a category, then saves to NearBuyHQ/{userId}/products.
 public class Add_Product extends AppCompatActivity {
 
     private EditText etProductName;

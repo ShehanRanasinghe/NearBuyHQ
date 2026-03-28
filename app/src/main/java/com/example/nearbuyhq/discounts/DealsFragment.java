@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+// Fragment shown on the Deals tab – loads all deals from Firestore and allows adding new ones via the FAB.
 public class DealsFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -72,7 +74,7 @@ public class DealsFragment extends Fragment {
     }
 
     private void loadDeals() {
-        String userId = com.example.nearbuyhq.core.SessionManager.getInstance(requireContext()).getUserId();
+        String userId = SessionManager.getInstance(requireContext()).getUserId();
         discountRepository.getDealsByUserId(userId, new DataCallback<List<Deal>>() {
             @Override
             public void onSuccess(List<Deal> data) {

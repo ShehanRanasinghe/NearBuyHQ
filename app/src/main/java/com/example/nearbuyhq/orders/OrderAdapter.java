@@ -11,6 +11,7 @@ import com.example.nearbuyhq.R;
 
 import java.util.List;
 
+// RecyclerView adapter for the orders list – binds each Order to item_order layout and colour-codes the status badge.
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
     public interface OnOrderClickListener {

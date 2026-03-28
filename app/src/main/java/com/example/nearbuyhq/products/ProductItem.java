@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+// Product data model – represents a single inventory item stored in NearBuyHQ/{shopId}/products.
 public class ProductItem {
 
     private String id;

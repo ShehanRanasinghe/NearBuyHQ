@@ -15,7 +15,6 @@
         android:orientation="vertical"
         android:padding="24dp"
         android:gravity="center_horizontal">
-        android:gravity="center_horizontal">
 
         <!-- Logo Section -->
         <ImageView
@@ -51,9 +50,9 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:hint="@string/hint_username"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/hint_email"
                 android:inputType="text"
                 android:autofillHints="username"
                 android:padding="16dp"
@@ -64,30 +63,54 @@
                 android:textSize="16sp" />
 
             <!-- Password Input -->
-            <EditText
-                android:id="@+id/password"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:hint="@string/hint_password"
-                android:inputType="textPassword"
-                android:autofillHints="password"
-                android:padding="16dp"
-                android:textColor="@color/text_dark_primary"
-                android:textColorHint="@color/text_dark_hint"
-                android:background="@drawable/bg_input_field"
-                android:drawablePadding="12dp"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp" />
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_input_field">
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/hint_password"
+                    android:inputType="textPassword"
+                    android:autofillHints="password"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="48dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:textColor="@color/text_dark_primary"
+                    android:textColorHint="@color/text_dark_hint"
+                    android:background="@null"
+                    android:textSize="16sp"
+                    android:layout_toStartOf="@+id/togglePassword"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true" />
+
+                <ImageView
+                    android:id="@+id/togglePassword"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="14dp"
+                    android:src="@drawable/ic_eye_closed"
+                    android:contentDescription="Toggle password visibility"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </RelativeLayout>
 
             <!-- Login Button -->
             <Button
                 android:id="@+id/loginBtn"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/link_log_in"
                 android:textColor="@color/white"
                 android:textSize="18sp"

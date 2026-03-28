@@ -29,29 +29,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
-/**
- * Splash screen – first activity launched on app start.
- *
- * Startup sequence:
- *  1. initPlacesSdk()           – pre-warm Google Maps/Places native library
- *                                  (prevents ANR when LocationPickerActivity opens later)
- *  2. checkPermissionsAndProceed() – request runtime permissions needed by the app
- *                                  (location for map picker)
- *  3. checkConnectivityAndNavigate() – ensure internet is available
- *  4. navigate()                – verify Firebase auth state (handles deleted accounts)
- *                                  and route to Dashboard or Welcome
- */
+//Splash screen – first activity launched on app start.
+
+//Startup sequence:
+//  1. initPlacesSdk() – pre-warm Google Maps/Places native library (prevents ANR when LocationPickerActivity opens later)
+//  2. checkPermissionsAndProceed() – request runtime permissions needed by the app (location for map picker)
+//  3. checkConnectivityAndNavigate() – ensure internet is available
+//  4. navigate() – verify Firebase auth state (handles deleted accounts) and route to Dashboard or Welcome
+
 public class SplashScreen extends AppCompatActivity {
 
     private static final int SPLASH_DELAY_MS       = 2000; // minimum splash display time
     private static final int REQ_LOCATION_PERMISSION = 100;
-
     private ConnectivityManager connectivityManager;
     private ConnectivityManager.NetworkCallback networkCallback;
     private boolean navigated = false; // guard – navigate only once
     private final Handler handler = new Handler(Looper.getMainLooper());
-
-    // ── Lifecycle ─────────────────────────────────────────────────────────
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,30 +67,22 @@ public class SplashScreen extends AppCompatActivity {
 
         connectivityManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        // ── Step 1: Pre-warm Maps + Places SDKs immediately ──────────────
-        // Calling MapsInitializer and Places.initialize() here loads the
-        // Maps GL renderer and Places native libraries during the splash
-        // delay instead of mid-interaction, reducing cold-start page faults.
+// ── Step 1: Pre-warm Maps + Places SDKs immediately
+// Calling MapsInitializer and Places.initialize() here loads the
+// Maps GL renderer and Places native libraries during the splash
+// delay instead of mid-interaction, reducing cold-start page faults.
         initMapSdks();
 
-        // ── Steps 2-4 start after the minimum splash display time ─────────
+// Steps 2 - 4 start after the minimum splash display time
         handler.postDelayed(this::checkPermissionsAndProceed, SPLASH_DELAY_MS);
     }
 
-    // ── Step 1 – Maps + Places SDK init ──────────────────────────────────
+// Step 1 – Maps + Places SDK init
 
-    /**
-     * Pre-warm both the Google Maps rendering SDK and the Places SDK.
-     *
-     * MapsInitializer.initialize() – triggers the Maps GL renderer setup
-     *   and begins loading the Maps native library. Without this, the first
-     *   time SupportMapFragment is created it causes ~30 000 page faults
-     *   that stall the main thread and produce an ANR in the calling activity.
-     *
-     * Places.initialize() – registers the Places API key so
-     *   LocationPickerActivity's autocomplete works without a cold-start.
-     */
+// Pre-warm both the Google Maps rendering SDK and the Places SDK.
+// MapsInitializer.initialize() – triggers the Maps GL renderer setup and begins loading the Maps native library. Without this, the first time SupportMapFragment is created it causes ~30 000 page faults that stall the main thread and produce an ANR in the calling activity.
+// Places.initialize() – registers the Places API key so LocationPickerActivity's autocomplete works without a cold-start.
+
     private void initMapSdks() {
         // Pre-warm Google Maps rendering SDK (the actual ANR culprit)
         try {

@@ -13,6 +13,7 @@ import com.example.nearbuyhq.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+// Discounts host activity – holds a ViewPager2 with two tabs: Promotions (tab 0) and Deals (tab 1).
 public class DiscountsActivity extends AppCompatActivity {
 
     private ImageView btnBack;

@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+// AddEditPromotion – form screen for creating a new promotion or editing an existing one.
 public class AddEditPromotion extends AppCompatActivity {
 
     static final String EXTRA_PROMO_ID = "promo_id";
@@ -150,9 +151,7 @@ public class AddEditPromotion extends AppCompatActivity {
 
         setupBottomNavigation();
 
-        // ── Back / Save ──────────────────────────────────────────────────
-//        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-//        btnSave.setOnClickListener(v -> savePromotion());
+        // Wire back and save buttons
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         btnSave.setOnClickListener(v -> savePromotion());
     }
@@ -233,6 +232,7 @@ public class AddEditPromotion extends AppCompatActivity {
 
     // ── Discounted price preview ─────────────────────────────────────────────
 
+    // Recalculate and display the final price whenever original price or discount % changes
     private void recalcDiscount() {
         try {
             double original = Double.parseDouble(etOriginalPrice.getText().toString());
@@ -267,6 +267,7 @@ public class AddEditPromotion extends AppCompatActivity {
         });
     }
 
+    // Populate all form fields from the loaded Promotion object
     private void populateFormFromEditing() {
         if (editing == null) return;
         etTitle.setText(editing.getTitle());
@@ -290,6 +291,7 @@ public class AddEditPromotion extends AppCompatActivity {
 
     // ── Save / Update ────────────────────────────────────────────────────────
 
+    // Validate form inputs, build a Promotion object, and persist to Firestore
     private void savePromotion() {
         // Validate
         String title = etTitle.getText().toString().trim();
@@ -354,6 +356,7 @@ public class AddEditPromotion extends AppCompatActivity {
         });
     }
 
+    // Toggle the save button state while the Firestore write is in progress
     private void setSaving(boolean saving) {
         btnSave.setEnabled(!saving);
         btnSave.setAlpha(saving ? 0.6f : 1f);

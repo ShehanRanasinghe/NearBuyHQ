@@ -3,6 +3,7 @@ package com.example.nearbuyhq.orders;
 import java.util.HashMap;
 import java.util.Map;
 
+// Order data model – represents a single customer order stored in NearBuyHQ/{shopId}/orders.
 public class Order {
     private String orderId, customerName, status, orderDate;
     private String customerPhone;
@@ -12,11 +13,13 @@ public class Order {
     private long createdAt;
     private long updatedAt;
 
+    // Short constructor used when only the key order fields are available (e.g. from UI intent)
     public Order(String orderId, String customerName, String status,
                  double orderTotal, String orderDate) {
         this(orderId, customerName, status, orderTotal, orderDate, "", "", System.currentTimeMillis(), System.currentTimeMillis());
     }
 
+    // Full constructor used when loading from Firestore
     public Order(String orderId, String customerName, String status,
                  double orderTotal, String orderDate, String customerPhone,
                  String customerAddress, long createdAt, long updatedAt) {
@@ -31,6 +34,8 @@ public class Order {
         this.updatedAt = updatedAt;
     }
 
+    // ── Getters ───────────────────────────────────────────────────────────
+
     public String getOrderId()         { return orderId; }
     public String getCustomerName()    { return customerName; }
     public String getStatus()          { return status; }
@@ -43,11 +48,17 @@ public class Order {
     public String getShopId()          { return shopId == null ? "" : shopId; }
     public void   setShopId(String shopId) { this.shopId = shopId; }
 
+    // ── Status update ─────────────────────────────────────────────────────
+
+    // Update the status and automatically refresh the updatedAt timestamp
     public void setStatus(String status) {
         this.status = status;
         this.updatedAt = System.currentTimeMillis();
     }
 
+    // ── Firestore serialisation ───────────────────────────────────────────
+
+    // Serialize order fields to a Map for writing to Firestore
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("customerName",    customerName);
@@ -63,6 +74,7 @@ public class Order {
         return map;
     }
 
+    // Deserialize a Firestore document snapshot into an Order object
     public static Order fromMap(String id, Map<String, Object> map) {
         if (map == null) return null;
         Order o = new Order(

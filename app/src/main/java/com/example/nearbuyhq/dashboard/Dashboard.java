@@ -111,12 +111,46 @@ public class Dashboard extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadDashboardData(); // refresh stats every time the user returns to the screen
+        // Always restore Dashboard as the active nav item when this screen is visible
+        resetNavSelection();
+        setNavActive(navDashboardIcon, navDashboardText);
+        // Re-read session so the status badge reflects any changes made on ProfilePage
         populateHeaderFromSession();
-        loadDashboardStats();
     }
 
-    // ── Init ──────────────────────────────────────────────────────────────
+    // ── Data loading ──────────────────────────────────────────────────────
 
+    // Fetch summary stats from Firestore and populate the header tiles
+    private void loadDashboardData() {
+        String userId = session.getUserId();
+
+        // Products count
+        productRepository.getProductsByShopId(userId, "All",
+                new DataCallback<List<ProductItem>>() {
+                    @Override
+                    public void onSuccess(List<ProductItem> items) {
+                        int total    = items.size();
+                        int lowStock = 0;
+                        for (ProductItem p : items) {
+                            if (p.isLowStock(LOW_STOCK_THRESHOLD)) lowStock++;
+                        }
+                        final int fl = lowStock;
+                        runOnUiThread(() -> {
+                            if (tvTotalProducts != null) tvTotalProducts.setText(String.valueOf(total));
+                            if (tvLowStock      != null) tvLowStock.setText(String.valueOf(fl));
+                        });
+                    }
+                    @Override public void onError(Exception e) {}
+                });
+
+        // Orders + revenue for current filter
+        loadFilteredRevenue();
+    }
+
+    // ── View binding ──────────────────────────────────────────────────────
+
+    // Bind all declared fields to their corresponding views in the layout
     private void initViews() {
         navDashboard = findViewById(R.id.navDashboard);
         navProducts  = findViewById(R.id.navProducts);
@@ -136,23 +170,24 @@ public class Dashboard extends AppCompatActivity {
         navAnalyticsText = findViewById(R.id.navAnalyticsText);
         navProfileText   = findViewById(R.id.navProfileText);
 
-        btnAddProduct      = findViewById(R.id.btnAddProduct);
-        btnManageInventory = findViewById(R.id.btnManageInventory);
-        btnDiscounts       = findViewById(R.id.btnDiscounts);
-        btnManageOrders    = findViewById(R.id.btnManageOrders);
-        btnViewReports     = findViewById(R.id.btnViewReports);
+        btnAddProduct          = findViewById(R.id.btnAddProduct);
+        btnManageInventory     = findViewById(R.id.btnManageInventory);
+        btnDiscounts           = findViewById(R.id.btnDiscounts);
+        btnManageOrders        = findViewById(R.id.btnManageOrders);
+        btnViewReports         = findViewById(R.id.btnViewReports);
         btnStoreLocationPicker = findViewById(R.id.btnStoreLocationPicker);
 
         btnSearch        = findViewById(R.id.btnSearch);
         btnNotifications = findViewById(R.id.btnNotifications);
 
-        tvAdminName     = findViewById(R.id.tvAdminName);
-        tvShopName      = findViewById(R.id.tvShopName);
-        tvShopStatus    = findViewById(R.id.tvShopStatus);
+        tvAdminName    = findViewById(R.id.tvAdminName);
+        tvShopName     = findViewById(R.id.tvShopName);
+        tvShopStatus   = findViewById(R.id.tvShopStatus);
         tvTotalProducts = findViewById(R.id.tvTotalProducts);
-        tvLowStock      = findViewById(R.id.tvLowStock);
-        tvTotalOrders   = findViewById(R.id.tvTotalOrders);
-        tvTotalRevenue  = findViewById(R.id.tvTotalRevenue);
+        tvLowStock     = findViewById(R.id.tvLowStock);
+        tvTotalOrders  = findViewById(R.id.tvTotalOrders);
+        tvTotalRevenue = findViewById(R.id.tvTotalRevenue);
+
         btnOverviewFilter = findViewById(R.id.btnOverviewFilter);
     }
 
@@ -183,7 +218,9 @@ public class Dashboard extends AppCompatActivity {
             public void onSuccess(User user) {
                 session.saveUserName(user.getName());
                 session.saveUserEmail(user.getEmail());
-                runOnUiThread(() -> populateHeaderFromSession());
+                runOnUiThread(() -> {
+                    populateHeaderFromSession();
+                });
             }
             @Override public void onError(Exception e) {}
         });
@@ -219,33 +256,6 @@ public class Dashboard extends AppCompatActivity {
         popup.show();
     }
 
-    // ── Stats loading ─────────────────────────────────────────────────────
-
-    private void loadDashboardStats() {
-        String userId = session.getUserId();
-
-        // Products count
-        productRepository.getProductsByShopId(userId, "All",
-                new DataCallback<List<ProductItem>>() {
-                    @Override
-                    public void onSuccess(List<ProductItem> items) {
-                        int total    = items.size();
-                        int lowStock = 0;
-                        for (ProductItem p : items) {
-                            if (p.isLowStock(LOW_STOCK_THRESHOLD)) lowStock++;
-                        }
-                        final int fl = lowStock;
-                        runOnUiThread(() -> {
-                            if (tvTotalProducts != null) tvTotalProducts.setText(String.valueOf(total));
-                            if (tvLowStock      != null) tvLowStock.setText(String.valueOf(fl));
-                        });
-                    }
-                    @Override public void onError(Exception e) {}
-                });
-
-        // Orders + revenue for current filter
-        loadFilteredRevenue();
-    }
 
     /**
      * Load orders filtered by the selected time period and update the

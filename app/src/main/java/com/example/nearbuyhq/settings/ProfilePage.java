@@ -30,6 +30,8 @@ import com.example.nearbuyhq.products.Inventory;
 import java.util.Locale;
 
 /**
+ * ProfilePage – allows the owner to view and update their shop profile; also handles logout.
+ *
  * Profile page – shows the logged-in shop owner's personal info and shop details.
  *
  * All data (user + shop) is stored in the single users/{uid} Firestore document.
@@ -79,7 +81,7 @@ public class ProfilePage extends AppCompatActivity {
         setupBottomNavigation();
         resetNavSelection();
         setNavActive(navProfileIcon, navProfileText);
-        // loadProfileData() will be called by onResume — no duplicate here.
+        loadProfileData(); // pull the latest profile from Firestore on open
     }
 
     @Override
@@ -511,4 +513,3 @@ public class ProfilePage extends AppCompatActivity {
         return (int) (value * getResources().getDisplayMetrics().density);
     }
 }
-

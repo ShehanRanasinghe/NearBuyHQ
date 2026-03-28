@@ -1,13 +1,13 @@
 package com.example.nearbuyhq.discounts;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+// Promotion data model – represents a time-bound percentage discount that is stored in Firestore.
 public class Promotion {
 
+    // ── Type constants ─────────────────────────────────────────────────────
     public static final String TYPE_RAMADAN    = "Ramadan";
     public static final String TYPE_CHRISTMAS  = "Christmas";
     public static final String TYPE_NEW_YEAR   = "New Year";
@@ -53,38 +53,10 @@ public class Promotion {
         this.updatedAt          = updatedAt;
     }
 
-    // ── JSON serialisation ──────────────────────────────────────────────────
 
-    public JSONObject toJson() throws JSONException {
-        JSONObject obj = new JSONObject();
-        obj.put("id",                 id);
-        obj.put("title",              title);
-        obj.put("type",               type);
-        obj.put("discountPercentage", discountPercentage);
-        obj.put("startDate",          startDate);
-        obj.put("endDate",            endDate);
-        obj.put("productName",        productName);
-        obj.put("originalPrice",      originalPrice);
-        obj.put("isActive",           isActive);
-        return obj;
-    }
+    // ── Firestore serialisation ───────────────────────────────────────────
 
-    public static Promotion fromJson(JSONObject obj) throws JSONException {
-        return new Promotion(
-                obj.getString("id"),
-                obj.getString("title"),
-                obj.getString("type"),
-                obj.getInt("discountPercentage"),
-                obj.getString("startDate"),
-                obj.getString("endDate"),
-                obj.optString("productName", ""),
-                obj.optDouble("originalPrice", 0.0),
-                obj.optBoolean("isActive", true),
-                obj.optLong("createdAt", System.currentTimeMillis()),
-                obj.optLong("updatedAt", System.currentTimeMillis())
-        );
-    }
-
+    // Serialize fields to a Map for writing to Firestore
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("userId",             userId != null ? userId : "");
@@ -101,6 +73,7 @@ public class Promotion {
         return map;
     }
 
+    // Deserialize a Firestore document snapshot into a Promotion object
     public static Promotion fromMap(String id, Map<String, Object> map) {
         if (map == null) {
             return null;

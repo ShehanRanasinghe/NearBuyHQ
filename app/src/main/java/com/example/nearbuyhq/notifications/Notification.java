@@ -1,5 +1,6 @@
 package com.example.nearbuyhq.notifications;
 
+// Notification data model – represents a single in-app notification shown to the shop owner.
 public class Notification {
     private String title;
     private String message;

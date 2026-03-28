@@ -31,6 +31,7 @@ import com.example.nearbuyhq.settings.ProfilePage;
 import java.util.ArrayList;
 import java.util.List;
 
+// Inventory screen – shows product categories and navigates to the product list for each category.
 public class Inventory extends AppCompatActivity {
 
     private static final int LOW_STOCK_THRESHOLD = 10;

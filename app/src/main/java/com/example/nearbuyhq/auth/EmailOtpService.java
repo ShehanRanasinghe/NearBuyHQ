@@ -23,17 +23,11 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 /**
- * EmailOtpService
- * <p>
  * Generates a 6-digit OTP, stores it in Firestore with a 10-minute expiry,
  * and sends it to the user's email address via Gmail SMTP.
- * <p>
  * Credentials come from BuildConfig (set in .env):
  * SMTP_EMAIL    – the sender Gmail address
  * SMTP_PASSWORD – a Gmail App Password (not the account password)
- * <p>
- * To generate an App Password:
- * <a href="https://myaccount.google.com/apppasswords">https://myaccount.google.com/apppasswords</a>
  */
 public class EmailOtpService {
 

@@ -18,6 +18,7 @@ import com.example.nearbuyhq.data.repository.OrderRepository;
 
 import java.util.Locale;
 
+// Order details screen – displays full order info and allows the owner to update the order status.
 public class Order_details extends AppCompatActivity {
 
     private String orderId;
@@ -38,6 +39,8 @@ public class Order_details extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_order_details);
+
+        // Apply window insets so the content respects the system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -49,13 +52,17 @@ public class Order_details extends AppCompatActivity {
         bindIntentData();
         setupStatusButtons();
 
+        // Wire back and update-status buttons
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         btnUpdateStatus.setOnClickListener(v -> updateStatus());
 
+        // If a real order ID was passed, load full details from Firestore
         if (orderId != null && !orderId.isEmpty()) {
             loadOrder();
         }
     }
+
+    // ── View binding ──────────────────────────────────────────────────────
 
     private void bindViews() {
         tvOrderId = findViewById(R.id.tv_order_id);
@@ -69,6 +76,9 @@ public class Order_details extends AppCompatActivity {
         btnUpdateStatus = findViewById(R.id.btn_update_status);
     }
 
+    // ── Intent data ───────────────────────────────────────────────────────
+
+    // Populate the UI immediately using the lightweight data passed via Intent extras
     private void bindIntentData() {
         orderId = getIntent().getStringExtra("order_id");
         String customerName = getIntent().getStringExtra("customer_name");
@@ -89,6 +99,9 @@ public class Order_details extends AppCompatActivity {
         applyStatusText();
     }
 
+    // ── Status buttons ────────────────────────────────────────────────────
+
+    // Wire the three status buttons so tapping them updates the local selection
     private void setupStatusButtons() {
         findViewById(R.id.btn_pending).setOnClickListener(v -> {
             selectedStatus = "Pending";
@@ -104,11 +117,15 @@ public class Order_details extends AppCompatActivity {
         });
     }
 
+    // Reflect the currently selected status in both header and body TextViews
     private void applyStatusText() {
         tvOrderStatus.setText(selectedStatus);
         tvHeaderStatus.setText(selectedStatus);
     }
 
+    // ── Firestore load ────────────────────────────────────────────────────
+
+    // Reload the order from Firestore to get phone, address and the latest status
     private void loadOrder() {
         String userId = SessionManager.getInstance(this).getUserId();
         orderRepository.getOrder(orderId, userId, new DataCallback<Order>() {
@@ -134,6 +151,9 @@ public class Order_details extends AppCompatActivity {
         });
     }
 
+    // ── Status update ─────────────────────────────────────────────────────
+
+    // Persist the selected status to Firestore and show feedback
     private void updateStatus() {
         if (orderId == null || orderId.trim().isEmpty()) {
             Toast.makeText(this, "Missing order ID", Toast.LENGTH_SHORT).show();

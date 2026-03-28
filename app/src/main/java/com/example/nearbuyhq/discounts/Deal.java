@@ -3,6 +3,7 @@ package com.example.nearbuyhq.discounts;
 import java.util.HashMap;
 import java.util.Map;
 
+// Deal data model – represents a shop-wide discount deal stored in NearBuyHQ/{userId}/deals.
 public class Deal {
     private String id;
     private String userId;   // owner's userId (== shopId)

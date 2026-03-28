@@ -224,7 +224,7 @@
                         android:id="@+id/btnOverviewFilter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Today ▾"
+                        android:text="Today 🔽"
                         android:textColor="@color/text_on_dark_secondary"
                         android:textSize="11sp"
                         android:textStyle="bold"

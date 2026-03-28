@@ -25,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+// Fragment shown on the Promotions tab – loads promotions from Firestore and supports inline edit/delete via the adapter callbacks.
 public class PromotionsFragment extends Fragment {
 
     private RecyclerView recyclerView;

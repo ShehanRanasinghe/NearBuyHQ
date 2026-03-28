@@ -26,6 +26,7 @@ import com.example.nearbuyhq.settings.ProfilePage;
 import java.util.Calendar;
 import java.util.Locale;
 
+// Add/Edit deal screen – creates or updates a shop-wide deal stored in NearBuyHQ/{userId}/deals.
 public class AddDeal extends AppCompatActivity {
 
     private EditText dealTitle, dealDescription, dealValidity;

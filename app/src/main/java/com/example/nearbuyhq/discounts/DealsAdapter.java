@@ -12,6 +12,7 @@ import com.example.nearbuyhq.R;
 
 import java.util.List;
 
+// RecyclerView adapter for the deals list – binds each Deal to the item_deal layout and fires click events.
 public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHolder> {
 
     private List<Deal> dealsList;

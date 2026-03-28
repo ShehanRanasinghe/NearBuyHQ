@@ -31,6 +31,7 @@ import com.example.nearbuyhq.settings.ProfilePage;
 import java.util.ArrayList;
 import java.util.List;
 
+// Order list screen – displays all orders for the current shop and allows status filtering.
 public class Order_List extends AppCompatActivity {
 
     private RecyclerView recyclerOrders;
@@ -113,9 +114,7 @@ public class Order_List extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         setupBottomNavigation();
-        resetNavSelection();
-        setNavActive(navOrdersIcon, navOrdersText);
-        loadOrders();
+        loadOrders(); // initial load from Firestore
     }
 
     @Override
@@ -124,6 +123,7 @@ public class Order_List extends AppCompatActivity {
         loadOrders();
     }
 
+    // ── Bottom navigation ─────────────────────────────────────────────────
     private void initBottomNavigationViews() {
         navDashboard = findViewById(R.id.navDashboard);
         navProducts = findViewById(R.id.navProducts);
@@ -202,31 +202,8 @@ public class Order_List extends AppCompatActivity {
         text.setTypeface(null, Typeface.BOLD);
     }
 
-    private void initSampleOrders() {
-        // Sample data removed – Firebase is the single source of truth.
-        // This method is kept as a no-op to avoid call-site changes.
-    }
 
-    private void loadOrders() {
-        String userId = SessionManager.getInstance(this).getUserId();
-        orderRepository.getOrdersByShopId(userId, new DataCallback<List<Order>>() {
-            @Override
-            public void onSuccess(List<Order> data) {
-                allOrders.clear();
-                allOrders.addAll(data);
-                applyOrderFilter();
-            }
-
-            @Override
-            public void onError(Exception exception) {
-                // Show empty list on error rather than sample data
-                allOrders.clear();
-                applyOrderFilter();
-                Toast.makeText(Order_List.this, "Could not load orders", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
+    // ── Status filter ─────────────────────────────────────────────────────
     private void setupFilterTabs() {
         tabAll.setOnClickListener(v -> setFilter("All"));
         tabPending.setOnClickListener(v -> setFilter("Pending"));
@@ -268,5 +245,27 @@ public class Order_List extends AppCompatActivity {
         tvTotalOrders.setText(String.valueOf(allOrders.size()));
         tvPendingCount.setText(String.valueOf(pending));
         tvDeliveredCount.setText(String.valueOf(delivered));
+    }
+
+    // ── Firestore load ────────────────────────────────────────────────────
+
+    private void loadOrders() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        orderRepository.getOrdersByShopId(userId, new DataCallback<List<Order>>() {
+            @Override
+            public void onSuccess(List<Order> data) {
+                allOrders.clear();
+                allOrders.addAll(data);
+                applyOrderFilter();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                // Show empty list on error rather than sample data
+                allOrders.clear();
+                applyOrderFilter();
+                Toast.makeText(Order_List.this, "Could not load orders", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
