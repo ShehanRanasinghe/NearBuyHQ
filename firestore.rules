@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Users ────────────────────────────────────────────────────────────
+    // Each user can only read and write their own profile document.
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // ── OTP Codes ────────────────────────────────────────────────────────
+    // Any authenticated user may create / read / delete their OTP document.
+    // This is required for both the Register and Login → OTP flows.
+    match /otp_codes/{docId} {
+      allow read, write, delete: if request.auth != null;
+    }
+
+
+    // ── Products ──────────────────────────────────────────────────────────
+    match /products/{productId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // ── Orders ────────────────────────────────────────────────────────────
+    match /orders/{orderId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // ── Promotions ────────────────────────────────────────────────────────
+    match /promotions/{promotionId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // ── Deals ─────────────────────────────────────────────────────────────
+    match /deals/{dealId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // ── Reports ───────────────────────────────────────────────────────────
+    match /reports/{reportId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // ── Notifications ─────────────────────────────────────────────────────
+    match /notifications/{notificationId} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+

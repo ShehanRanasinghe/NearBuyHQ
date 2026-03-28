@@ -5,7 +5,6 @@ import android.content.Context;
 import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.remote.firebase.FirebaseCollections;
-import com.example.nearbuyhq.shops.Shop;
 import com.example.nearbuyhq.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,7 +16,7 @@ import java.util.Map;
 
 /**
  * Manages Firebase Authentication (register / login / logout / password reset).
- *
+ * <p>
  * After a successful login, it:
  *   1. Loads the user's Firestore profile
  *   2. Looks up their linked shop (ownerUid == currentUid)
@@ -214,6 +213,75 @@ public class AuthRepository {
             updates.put("shopLocation", address.trim());
         }
         updates.put("updatedAt", System.currentTimeMillis());
+
+        firestore.collection(FirebaseCollections.USERS)
+                .document(uid)
+                .update(updates)
+                .addOnSuccessListener(unused -> callback.onSuccess())
+                .addOnFailureListener(callback::onError);
+    }
+
+    // ── Email verification ────────────────────────────────────────────────
+
+    /**
+     * Check whether the {@code emailVerified} flag is set to {@code true}
+     * in the user's Firestore document.
+     */
+    public void isEmailVerifiedInFirestore(String uid, DataCallback<Boolean> callback) {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            callback.onError(new IllegalStateException("Firebase is disabled"));
+            return;
+        }
+
+        firestore.collection(FirebaseCollections.USERS)
+                .document(uid)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        Boolean verified = doc.getBoolean("emailVerified");
+                        callback.onSuccess(Boolean.TRUE.equals(verified));
+                    } else {
+                        callback.onSuccess(false);
+                    }
+                })
+                .addOnFailureListener(callback::onError);
+    }
+
+    /**
+     * Set the {@code emailVerified} flag to {@code false} in the user's
+     * Firestore document right after registration, marking the account as
+     * pending email verification.
+     */
+    public void setEmailUnverified(String uid, OperationCallback callback) {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            callback.onError(new IllegalStateException("Firebase is disabled"));
+            return;
+        }
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("emailVerified", false);
+        updates.put("updatedAt",     System.currentTimeMillis());
+
+        firestore.collection(FirebaseCollections.USERS)
+                .document(uid)
+                .update(updates)
+                .addOnSuccessListener(unused -> callback.onSuccess())
+                .addOnFailureListener(callback::onError);
+    }
+
+    /**
+     * Set the {@code emailVerified} flag to {@code true} in the user's
+     * Firestore document once the OTP has been validated successfully.
+     */
+    public void markEmailVerified(String uid, OperationCallback callback) {
+        if (!FirebaseConfig.isFirebaseEnabled()) {
+            callback.onError(new IllegalStateException("Firebase is disabled"));
+            return;
+        }
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("emailVerified", true);
+        updates.put("updatedAt",     System.currentTimeMillis());
 
         firestore.collection(FirebaseCollections.USERS)
                 .document(uid)

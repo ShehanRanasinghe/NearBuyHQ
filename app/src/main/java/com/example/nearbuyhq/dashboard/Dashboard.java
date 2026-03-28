@@ -187,22 +187,6 @@ public class Dashboard extends AppCompatActivity {
             }
             @Override public void onError(Exception e) {}
         });
-
-        // Load shop via owner UID
-        new com.example.nearbuyhq.data.repository.ShopRepository()
-                .getShopByOwnerUid(uid, new DataCallback<com.example.nearbuyhq.shops.Shop>() {
-                    @Override
-                    public void onSuccess(com.example.nearbuyhq.shops.Shop shop) {
-                        if (shop != null) {
-                            session.saveShopId(shop.getId());
-                            session.saveShopName(shop.getName());
-                            runOnUiThread(() -> populateHeaderFromSession());
-                            // Refresh stats now that we have the shopId
-                            runOnUiThread(() -> loadDashboardStats());
-                        }
-                    }
-                    @Override public void onError(Exception e) {}
-                });
     }
 
     // ── Overview filter dropdown ──────────────────────────────────────────

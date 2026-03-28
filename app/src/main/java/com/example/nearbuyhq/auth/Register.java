@@ -102,11 +102,21 @@ public class Register extends AppCompatActivity {
         authRepository.register(nameStr, emailStr, usernameStr, passwordStr, new OperationCallback() {
             @Override
             public void onSuccess() {
+                // Mark account as pending email verification
+                com.google.firebase.auth.FirebaseUser fbUser =
+                        com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+                if (fbUser != null) {
+                    authRepository.setEmailUnverified(fbUser.getUid(), new OperationCallback() {
+                        @Override public void onSuccess() {}
+                        @Override public void onError(Exception e) {}
+                    });
+                }
+
                 setLoading(false);
                 Toast.makeText(Register.this, "Account created! Please verify your email.", Toast.LENGTH_SHORT).show();
-                // Go to OTP/email verification screen (only on first registration)
                 Intent intent = new Intent(Register.this, OTPVerification.class);
-                intent.putExtra("email", emailStr);
+                intent.putExtra("email",    emailStr);
+                intent.putExtra("userName", nameStr);
                 startActivity(intent);
                 finish();
             }

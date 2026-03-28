@@ -2,10 +2,12 @@ package com.example.nearbuyhq.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,31 +16,32 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.data.repository.AuthRepository;
+import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * OTP / Email Verification screen – shown once after first-time registration.
- *
- * Firebase doesn't send a numeric OTP for email, but it sends an email-verification link.
- * This screen tells the user to check their inbox and polls Firebase until
- * the email is marked verified, then redirects to Login.
- *
- * The 6 digit boxes are kept for UI consistency; pressing "Verify OTP" triggers
- * a manual reload-and-check of the verification state.
+ * OTP Verification screen – shown once after first-time registration.
+ * <p>
+ * A 6-digit OTP is generated, stored in Firestore and emailed to the user
+ * via Gmail SMTP (EmailOtpService). The user enters the code here to verify
+ * their email address.  No Firebase email-link is used.
  */
 public class OTPVerification extends AppCompatActivity {
 
     private EditText otp1, otp2, otp3, otp4, otp5, otp6;
     private Button btnVerify;
-    private TextView btnResendOTP;
+    private TextView btnResendOTP, tvCountdown;
     private String email;
+    private String userName;
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    // Poll every 4 seconds while screen is visible
-    private static final int POLL_INTERVAL_MS = 4000;
-    private boolean verified = false;
+    private final AuthRepository authRepository = new AuthRepository();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
+    private CountDownTimer resendTimer;
+    private static final long RESEND_COOLDOWN_MS = 60_000L; // 60 seconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,9 @@ public class OTPVerification extends AppCompatActivity {
         setContentView(R.layout.activity_otp_verification);
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
-        email = getIntent().getStringExtra("email");
+        email    = getIntent().getStringExtra("email");
+        userName = getIntent().getStringExtra("userName");
+        if (userName == null || userName.isEmpty()) userName = "User";
 
         otp1 = findViewById(R.id.otp1);
         otp2 = findViewById(R.id.otp2);
@@ -55,115 +60,178 @@ public class OTPVerification extends AppCompatActivity {
         otp5 = findViewById(R.id.otp5);
         otp6 = findViewById(R.id.otp6);
         btnVerify    = findViewById(R.id.btnVerify);
-        btnResendOTP = findViewById(R.id.btnResendOTP);
+        btnResendOTP  = findViewById(R.id.btnResendOTP);
+        tvCountdown   = findViewById(R.id.tvCountdown);
+        TextView tvEmailSentTo = findViewById(R.id.tvEmailSentTo);
 
-        // Auto-advance focus between OTP boxes
+        if (tvEmailSentTo != null) {
+            tvEmailSentTo.setText(getString(R.string.otp_code_sent_to, email));
+        }
+
         setupOtpAutoAdvance();
 
-        // Send the verification email as soon as this screen opens
-        sendVerificationEmail();
+        // Send OTP as soon as the screen opens
+        sendOtp();
 
-        // "Verify OTP" button → reload Firebase user and check isEmailVerified
-        btnVerify.setOnClickListener(v -> checkEmailVerified());
+        btnVerify.setOnClickListener(v -> verifyOtp());
 
-        // Resend button
-        btnResendOTP.setOnClickListener(v -> sendVerificationEmail());
-
-        // Start background polling so the user can just click the link and come back
-        startPolling();
+        btnResendOTP.setOnClickListener(v -> {
+            clearOtpFields();
+            sendOtp();
+        });
     }
 
-    // ── Firebase email verification ───────────────────────────────────────
+    // ── Send OTP ──────────────────────────────────────────────────────────────
 
-    /** Send Firebase email-verification link to the user's inbox. */
-    private void sendVerificationEmail() {
-        FirebaseUser user = auth.getCurrentUser();
-        if (user == null) return;
-        user.sendEmailVerification()
-                .addOnSuccessListener(unused ->
-                        Toast.makeText(this,
-                                "Verification email sent to " + email +
-                                        ". Please check your inbox.",
-                                Toast.LENGTH_LONG).show())
-                .addOnFailureListener(e ->
-                        Toast.makeText(this,
-                                "Could not send email: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show());
+    private void sendOtp() {
+        setVerifyEnabled(false);
+        btnResendOTP.setEnabled(false);
+        if (tvCountdown != null) tvCountdown.setText(R.string.otp_sending);
+
+        EmailOtpService.sendOtp(email, userName, new EmailOtpService.OtpCallback() {
+            @Override
+            public void onSuccess(String otp) {
+                mainHandler.post(() -> {
+                    Toast.makeText(OTPVerification.this,
+                            "Verification code sent to " + email,
+                            Toast.LENGTH_LONG).show();
+                    setVerifyEnabled(true);
+                    startResendCountdown();
+                });
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                mainHandler.post(() -> {
+                    Toast.makeText(OTPVerification.this,
+                            "Could not send code. Check SMTP settings.\n" + errorMessage,
+                            Toast.LENGTH_LONG).show();
+                    setVerifyEnabled(true);
+                    btnResendOTP.setEnabled(true);
+                    if (tvCountdown != null) tvCountdown.setVisibility(View.GONE);
+                });
+            }
+        });
     }
 
-    /**
-     * Reload the Firebase user object and check whether the email is verified.
-     * Called both on button press and by the background poll.
-     */
-    private void checkEmailVerified() {
-        FirebaseUser user = auth.getCurrentUser();
-        if (user == null) {
-            goToLogin();
+    // ── Verify OTP ────────────────────────────────────────────────────────────
+
+    private void verifyOtp() {
+        String entered = getEnteredOtp();
+        if (entered.length() < 6) {
+            Toast.makeText(this, "Please enter the complete 6-digit code.", Toast.LENGTH_SHORT).show();
             return;
         }
-        btnVerify.setEnabled(false);
-        btnVerify.setText("Checking…");
 
-        user.reload().addOnCompleteListener(task -> {
-            FirebaseUser refreshed = auth.getCurrentUser();
-            if (refreshed != null && refreshed.isEmailVerified()) {
-                onVerified();
-            } else {
-                btnVerify.setEnabled(true);
-                btnVerify.setText("Verify OTP");
-                Toast.makeText(this,
-                        "Email not verified yet. Please click the link in your email.",
-                        Toast.LENGTH_LONG).show();
+        setVerifyEnabled(false);
+        btnVerify.setText(R.string.otp_verifying);
+
+        EmailOtpService.verifyOtp(email, entered, new EmailOtpService.VerifyCallback() {
+            @Override
+            public void onSuccess() {
+                FirebaseUser user = auth.getCurrentUser();
+                if (user != null) {
+                    authRepository.markEmailVerified(user.getUid(), new OperationCallback() {
+                        @Override public void onSuccess() { mainHandler.post(OTPVerification.this::onVerified); }
+                        @Override public void onError(Exception e) { mainHandler.post(OTPVerification.this::onVerified); }
+                    });
+                } else {
+                    mainHandler.post(OTPVerification.this::onVerified);
+                }
+            }
+
+            @Override
+            public void onExpired() {
+                mainHandler.post(() -> {
+                    setVerifyEnabled(true);
+                    btnVerify.setText(R.string.otp_verify_code);
+                    Toast.makeText(OTPVerification.this,
+                            "Code expired. Please request a new one.",
+                            Toast.LENGTH_LONG).show();
+                    clearOtpFields();
+                });
+            }
+
+            @Override
+            public void onInvalid() {
+                mainHandler.post(() -> {
+                    setVerifyEnabled(true);
+                    btnVerify.setText(R.string.otp_verify_code);
+                    Toast.makeText(OTPVerification.this,
+                            "Incorrect code. Please try again.",
+                            Toast.LENGTH_SHORT).show();
+                    clearOtpFields();
+                });
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                mainHandler.post(() -> {
+                    setVerifyEnabled(true);
+                    btnVerify.setText(R.string.otp_verify_code);
+                    Toast.makeText(OTPVerification.this,
+                            "Verification failed: " + errorMessage,
+                            Toast.LENGTH_LONG).show();
+                });
             }
         });
     }
 
     private void onVerified() {
-        verified = true;
-        Toast.makeText(this, "Email verified! You can now log in.", Toast.LENGTH_SHORT).show();
-        goToLogin();
-    }
-
-    private void goToLogin() {
-        auth.signOut(); // sign out so the user goes through the normal login flow
+        Toast.makeText(this, "Email verified! Please log in.", Toast.LENGTH_SHORT).show();
+        auth.signOut();
         Intent intent = new Intent(this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
 
-    // ── Background poll ───────────────────────────────────────────────────
+    // ── Resend countdown ──────────────────────────────────────────────────────
 
-    private final Runnable pollTask = new Runnable() {
-        @Override
-        public void run() {
-            if (verified) return;
-            FirebaseUser user = auth.getCurrentUser();
-            if (user != null) {
-                user.reload().addOnCompleteListener(task -> {
-                    FirebaseUser refreshed = auth.getCurrentUser();
-                    if (refreshed != null && refreshed.isEmailVerified()) {
-                        onVerified();
-                    } else {
-                        // Not yet – schedule next poll
-                        handler.postDelayed(this, POLL_INTERVAL_MS);
-                    }
-                });
+    private void startResendCountdown() {
+        if (resendTimer != null) resendTimer.cancel();
+        btnResendOTP.setEnabled(false);
+        if (tvCountdown != null) tvCountdown.setVisibility(View.VISIBLE);
+
+        resendTimer = new CountDownTimer(RESEND_COOLDOWN_MS, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if (tvCountdown != null)
+                    tvCountdown.setText(getString(R.string.otp_resend_in, millisUntilFinished / 1000));
             }
-        }
-    };
 
-    private void startPolling() {
-        handler.postDelayed(pollTask, POLL_INTERVAL_MS);
+            @Override
+            public void onFinish() {
+                btnResendOTP.setEnabled(true);
+                if (tvCountdown != null) {
+                    tvCountdown.setText(R.string.otp_didnt_receive);
+                }
+            }
+        }.start();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private String getEnteredOtp() {
+        return otp1.getText().toString().trim() +
+               otp2.getText().toString().trim() +
+               otp3.getText().toString().trim() +
+               otp4.getText().toString().trim() +
+               otp5.getText().toString().trim() +
+               otp6.getText().toString().trim();
     }
 
-    // ── Auto-advance OTP input ────────────────────────────────────────────
+    private void clearOtpFields() {
+        otp1.setText(""); otp2.setText(""); otp3.setText("");
+        otp4.setText(""); otp5.setText(""); otp6.setText("");
+        otp1.requestFocus();
+    }
+
+    private void setVerifyEnabled(boolean enabled) {
+        btnVerify.setEnabled(enabled);
+        btnVerify.setAlpha(enabled ? 1f : 0.6f);
+        if (enabled) btnVerify.setText(R.string.otp_verify_code);
+    }
 
     private void setupOtpAutoAdvance() {
         EditText[] fields = {otp1, otp2, otp3, otp4, otp5, otp6};
@@ -175,9 +243,17 @@ public class OTPVerification extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {
                     if (s.length() == 1 && index < fields.length - 1) {
                         fields[index + 1].requestFocus();
+                    } else if (s.length() == 0 && index > 0) {
+                        fields[index - 1].requestFocus();
                     }
                 }
             });
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (resendTimer != null) resendTimer.cancel();
     }
 }

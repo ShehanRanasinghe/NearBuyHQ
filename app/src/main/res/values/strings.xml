@@ -213,4 +213,12 @@
     <string name="location_tap_hint">Tap on the map or search above to set your shop location</string>
     <string name="pick_on_map">Map</string>
     <string name="location_coordinates_label">Coordinates:</string>
+
+    <!-- OTP Verification Screen -->
+    <string name="otp_code_sent_to">A 6-digit code was sent to\n%1$s</string>
+    <string name="otp_sending">Sending…</string>
+    <string name="otp_verifying">Verifying…</string>
+    <string name="otp_verify_code">Verify Code</string>
+    <string name="otp_resend_in">Resend in %1$ds</string>
+    <string name="otp_didnt_receive">Didn\'t receive the code?</string>
 </resources>

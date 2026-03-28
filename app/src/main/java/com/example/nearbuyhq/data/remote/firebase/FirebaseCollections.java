@@ -16,6 +16,7 @@ public final class FirebaseCollections {
     public static final String DEALS         = "deals";         // flash / short-term deals
     public static final String REPORTS       = "reports";       // user/admin submitted reports
     public static final String NOTIFICATIONS = "notifications"; // in-app notifications per shop
+    public static final String OTP_CODES     = "otp_codes";     // email OTP verification codes
 
     private FirebaseCollections() {
         // Utility class

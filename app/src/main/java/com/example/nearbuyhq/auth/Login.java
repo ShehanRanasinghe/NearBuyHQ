@@ -15,8 +15,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.nearbuyhq.R;
 import com.example.nearbuyhq.data.repository.AuthRepository;
+import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.dashboard.Dashboard;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
 
@@ -42,9 +44,7 @@ public class Login extends AppCompatActivity {
         authRepository = new AuthRepository();
 
         // Setup login button
-        loginBtn.setOnClickListener(v -> {
-            loginUser();
-        });
+        loginBtn.setOnClickListener(v -> loginUser());
 
 
         // Setup sign up link
@@ -57,8 +57,31 @@ public class Login extends AppCompatActivity {
         }
 
         if (authRepository.isLoggedIn()) {
-            startActivity(new Intent(Login.this, Dashboard.class));
-            finish();
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            authRepository.isEmailVerifiedInFirestore(uid, new DataCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean verified) {
+                    if (verified) {
+                        goToDashboard();
+                    } else {
+                        // Registered but never completed OTP — send back to verification
+                        String email = FirebaseAuth.getInstance().getCurrentUser() != null
+                                ? FirebaseAuth.getInstance().getCurrentUser().getEmail() : "";
+                        String name = FirebaseAuth.getInstance().getCurrentUser() != null
+                                ? FirebaseAuth.getInstance().getCurrentUser().getDisplayName() : "";
+                        Intent intent = new Intent(Login.this, OTPVerification.class);
+                        intent.putExtra("email", email != null ? email : "");
+                        intent.putExtra("userName", name != null ? name : "");
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    // Non-fatal – fall through to show login screen
+                }
+            });
         }
     }
 
@@ -81,9 +104,38 @@ public class Login extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 setLoading(false);
-                Intent intent = new Intent(Login.this, Dashboard.class);
-                startActivity(intent);
-                finish();
+                // Check emailVerified flag before allowing Dashboard access
+                String uid = FirebaseAuth.getInstance().getCurrentUser() != null
+                        ? FirebaseAuth.getInstance().getCurrentUser().getUid() : "";
+                if (uid.isEmpty()) {
+                    goToDashboard();
+                    return;
+                }
+                authRepository.isEmailVerifiedInFirestore(uid, new DataCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean verified) {
+                        if (verified) {
+                            goToDashboard();
+                        } else {
+                            // Not verified — redirect to OTP screen (stay signed in so OTP can be written to Firestore)
+                            String email = FirebaseAuth.getInstance().getCurrentUser() != null
+                                    ? FirebaseAuth.getInstance().getCurrentUser().getEmail() : "";
+                            String name = FirebaseAuth.getInstance().getCurrentUser() != null
+                                    ? FirebaseAuth.getInstance().getCurrentUser().getDisplayName() : "";
+                            Toast.makeText(Login.this,
+                                    "Please verify your email first.", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(Login.this, OTPVerification.class);
+                            intent.putExtra("email", email != null ? email : "");
+                            intent.putExtra("userName", name != null ? name : "");
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                    @Override
+                    public void onError(Exception e) {
+                        goToDashboard(); // non-fatal – allow login
+                    }
+                });
             }
 
             @Override
@@ -92,6 +144,12 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(Login.this, "Login failed: " + exception.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void goToDashboard() {
+        Intent intent = new Intent(Login.this, Dashboard.class);
+        startActivity(intent);
+        finish();
     }
 
     private void setLoading(boolean loading) {

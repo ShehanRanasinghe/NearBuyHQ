@@ -42,9 +42,13 @@ android {
         val firebaseEnabled = envOrProperty("FIREBASE_ENABLED", "false").toBooleanStrictOrNull() ?: false
         val firebaseProjectId = envOrProperty("FIREBASE_PROJECT_ID", "")
         val mapsApiKey = envOrProperty("GOOGLE_MAP_APIKEY", "")
+        val smtpEmail = envOrProperty("SMTP_EMAIL", "")
+        val smtpPassword = envOrProperty("SMTP_PASSWORD", "")
         buildConfigField("boolean", "FIREBASE_ENABLED", firebaseEnabled.toString())
         buildConfigField("String", "FIREBASE_PROJECT_ID", "\"$firebaseProjectId\"")
         buildConfigField("String", "GOOGLE_MAP_APIKEY", "\"$mapsApiKey\"")
+        buildConfigField("String", "SMTP_EMAIL", "\"$smtpEmail\"")
+        buildConfigField("String", "SMTP_PASSWORD", "\"$smtpPassword\"")
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -67,6 +71,13 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/NOTICE.md"
+            excludes += "META-INF/LICENSE.md"
+        }
+    }
 }
 
 dependencies {
@@ -86,6 +97,8 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.sun.mail:android-mail:1.6.7")
+    implementation("com.sun.mail:android-activation:1.6.7")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
