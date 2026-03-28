@@ -263,8 +263,8 @@ public class Dashboard extends AppCompatActivity {
      */
     private void loadFilteredRevenue() {
         long[] range = getDateRange(currentFilter);
-        long from = range[0];
-        long to   = range[1];
+        final long from = range[0];
+        final long to   = range[1];
         String userId = session.getUserId();
 
         orderRepository.getOrdersByShopIdAndDateRange(userId, from, to, new DataCallback<List<Order>>() {
@@ -286,18 +286,25 @@ public class Dashboard extends AppCompatActivity {
                 });
             }
             @Override public void onError(Exception e) {
-                // Fallback to all-orders query if date-range fails (e.g. missing index)
+                // Fallback: load all orders and apply the date filter client-side
                 orderRepository.getOrdersByShopId(userId, new DataCallback<List<Order>>() {
                     @Override
                     public void onSuccess(List<Order> orders) {
-                        int cnt = orders.size();
+                        int    cnt = 0;
                         double rev = 0;
                         for (Order o : orders) {
-                            if ("Delivered".equalsIgnoreCase(o.getStatus())) rev += o.getOrderTotal();
+                            long created = o.getCreatedAt();
+                            // For Lifetime the range is 0..MAX so everything passes;
+                            // for other filters only orders within the window are counted.
+                            if (created >= from && created <= to) {
+                                cnt++;
+                                if ("Delivered".equalsIgnoreCase(o.getStatus())) rev += o.getOrderTotal();
+                            }
                         }
                         final double finalRev = rev;
+                        final int    finalCnt = cnt;
                         runOnUiThread(() -> {
-                            if (tvTotalOrders  != null) tvTotalOrders.setText(String.valueOf(cnt));
+                            if (tvTotalOrders  != null) tvTotalOrders.setText(String.valueOf(finalCnt));
                             if (tvTotalRevenue != null)
                                 tvTotalRevenue.setText(String.format(Locale.US, "Rs. %.0f", finalRev));
                         });
