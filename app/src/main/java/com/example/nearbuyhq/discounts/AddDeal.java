@@ -1,13 +1,12 @@
 package com.example.nearbuyhq.discounts;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +23,12 @@ import com.example.nearbuyhq.orders.Order_List;
 import com.example.nearbuyhq.products.Inventory;
 import com.example.nearbuyhq.settings.ProfilePage;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 public class AddDeal extends AppCompatActivity {
 
-    private EditText dealTitle, dealDescription, dealDiscount, dealValidity;
-    private Spinner shopSelection;
+    private EditText dealTitle, dealDescription, dealValidity;
     private TextView btnSubmit, btnCancel;
     private DiscountRepository discountRepository;
     private boolean editMode;
@@ -50,9 +51,7 @@ public class AddDeal extends AppCompatActivity {
 
         dealTitle = findViewById(R.id.dealTitle);
         dealDescription = findViewById(R.id.dealDescription);
-        dealDiscount = findViewById(R.id.dealDiscount);
         dealValidity = findViewById(R.id.dealValidity);
-        shopSelection = findViewById(R.id.shopSelection);
         btnSubmit = findViewById(R.id.btnSubmit);
         btnCancel = findViewById(R.id.btnCancel);
         discountRepository = new DiscountRepository();
@@ -76,13 +75,19 @@ public class AddDeal extends AppCompatActivity {
         navAnalyticsText = findViewById(R.id.navAnalyticsText);
         navProfileText = findViewById(R.id.navProfileText);
 
-        // Setup shop spinner
-        String[] shops = {"Fresh Mart", "Tech Hub", "Fashion Plaza", "Book Haven", "Coffee Corner", "Fitness First"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, shops);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        shopSelection.setAdapter(adapter);
+        // Date picker for Valid Until
+        dealValidity.setOnClickListener(v -> {
+            Calendar cal = Calendar.getInstance();
+            int year  = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day   = cal.get(Calendar.DAY_OF_MONTH);
+            new DatePickerDialog(AddDeal.this, (view, y, m, d) -> {
+                String date = String.format(Locale.getDefault(), "%02d/%02d/%04d", d, m + 1, y);
+                dealValidity.setText(date);
+            }, year, month, day).show();
+        });
 
-        bindEditPayload(shops);
+        bindEditPayload();
 
         ImageView btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> finish());
@@ -168,10 +173,6 @@ public class AddDeal extends AppCompatActivity {
             dealDescription.setError("Description is required");
             return false;
         }
-        if (dealDiscount.getText().toString().trim().isEmpty()) {
-            dealDiscount.setError("Discount is required");
-            return false;
-        }
         if (dealValidity.getText().toString().trim().isEmpty()) {
             dealValidity.setError("Validity date is required");
             return false;
@@ -180,7 +181,6 @@ public class AddDeal extends AppCompatActivity {
     }
 
     private void saveDeal() {
-
         SessionManager session = SessionManager.getInstance(this);
         String userId   = session.getUserId();
         String shopName = session.getShopName();
@@ -189,14 +189,14 @@ public class AddDeal extends AppCompatActivity {
         Deal deal = new Deal(
                 editMode ? editDealId : "",
                 dealTitle.getText().toString().trim(),
-                shopName,   // use the owner's actual shop name
-                dealDiscount.getText().toString().trim() + "%",
+                shopName,
+                "",
                 dealDescription.getText().toString().trim(),
                 dealValidity.getText().toString().trim(),
                 editMode ? originalCreatedAt : now,
                 now
         );
-        deal.setUserId(userId);  // attach owner's userId for dual-write
+        deal.setUserId(userId);
 
         setSaving(true);
         discountRepository.saveDeal(deal, new OperationCallback() {
@@ -222,7 +222,7 @@ public class AddDeal extends AppCompatActivity {
         btnSubmit.setText(saving ? "Saving..." : (editMode ? "Update Deal" : "Create Deal"));
     }
 
-    private void bindEditPayload(String[] shops) {
+    private void bindEditPayload() {
         editMode = getIntent().getBooleanExtra("is_edit", false);
         if (!editMode) {
             originalCreatedAt = System.currentTimeMillis();
@@ -234,23 +234,8 @@ public class AddDeal extends AppCompatActivity {
 
         dealTitle.setText(getIntent().getStringExtra("deal_title"));
         dealDescription.setText(getIntent().getStringExtra("deal_description"));
-        String discount = getIntent().getStringExtra("deal_discount");
-        if (discount != null) {
-            dealDiscount.setText(discount.replace("%", "").replace("OFF", "").trim());
-        }
         dealValidity.setText(getIntent().getStringExtra("deal_validity"));
-
-        String incomingShop = getIntent().getStringExtra("deal_shop");
-        if (incomingShop != null) {
-            for (int i = 0; i < shops.length; i++) {
-                if (incomingShop.equalsIgnoreCase(shops[i])) {
-                    shopSelection.setSelection(i);
-                    break;
-                }
-            }
-        }
 
         btnSubmit.setText("Update Deal");
     }
 }
-

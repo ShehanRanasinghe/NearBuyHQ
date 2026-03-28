@@ -27,30 +27,24 @@
         android:textColor="@color/text_dark_secondary"
         android:layout_marginTop="4dp" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/dealDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+        android:text=""
+        android:textSize="13sp"
+        android:textColor="@color/text_dark_secondary"
+        android:layout_marginTop="6dp"
+        android:maxLines="2"
+        android:ellipsize="end" />
 
-        <TextView
-            android:id="@+id/dealDiscount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text=""
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/coral_primary" />
-
-        <TextView
-            android:id="@+id/dealValidity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="12sp"
-            android:textColor="@color/text_dark_secondary" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/dealValidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="12sp"
+        android:textColor="@color/text_dark_secondary"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>

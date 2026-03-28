@@ -153,7 +153,7 @@
                     android:background="@drawable/bg_input_field"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
-                    android:layout_marginBottom="4dp">
+                    android:layout_marginBottom="14dp">
 
                     <EditText
                         android:id="@+id/dealDescription"
@@ -168,136 +168,43 @@
                         android:gravity="top" />
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:letterSpacing="0.1"
-                android:text="DEAL SETTINGS"
-                android:textColor="@color/coral_primary"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <!-- DEAL SETTINGS CARD -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/bg_order_card"
-                android:padding="16dp"
-                android:elevation="4dp"
-                android:layout_marginBottom="0dp">
-
-
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Shop"
+                    android:text="Valid Until"
                     android:textColor="#1B2D4F"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="6dp" />
 
-                <Spinner
-                    android:id="@+id/shopSelection"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@drawable/bg_input_field"
-                    android:paddingHorizontal="12dp"
-                    android:layout_marginBottom="14dp" />
-
-                <!-- Discount & Validity Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:orientation="horizontal"
+                    android:background="@drawable/bg_input_field"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="12dp"
                     android:layout_marginBottom="4dp">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="10dp">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@android:drawable/ic_menu_my_calendar"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="Pick date" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Discount"
-                            android:textColor="#1B2D4F"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="6dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:background="@drawable/bg_input_field"
-                            android:gravity="center_vertical"
-                            android:paddingHorizontal="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="%"
-                                android:textColor="@color/coral_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:layout_marginEnd="4dp" />
-
-                            <EditText
-                                android:id="@+id/dealDiscount"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:hint="50"
-                                android:textColorHint="#9AA0AC"
-                                android:textColor="#1B2D4F"
-                                android:textSize="13sp"
-                                android:background="@null"
-                                android:inputType="numberDecimal" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Valid Until"
-                            android:textColor="#1B2D4F"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="6dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:background="@drawable/bg_input_field"
-                            android:gravity="center_vertical"
-                            android:paddingHorizontal="12dp">
-
-                            <EditText
-                                android:id="@+id/dealValidity"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:hint="DD/MM/YYYY"
-                                android:textColorHint="#9AA0AC"
-                                android:textColor="#1B2D4F"
-                                android:textSize="13sp"
-                                android:background="@null"
-                                android:inputType="date" />
-                        </LinearLayout>
-                    </LinearLayout>
-
+                    <EditText
+                        android:id="@+id/dealValidity"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="DD/MM/YYYY"
+                        android:textColorHint="#9AA0AC"
+                        android:textColor="#1B2D4F"
+                        android:textSize="13sp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:cursorVisible="false" />
                 </LinearLayout>
 
             </LinearLayout>

@@ -17,7 +17,7 @@ import android.content.Intent;
 
 public class DealDetails extends AppCompatActivity {
 
-    private TextView dealTitle, dealShop, dealDiscount, dealValidity;
+    private TextView dealTitle, dealShop, dealValidity;
     private TextView btnEdit, btnDelete;
     private ImageView btnBack;
     private DiscountRepository discountRepository;
@@ -35,7 +35,6 @@ public class DealDetails extends AppCompatActivity {
 
         dealTitle    = findViewById(R.id.dealTitle);
         dealShop     = findViewById(R.id.dealShop);
-        dealDiscount = findViewById(R.id.dealDiscount);
         dealValidity = findViewById(R.id.dealValidity);
         btnEdit      = findViewById(R.id.btnEdit);
         btnDelete    = findViewById(R.id.btnDelete);
@@ -46,13 +45,11 @@ public class DealDetails extends AppCompatActivity {
         dealId = getIntent().getStringExtra("deal_id");
         String title = getIntent().getStringExtra("deal_title");
         String shop = getIntent().getStringExtra("deal_shop");
-        String discount = getIntent().getStringExtra("deal_discount");
         String validity = getIntent().getStringExtra("deal_validity");
         dealDescription = getIntent().getStringExtra("deal_description");
 
         if (title    != null) dealTitle.setText(title);
         if (shop     != null) dealShop.setText("Shop: " + shop);
-        if (discount != null) dealDiscount.setText(discount + " OFF");
         if (validity != null) dealValidity.setText(validity);
 
         if (dealId != null && !dealId.trim().isEmpty()) {
@@ -65,7 +62,6 @@ public class DealDetails extends AppCompatActivity {
                     }
                     dealTitle.setText(data.getTitle());
                     dealShop.setText("Shop: " + data.getShopName());
-                    dealDiscount.setText(data.getDiscount() + " OFF");
                     dealValidity.setText(data.getValidity());
                     dealDescription = data.getDescription();
                 }
@@ -83,7 +79,6 @@ public class DealDetails extends AppCompatActivity {
             intent.putExtra("deal_id", dealId);
             intent.putExtra("deal_title", dealTitle.getText().toString());
             intent.putExtra("deal_shop", dealShop.getText().toString().replace("Shop: ", ""));
-            intent.putExtra("deal_discount", dealDiscount.getText().toString().replace(" OFF", ""));
             intent.putExtra("deal_validity", dealValidity.getText().toString());
             intent.putExtra("deal_description", dealDescription == null ? "" : dealDescription);
             intent.putExtra("deal_created_at", System.currentTimeMillis());

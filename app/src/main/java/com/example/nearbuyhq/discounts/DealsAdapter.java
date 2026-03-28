@@ -39,7 +39,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
         Deal deal = dealsList.get(position);
         holder.dealTitle.setText(deal.getTitle());
         holder.dealShop.setText(deal.getShopName());
-        holder.dealDiscount.setText(deal.getDiscount());
+        holder.dealDescription.setText(deal.getDescription());
         holder.dealValidity.setText(deal.getValidity());
 
         holder.itemView.setOnClickListener(v -> listener.onDealClick(deal));
@@ -51,14 +51,14 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
     }
 
     static class DealViewHolder extends RecyclerView.ViewHolder {
-        TextView dealTitle, dealShop, dealDiscount, dealValidity;
+        TextView dealTitle, dealShop, dealDescription, dealValidity;
 
         public DealViewHolder(@NonNull View itemView) {
             super(itemView);
-            dealTitle = itemView.findViewById(R.id.dealTitle);
-            dealShop = itemView.findViewById(R.id.dealShop);
-            dealDiscount = itemView.findViewById(R.id.dealDiscount);
-            dealValidity = itemView.findViewById(R.id.dealValidity);
+            dealTitle       = itemView.findViewById(R.id.dealTitle);
+            dealShop        = itemView.findViewById(R.id.dealShop);
+            dealDescription = itemView.findViewById(R.id.dealDescription);
+            dealValidity    = itemView.findViewById(R.id.dealValidity);
         }
     }
 }

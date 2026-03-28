@@ -90,7 +90,7 @@
                 android:elevation="4dp"
                 android:layout_marginBottom="12dp">
 
-                <!-- Discount Badge -->
+                <!-- Title + Active Badge -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -99,14 +99,14 @@
                     android:layout_marginBottom="16dp">
 
                     <TextView
-                        android:id="@+id/dealDiscount"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/dealTitle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="—"
-                        android:textSize="28sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="@color/coral_primary"
-                        android:layout_weight="1" />
+                        android:textColor="#1B2D4F" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -122,15 +122,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/dealTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#1B2D4F"
-                    android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:id="@+id/dealShop"
