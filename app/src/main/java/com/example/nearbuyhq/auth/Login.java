@@ -68,6 +68,13 @@ public class Login extends AppCompatActivity {
         // Wire the login button to the login flow
         loginBtn.setOnClickListener(v -> loginUser());
 
+        // Navigate to Forgot Password screen
+        TextView forgotPassword = findViewById(R.id.forgotPassword);
+        if (forgotPassword != null) {
+            forgotPassword.setOnClickListener(v ->
+                    startActivity(new Intent(Login.this, ForgotPassword.class)));
+        }
+
         // Navigate to Register when the sign-up link is tapped
         TextView signup = findViewById(R.id.signup);
         if (signup != null) {
@@ -79,7 +86,10 @@ public class Login extends AppCompatActivity {
 
         // If a session already exists, check whether email verification was completed
         if (authRepository.isLoggedIn()) {
-            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            com.google.firebase.auth.FirebaseUser currentUser =
+                    FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser == null) return;
+            String uid = currentUser.getUid();
             authRepository.isEmailVerifiedInFirestore(uid, new DataCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean verified) {

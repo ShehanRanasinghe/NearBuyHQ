@@ -94,10 +94,6 @@ public class AuthRepository {
         }
     }
 
-    /** Sign in with just email + password (no context, used by Login.java existing code). */
-    public void login(String usernameOrEmail, String password, OperationCallback callback) {
-        login(usernameOrEmail, password, null, callback);
-    }
 
     // ── Password Reset ────────────────────────────────────────────────────
 
@@ -122,27 +118,6 @@ public class AuthRepository {
 
     // ── Update profile ────────────────────────────────────────────────────
 
-    /**
-     * Update the user's Firestore profile (name, phone).
-     */
-    public void updateUserProfile(String uid, String name, String phone,
-                                  OperationCallback callback) {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            callback.onError(new IllegalStateException("Firebase is disabled"));
-            return;
-        }
-
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("name",      name);
-        updates.put("phone",     phone);
-        updates.put("updatedAt", System.currentTimeMillis());
-
-        firestore.collection(FirebaseCollections.USERS)
-                .document(uid)
-                .update(updates)
-                .addOnSuccessListener(unused -> callback.onSuccess())
-                .addOnFailureListener(callback::onError);
-    }
 
     /**
      * Load the current user's Firestore profile.
@@ -292,11 +267,6 @@ public class AuthRepository {
 
     // ── Logout ────────────────────────────────────────────────────────────
 
-    /** Sign out from Firebase Auth. */
-    public void logout() {
-        auth.signOut();
-    }
-
     /** Sign out and clear all local session data. */
     public void logout(Context context) {
         auth.signOut();
@@ -312,10 +282,6 @@ public class AuthRepository {
         return auth.getCurrentUser() != null;
     }
 
-    /** Returns the current Firebase Auth user, or null if not signed in. */
-    public FirebaseUser getCurrentUser() {
-        return auth.getCurrentUser();
-    }
 
     // ── Private helpers ───────────────────────────────────────────────────
 

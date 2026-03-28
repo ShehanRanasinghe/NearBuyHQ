@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -193,7 +194,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:src="@drawable/ic_edit"
-            android:tint="@color/deep_blue"
+            app:tint="@color/deep_blue"
             android:background="@drawable/bg_icon_circle_blue"
             android:padding="8dp"
             android:layout_marginEnd="8dp"
@@ -205,7 +206,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:src="@drawable/ic_delete"
-            android:tint="@color/stat_red"
+            app:tint="@color/stat_red"
             android:background="@drawable/bg_icon_circle"
             android:padding="8dp"
             android:contentDescription="Delete promotion" />

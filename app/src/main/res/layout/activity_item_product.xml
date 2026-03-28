@@ -174,7 +174,7 @@
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_edit"
-                    android:tint="#4ECDC4"
+                    app:tint="#4ECDC4"
                     android:contentDescription="Edit" />
             </androidx.cardview.widget.CardView>
 
@@ -192,7 +192,7 @@
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_delete"
-                    android:tint="#FF6B6B"
+                    app:tint="#FF6B6B"
                     android:contentDescription="Delete" />
             </androidx.cardview.widget.CardView>
         </LinearLayout>

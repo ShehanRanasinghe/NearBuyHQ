@@ -77,6 +77,7 @@ public class OrderRepository {
     }
 
     /** @deprecated Use getOrdersByShopId */
+    @Deprecated
     public void getOrders(DataCallback<List<Order>> callback) {
         callback.onError(new IllegalStateException("shopId required – use getOrdersByShopId(shopId, cb)"));
     }
@@ -94,6 +95,7 @@ public class OrderRepository {
     }
 
     /** @deprecated pass shopId */
+    @Deprecated
     public void getOrder(String orderId, DataCallback<Order> callback) {
         callback.onError(new IllegalStateException("shopId required – use getOrder(orderId, shopId, cb)"));
     }
@@ -120,6 +122,7 @@ public class OrderRepository {
     }
 
     /** @deprecated pass shopId */
+    @Deprecated
     public void getOrdersByDateRange(long fromMs, long toMs, DataCallback<List<Order>> callback) {
         callback.onError(new IllegalStateException("shopId required – use getOrdersByShopIdAndDateRange"));
     }
@@ -136,6 +139,7 @@ public class OrderRepository {
     }
 
     /** @deprecated pass shopId */
+    @Deprecated
     public void updateOrderStatus(String orderId, String status, OperationCallback callback) {
         callback.onError(new IllegalStateException("shopId required – use updateOrderStatus(orderId, shopId, status, cb)"));
     }
@@ -152,6 +156,7 @@ public class OrderRepository {
     }
 
     /** @deprecated pass shopId */
+    @Deprecated
     public void deleteOrder(String orderId, OperationCallback callback) {
         callback.onError(new IllegalStateException("shopId required – use deleteOrder(orderId, shopId, cb)"));
     }

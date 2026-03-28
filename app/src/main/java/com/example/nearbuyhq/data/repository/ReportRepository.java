@@ -84,6 +84,7 @@ public class ReportRepository {
     }
 
     /** @deprecated pass shopId; use getReportsByShop(shopId, cb) */
+    @Deprecated
     public void getAllReports(DataCallback<List<Map<String, Object>>> callback) {
         callback.onError(new IllegalStateException("shopId required – use getReportsByShop(shopId, cb)"));
     }
@@ -103,6 +104,7 @@ public class ReportRepository {
     }
 
     /** @deprecated pass shopId */
+    @Deprecated
     public void updateStatus(String reportId, String status, OperationCallback callback) {
         callback.onError(new IllegalStateException("shopId required – use updateStatus(reportId, shopId, status, cb)"));
     }
@@ -122,6 +124,7 @@ public class ReportRepository {
     }
 
     /** @deprecated pass shopId */
+    @Deprecated
     public void deleteReport(String reportId, OperationCallback callback) {
         callback.onError(new IllegalStateException("shopId required – use deleteReport(reportId, shopId, cb)"));
     }

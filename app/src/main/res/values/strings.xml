@@ -55,70 +55,20 @@
     <string name="inventory">Inventory</string>
 
     <!-- Inventory Alert Placeholders (loaded from Firebase at runtime) -->
-    <string name="item_milk">—</string>
-    <string name="item_milk_stock">—</string>
-    <string name="item_bread">—</string>
-    <string name="item_bread_stock">—</string>
-    <string name="item_eggs">—</string>
-    <string name="item_eggs_stock">—</string>
     <string name="restock">Restock</string>
 
-    <!-- Recent Order Placeholders (loaded from Firebase at runtime) -->
-    <string name="order_id_1">—</string>
-    <string name="order_customer_1">—</string>
-    <string name="order_amount_1">—</string>
-    <string name="order_status_pending">Pending</string>
-    <string name="order_id_2">—</string>
-    <string name="order_customer_2">—</string>
-    <string name="order_amount_2">—</string>
-    <string name="order_status_processing">Processing</string>
-    <string name="order_id_3">—</string>
-    <string name="order_customer_3">—</string>
-    <string name="order_amount_3">—</string>
-    <string name="order_status_completed">Completed</string>
 
-    <!-- Product Performance Placeholders (loaded from Firebase at runtime) -->
-    <string name="top_product_1">—</string>
-    <string name="top_product_1_sales">—</string>
-    <string name="top_product_2">—</string>
-    <string name="top_product_2_sales">—</string>
-    <string name="top_product_3">—</string>
-    <string name="top_product_3_sales">—</string>
-
-    <!-- Promotion Placeholders (loaded from Firebase at runtime) -->
-    <string name="promo_1_title">—</string>
-    <string name="promo_1_discount">—</string>
-    <string name="promo_1_expiry">—</string>
-    <string name="promo_2_title">—</string>
-    <string name="promo_2_discount">—</string>
-    <string name="promo_2_expiry">—</string>
-
-    <!-- Recent Activity Placeholders (loaded from Firebase at runtime) -->
+    <!-- Recent Activity Labels (loaded from Firebase at runtime) -->
     <string name="product_added_desc">Product Added</string>
     <string name="order_desc">Order</string>
     <string name="stock_updated_desc">Stock Updated</string>
     <string name="promo_created_desc">Promotion Created</string>
-    <string name="two_hours_ago">—</string>
-    <string name="new_product_added">—</string>
-    <string name="sample_product">—</string>
-    <string name="five_hours_ago">—</string>
-    <string name="order_completed">—</string>
-    <string name="sample_order">—</string>
-    <string name="promo_created">—</string>
-    <string name="sample_promo_activity">—</string>
-    <string name="three_hours_ago">—</string>
-    <string name="stock_updated">—</string>
-    <string name="sample_stock_update">—</string>
-    <string name="six_hours_ago">—</string>
 
-    <!-- Stat Card Placeholders (loaded from Firebase at runtime) -->
+    <!-- Stat Card initial values (replaced at runtime from Firestore) -->
     <string name="sample_total_products">0</string>
     <string name="sample_low_stock">0</string>
     <string name="sample_todays_orders">0</string>
     <string name="sample_todays_revenue">Rs. 0.00</string>
-    <string name="rank_1">1</string>
-    <string name="rank_2">2</string>
-    <string name="rank_3">3</string>
 
     <!-- Splash Screen -->
     <string name="app_tagline">Your Neighbourhood, Delivered.</string>
@@ -137,6 +87,8 @@
     <!-- Login Screen -->
     <string name="dont_have_account">Don\'t have an account? </string>
     <string name="link_sign_up">Sign Up</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="toggle_password_visibility">Toggle password visibility</string>
 
     <!-- Analytics Dashboard -->
     <string name="analytics_dashboard">Analytics Dashboard</string>
@@ -170,14 +122,11 @@
     <string name="my_profile">My Profile</string>
     <string name="back">Back</string>
     <string name="profile_picture">Profile Picture</string>
-    <string name="sample_owner_name">—</string>
     <string name="shop_owner_label">Shop Owner</string>
     <string name="account_information">ACCOUNT INFORMATION</string>
     <string name="email">Email</string>
     <string name="phone">Phone</string>
     <string name="shop_name_label">Shop Name</string>
-    <string name="sample_email">—</string>
-    <string name="sample_phone">—</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="logout">Log Out</string>
 
@@ -189,9 +138,7 @@
     <string name="opening_hours_label">Opening Hours</string>
     <string name="website_label">Website / Social</string>
     <string name="sample_store_location">—</string>
-    <string name="sample_store_category">—</string>
     <string name="sample_opening_hours">—</string>
-    <string name="sample_website">—</string>
 
     <!-- Profile – Branches -->
     <string name="branches_label">BRANCHES</string>
@@ -199,12 +146,6 @@
     <string name="edit_branch_label">Edit</string>
     <string name="branch_icon_desc">Branch</string>
     <string name="address_label">Address</string>
-    <string name="sample_branch1_name">—</string>
-    <string name="sample_branch1_address">—</string>
-    <string name="sample_branch1_phone">—</string>
-    <string name="sample_branch2_name">—</string>
-    <string name="sample_branch2_address">—</string>
-    <string name="sample_branch2_phone">—</string>
 
     <!-- Location Picker -->
     <string name="location_picker_title">Pick Shop Location</string>

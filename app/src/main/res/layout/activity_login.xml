@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="@color/navy_dark"
-    tools:context=".Login">
+    tools:context=".auth.Login">
 
     <LinearLayout
         android:id="@+id/main"
@@ -98,11 +98,25 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="14dp"
                     android:src="@drawable/ic_eye_closed"
-                    android:contentDescription="Toggle password visibility"
+                    android:contentDescription="@string/toggle_password_visibility"
                     android:clickable="true"
                     android:focusable="true" />
 
             </RelativeLayout>
+
+            <!-- Forgot Password Link -->
+            <TextView
+                android:id="@+id/forgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/forgot_password"
+                android:textColor="@color/coral_primary"
+                android:textSize="13sp"
+                android:clickable="true"
+                android:focusable="true" />
 
             <!-- Login Button -->
             <Button

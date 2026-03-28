@@ -86,6 +86,7 @@ public class ProductRepository {
     }
 
     /** @deprecated pass userId; exists only so legacy call-sites still compile */
+    @Deprecated
     public void deleteProduct(String productId, OperationCallback callback) {
         callback.onError(new IllegalStateException("userId is required – use deleteProduct(id, userId, cb)"));
     }

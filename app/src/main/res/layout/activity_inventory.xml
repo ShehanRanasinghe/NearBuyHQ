@@ -101,7 +101,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_search"
-                android:tint="#7A9EA8"
+                app:tint="#7A9EA8"
                 android:contentDescription="Search" />
 
             <EditText
@@ -125,7 +125,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_close"
-                android:tint="#7A9EA8"
+                app:tint="#7A9EA8"
                 android:visibility="gone"
                 android:contentDescription="Clear search" />
         </LinearLayout>

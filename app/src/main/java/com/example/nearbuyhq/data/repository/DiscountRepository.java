@@ -76,6 +76,7 @@ public class DiscountRepository {
     }
 
     /** @deprecated Use getPromotionsByUserId instead */
+    @Deprecated
     public void getPromotions(DataCallback<List<Promotion>> callback) {
         callback.onError(new IllegalStateException("userId required – use getPromotionsByUserId(userId, cb)"));
     }
@@ -102,6 +103,7 @@ public class DiscountRepository {
     }
 
     /** @deprecated pass userId */
+    @Deprecated
     public void deletePromotion(String promotionId, OperationCallback callback) {
         callback.onError(new IllegalStateException("userId required – use deletePromotion(id, userId, cb)"));
     }
@@ -144,6 +146,7 @@ public class DiscountRepository {
     }
 
     /** @deprecated Use getDealsByUserId instead */
+    @Deprecated
     public void getDeals(DataCallback<List<Deal>> callback) {
         callback.onError(new IllegalStateException("userId required – use getDealsByUserId(userId, cb)"));
     }
@@ -170,6 +173,7 @@ public class DiscountRepository {
     }
 
     /** @deprecated pass userId */
+    @Deprecated
     public void deleteDeal(String dealId, OperationCallback callback) {
         callback.onError(new IllegalStateException("userId required – use deleteDeal(id, userId, cb)"));
     }
