@@ -85,15 +85,15 @@ public class Notifications extends AppCompatActivity {
      */
     private void loadNotifications() {
         // Get the shopId saved in session after login
-        String shopId = SessionManager.getInstance(this).getShopId();
+        String userId = SessionManager.getInstance(this).getUserId();
 
-        if (shopId == null || shopId.isEmpty()) {
-            // No shop registered yet – show empty list
+        if (userId == null || userId.isEmpty()) {
+            // No user logged in yet – show empty list
             notificationsAdapter.updateList(new ArrayList<>());
             return;
         }
 
-        notificationRepository.getNotificationsByShop(shopId,
+        notificationRepository.getNotificationsByShop(userId,
                 new DataCallback<List<Map<String, Object>>>() {
                     @Override
                     public void onSuccess(List<Map<String, Object>> data) {

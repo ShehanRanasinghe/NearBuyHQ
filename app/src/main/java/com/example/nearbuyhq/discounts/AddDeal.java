@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.dashboard.Analytics;
@@ -180,17 +181,22 @@ public class AddDeal extends AppCompatActivity {
 
     private void saveDeal() {
 
+        SessionManager session = SessionManager.getInstance(this);
+        String userId   = session.getUserId();
+        String shopName = session.getShopName();
+
         long now = System.currentTimeMillis();
         Deal deal = new Deal(
                 editMode ? editDealId : "",
                 dealTitle.getText().toString().trim(),
-                String.valueOf(shopSelection.getSelectedItem()),
+                shopName,   // use the owner's actual shop name
                 dealDiscount.getText().toString().trim() + "%",
                 dealDescription.getText().toString().trim(),
                 dealValidity.getText().toString().trim(),
                 editMode ? originalCreatedAt : now,
                 now
         );
+        deal.setUserId(userId);  // attach owner's userId for dual-write
 
         setSaving(true);
         discountRepository.saveDeal(deal, new OperationCallback() {

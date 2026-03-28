@@ -163,8 +163,8 @@ public class Inventory extends AppCompatActivity {
 
     // ── LOAD FROM FIREBASE ─────────────────────────────────────────────────
     private void loadInventory() {
-        String shopId = SessionManager.getInstance(this).getShopId();
-        productRepository.getProductsByShopId(shopId, "All", new DataCallback<List<ProductItem>>() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        productRepository.getProductsByShopId(userId, "All", new DataCallback<List<ProductItem>>() {
             @Override
             public void onSuccess(List<ProductItem> data) {
                 allItems.clear();

@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.data.repository.ReportRepository;
 
@@ -69,7 +70,8 @@ public class ReportDetails extends AppCompatActivity {
         }
 
         btnResolve.setEnabled(false);
-        reportRepository.updateStatus(reportId, "Resolved", new OperationCallback() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        reportRepository.updateStatus(reportId, userId, "Resolved", new OperationCallback() {
             @Override
             public void onSuccess() {
                 reportStatus.setText("Status: Resolved");

@@ -13,28 +13,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Repository for shop/user reports stored in Firestore.
- *
- * Customers can submit reports against shops from the customer app.
- * This admin app can read and resolve them.
- *
- * Firestore document structure:
- *   reports/{id}
- *     ├── type        – "Shop Violation" | "False Advertisement" | etc.
- *     ├── subject     – the shop name or item involved
- *     ├── description – details from the reporter
- *     ├── shopId      – which shop this report is about
- *     ├── status      – "Pending" | "Reviewed" | "Resolved"
- *     ├── createdAt
- *     └── updatedAt
+ * All report data lives under NearBuyHQ/{shopId}/reports.
+ * shopId == userId (they are the same thing).
  */
 public class ReportRepository {
 
-    private final CollectionReference reportsRef;
+    private final FirebaseFirestore db;
 
     public ReportRepository() {
-        this.reportsRef = FirebaseFirestore.getInstance()
-                .collection(FirebaseCollections.REPORTS);
+        this.db = FirebaseFirestore.getInstance();
+    }
+
+    private CollectionReference reportsRef(String shopId) {
+        return db.collection(FirebaseCollections.USERS)
+                 .document(shopId)
+                 .collection(FirebaseCollections.USER_REPORTS);
     }
 
     // ── Create ────────────────────────────────────────────────────────────
@@ -60,54 +53,25 @@ public class ReportRepository {
         data.put("createdAt",   now);
         data.put("updatedAt",   now);
 
-        reportsRef.add(data)
+        reportsRef(shopId).add(data)
                 .addOnSuccessListener(ref -> callback.onSuccess())
                 .addOnFailureListener(callback::onError);
     }
 
     // ── Read ──────────────────────────────────────────────────────────────
 
-    /**
-     * Load all reports, newest first.
-     * Returns raw maps – the caller (Reports.java) converts them to Report objects.
-     */
-    public void getAllReports(DataCallback<List<Map<String, Object>>> callback) {
-        if (!FirebaseConfig.isFirebaseEnabled()) {
-            callback.onError(new IllegalStateException("Firebase is disabled"));
-            return;
-        }
-
-        reportsRef.orderBy("createdAt", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener(snapshots -> {
-                    List<Map<String, Object>> list = new ArrayList<>();
-                    for (DocumentSnapshot doc : snapshots.getDocuments()) {
-                        Map<String, Object> item = doc.getData();
-                        if (item != null) {
-                            item.put("id", doc.getId()); // inject doc id
-                            list.add(item);
-                        }
-                    }
-                    callback.onSuccess(list);
-                })
-                .addOnFailureListener(callback::onError);
-    }
-
-    /**
-     * Load reports that belong to a specific shop.
-     */
+    /** Load all reports for a specific shop owner. */
     public void getReportsByShop(String shopId, DataCallback<List<Map<String, Object>>> callback) {
         if (!FirebaseConfig.isFirebaseEnabled()) {
             callback.onError(new IllegalStateException("Firebase is disabled"));
             return;
         }
 
-        reportsRef.whereEqualTo("shopId", shopId)
-                .orderBy("createdAt", Query.Direction.DESCENDING)
+        reportsRef(shopId).orderBy("createdAt", Query.Direction.DESCENDING)
                 .get()
-                .addOnSuccessListener(snapshots -> {
+                .addOnSuccessListener(snaps -> {
                     List<Map<String, Object>> list = new ArrayList<>();
-                    for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                    for (DocumentSnapshot doc : snaps.getDocuments()) {
                         Map<String, Object> item = doc.getData();
                         if (item != null) {
                             item.put("id", doc.getId());
@@ -119,34 +83,46 @@ public class ReportRepository {
                 .addOnFailureListener(callback::onError);
     }
 
+    /** @deprecated pass shopId; use getReportsByShop(shopId, cb) */
+    public void getAllReports(DataCallback<List<Map<String, Object>>> callback) {
+        callback.onError(new IllegalStateException("shopId required – use getReportsByShop(shopId, cb)"));
+    }
+
     // ── Update ────────────────────────────────────────────────────────────
 
-    /**
-     * Update the status of a report (e.g. "Pending" → "Reviewed" → "Resolved").
-     */
-    public void updateStatus(String reportId, String status, OperationCallback callback) {
+    public void updateStatus(String reportId, String shopId, String status, OperationCallback callback) {
         if (!FirebaseConfig.isFirebaseEnabled()) {
             callback.onError(new IllegalStateException("Firebase is disabled"));
             return;
         }
-        reportsRef.document(reportId)
+
+        reportsRef(shopId).document(reportId)
                 .update("status", status, "updatedAt", System.currentTimeMillis())
                 .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(callback::onError);
     }
 
+    /** @deprecated pass shopId */
+    public void updateStatus(String reportId, String status, OperationCallback callback) {
+        callback.onError(new IllegalStateException("shopId required – use updateStatus(reportId, shopId, status, cb)"));
+    }
+
     // ── Delete ────────────────────────────────────────────────────────────
 
-    /** Remove a report document. */
-    public void deleteReport(String reportId, OperationCallback callback) {
+    public void deleteReport(String reportId, String shopId, OperationCallback callback) {
         if (!FirebaseConfig.isFirebaseEnabled()) {
             callback.onError(new IllegalStateException("Firebase is disabled"));
             return;
         }
-        reportsRef.document(reportId)
+
+        reportsRef(shopId).document(reportId)
                 .delete()
                 .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(callback::onError);
     }
-}
 
+    /** @deprecated pass shopId */
+    public void deleteReport(String reportId, OperationCallback callback) {
+        callback.onError(new IllegalStateException("shopId required – use deleteReport(reportId, shopId, cb)"));
+    }
+}

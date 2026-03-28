@@ -173,15 +173,14 @@ public class Add_Product extends AppCompatActivity {
             return;
         }
 
-        // Get the shop ID linked to the signed-in user
-        String shopId = SessionManager.getInstance(this).getShopId();
-        if (shopId == null || shopId.isEmpty()) shopId = "global"; // fallback
+        // userId == shopId — one account = one shop
+        String userId = SessionManager.getInstance(this).getUserId();
 
         long now = System.currentTimeMillis();
         long createdAt = editMode ? originalCreatedAt : now;
         ProductItem item = new ProductItem(
                 editMode ? editingProductId : "",
-                shopId,
+                userId,
                 name,
                 description,
                 selectedCategory,

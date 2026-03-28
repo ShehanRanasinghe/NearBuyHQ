@@ -46,12 +46,39 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- Google Map fills the entire frame -->
-        <fragment
-            android:id="@+id/mapFragment"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <!-- Map container: SupportMapFragment is added programmatically
+             (with a short delay) so setContentView() stays lightweight and
+             the activity enter-transition completes before the heavy Maps
+             native library load begins. This prevents the ProfilePage ANR. -->
+        <FrameLayout
+            android:id="@+id/mapContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <!-- Loading overlay – visible while the map fragment initialises.
+             Hidden in onMapReady(). -->
+        <LinearLayout
+            android:id="@+id/mapLoadingOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@color/bg_white">
+
+            <ProgressBar
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:indeterminate="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading map…"
+                android:textColor="@color/text_dark_secondary"
+                android:textSize="14sp"
+                android:layout_marginTop="12dp" />
+
+        </LinearLayout>
 
         <!-- Search bar + dropdown float on top of the map -->
         <LinearLayout

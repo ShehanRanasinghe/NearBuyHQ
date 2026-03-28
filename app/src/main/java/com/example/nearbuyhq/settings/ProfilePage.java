@@ -79,13 +79,15 @@ public class ProfilePage extends AppCompatActivity {
         setupBottomNavigation();
         resetNavSelection();
         setNavActive(navProfileIcon, navProfileText);
-
-        loadProfileData();
+        // loadProfileData() will be called by onResume — no duplicate here.
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // Reload when returning from LocationPicker or edit dialog.
+        // dataLoaded is reset to false by onActivityResult so we always
+        // refresh after saving a new location.
         loadProfileData();
     }
 

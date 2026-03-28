@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.OrderRepository;
 import com.example.nearbuyhq.orders.Order;
@@ -110,7 +111,8 @@ public class Analytics extends AppCompatActivity {
      */
     private void loadAnalyticsData() {
         // ── Order-based stats ─────────────────────────────────────────
-        orderRepository.getOrders(new DataCallback<List<Order>>() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        orderRepository.getOrdersByShopId(userId, new DataCallback<List<Order>>() {
             @Override
             public void onSuccess(List<Order> orders) {
                 double totalRevenue = 0;

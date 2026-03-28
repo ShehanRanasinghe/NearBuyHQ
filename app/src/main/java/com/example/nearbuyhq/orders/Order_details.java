@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.data.repository.OrderRepository;
@@ -109,7 +110,8 @@ public class Order_details extends AppCompatActivity {
     }
 
     private void loadOrder() {
-        orderRepository.getOrder(orderId, new DataCallback<Order>() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        orderRepository.getOrder(orderId, userId, new DataCallback<Order>() {
             @Override
             public void onSuccess(Order data) {
                 if (data == null) {
@@ -139,7 +141,8 @@ public class Order_details extends AppCompatActivity {
         }
 
         btnUpdateStatus.setEnabled(false);
-        orderRepository.updateOrderStatus(orderId, selectedStatus, new OperationCallback() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        orderRepository.updateOrderStatus(orderId, userId, selectedStatus, new OperationCallback() {
             @Override
             public void onSuccess() {
                 btnUpdateStatus.setEnabled(true);

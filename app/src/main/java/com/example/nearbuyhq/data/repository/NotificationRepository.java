@@ -13,22 +13,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Repository for in-app notifications stored in Firestore.
- *
- * Notifications are created automatically when key events happen, e.g.:
- *  - A new product is added (low-stock warnings)
- *  - An order is placed by a customer
- *  - A promotion expires
- *
- * The customer app can also trigger notifications via Cloud Functions.
+ * All notification data lives under NearBuyHQ/{shopId}/notifications.
  */
 public class NotificationRepository {
 
-    private final CollectionReference notifRef;
+    private final FirebaseFirestore db;
 
     public NotificationRepository() {
-        this.notifRef = FirebaseFirestore.getInstance()
-                .collection(FirebaseCollections.NOTIFICATIONS);
+        this.db = FirebaseFirestore.getInstance();
+    }
+
+    private CollectionReference notifRef(String shopId) {
+        return db.collection(FirebaseCollections.USERS)
+                 .document(shopId)
+                 .collection(FirebaseCollections.USER_NOTIFICATIONS);
     }
 
     // ── Create ────────────────────────────────────────────────────────────
@@ -59,7 +57,7 @@ public class NotificationRepository {
         data.put("updatedAt", now);
 
         // Let Firestore auto-generate the document ID
-        notifRef.add(data)
+        notifRef(shopId).add(data)
                 .addOnSuccessListener(ref -> callback.onSuccess())
                 .addOnFailureListener(callback::onError);
     }
@@ -75,12 +73,11 @@ public class NotificationRepository {
             return;
         }
 
-        notifRef.whereEqualTo("shopId", shopId)
-                .orderBy("createdAt", Query.Direction.DESCENDING)
+        notifRef(shopId).orderBy("createdAt", Query.Direction.DESCENDING)
                 .get()
-                .addOnSuccessListener(snapshots -> {
+                .addOnSuccessListener(snaps -> {
                     List<Map<String, Object>> list = new ArrayList<>();
-                    for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                    for (DocumentSnapshot doc : snaps.getDocuments()) {
                         Map<String, Object> item = doc.getData();
                         if (item != null) {
                             item.put("id", doc.getId()); // inject doc id
@@ -95,12 +92,13 @@ public class NotificationRepository {
     // ── Mark as read ──────────────────────────────────────────────────────
 
     /** Mark a notification as read in Firestore. */
-    public void markAsRead(String notifId, OperationCallback callback) {
+    public void markAsRead(String notifId, String shopId, OperationCallback callback) {
         if (!FirebaseConfig.isFirebaseEnabled()) {
             callback.onError(new IllegalStateException("Firebase is disabled"));
             return;
         }
-        notifRef.document(notifId)
+
+        notifRef(shopId).document(notifId)
                 .update("isRead", true, "updatedAt", System.currentTimeMillis())
                 .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(callback::onError);
@@ -109,15 +107,15 @@ public class NotificationRepository {
     // ── Delete ────────────────────────────────────────────────────────────
 
     /** Delete a notification document. */
-    public void deleteNotification(String notifId, OperationCallback callback) {
+    public void deleteNotification(String notifId, String shopId, OperationCallback callback) {
         if (!FirebaseConfig.isFirebaseEnabled()) {
             callback.onError(new IllegalStateException("Firebase is disabled"));
             return;
         }
-        notifRef.document(notifId)
+
+        notifRef(shopId).document(notifId)
                 .delete()
                 .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(callback::onError);
     }
 }
-

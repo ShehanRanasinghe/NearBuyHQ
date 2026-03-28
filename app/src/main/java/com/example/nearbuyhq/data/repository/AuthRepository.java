@@ -349,44 +349,32 @@ public class AuthRepository {
     }
 
     /**
-     * After successful Firebase sign-in, load user profile and their linked shop
-     * into SessionManager. This allows any screen to read the data without
-     * an extra Firestore round-trip.
+     * After successful Firebase sign-in, load user profile into SessionManager.
+     * userId == shopId — no separate shops-collection lookup is needed.
      */
     private void loadSessionAfterLogin(String uid, Context context,
                                         OperationCallback callback) {
         SessionManager session = SessionManager.getInstance(context);
         session.saveUserId(uid);
+        // userId IS the shopId – store it right away so every screen can use it
+        session.saveShopId(uid);
 
-        // Load user profile from Firestore
+        // Load user profile from Firestore for display name / email / shopName
         firestore.collection(FirebaseCollections.USERS)
                 .document(uid)
                 .get()
                 .addOnSuccessListener(doc -> {
                     if (doc.exists()) {
-                        String name  = doc.getString("name");
-                        String email = doc.getString("email");
-                        String phone = doc.getString("phone");
-                        if (name  != null) session.saveUserName(name);
-                        if (email != null) session.saveUserEmail(email);
-                        if (phone != null) session.saveUserPhone(phone);
+                        String name     = doc.getString("name");
+                        String email    = doc.getString("email");
+                        String phone    = doc.getString("phone");
+                        String shopName = doc.getString("shopName");
+                        if (name     != null) session.saveUserName(name);
+                        if (email    != null) session.saveUserEmail(email);
+                        if (phone    != null) session.saveUserPhone(phone);
+                        if (shopName != null && !shopName.isEmpty()) session.saveShopName(shopName);
                     }
-
-                    // Now look up their linked shop
-                    firestore.collection(FirebaseCollections.SHOPS)
-                            .whereEqualTo("ownerUid", uid)
-                            .limit(1)
-                            .get()
-                            .addOnSuccessListener(shopSnaps -> {
-                                if (!shopSnaps.isEmpty()) {
-                                    String shopId   = shopSnaps.getDocuments().get(0).getId();
-                                    String shopName = shopSnaps.getDocuments().get(0).getString("name");
-                                    session.saveShopId(shopId);
-                                    if (shopName != null) session.saveShopName(shopName);
-                                }
-                                callback.onSuccess(); // done – proceed to Dashboard
-                            })
-                            .addOnFailureListener(e -> callback.onSuccess()); // non-fatal
+                    callback.onSuccess();
                 })
                 .addOnFailureListener(e -> callback.onSuccess()); // non-fatal – still log in
     }

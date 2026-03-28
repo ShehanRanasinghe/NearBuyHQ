@@ -87,8 +87,8 @@ public class DealsList extends AppCompatActivity {
     }
 
     private void loadDeals() {
-
-        discountRepository.getDeals(new DataCallback<List<Deal>>() {
+        String userId = com.example.nearbuyhq.core.SessionManager.getInstance(this).getUserId();
+        discountRepository.getDealsByUserId(userId, new DataCallback<List<Deal>>() {
             @Override
             public void onSuccess(List<Deal> data) {
                 allDeals.clear();

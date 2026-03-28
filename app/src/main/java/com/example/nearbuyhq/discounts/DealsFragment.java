@@ -72,7 +72,8 @@ public class DealsFragment extends Fragment {
     }
 
     private void loadDeals() {
-        discountRepository.getDeals(new DataCallback<List<Deal>>() {
+        String userId = com.example.nearbuyhq.core.SessionManager.getInstance(requireContext()).getUserId();
+        discountRepository.getDealsByUserId(userId, new DataCallback<List<Deal>>() {
             @Override
             public void onSuccess(List<Deal> data) {
                 dealsList.clear();

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -72,6 +74,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     private TextView tvSelectedAddress;
     private TextView tvCoordinates;
     private LinearLayout btnConfirm;
+    private LinearLayout mapLoadingOverlay; // hidden once map is ready
 
     // ── Maps / Places ────────────────────────────────────────────────────
     private GoogleMap googleMap;
@@ -125,11 +128,12 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void initViews() {
-        etSearch         = findViewById(R.id.etSearchLocation);
-        lvSuggestions    = findViewById(R.id.lvLocationSuggestions);
+        etSearch          = findViewById(R.id.etSearchLocation);
+        lvSuggestions     = findViewById(R.id.lvLocationSuggestions);
         tvSelectedAddress = findViewById(R.id.tvSelectedAddress);
-        tvCoordinates    = findViewById(R.id.tvCoordinates);
-        btnConfirm       = findViewById(R.id.btnConfirmLocation);
+        tvCoordinates     = findViewById(R.id.tvCoordinates);
+        btnConfirm        = findViewById(R.id.btnConfirmLocation);
+        mapLoadingOverlay = findViewById(R.id.mapLoadingOverlay);
 
         // Pre-fill existing address
         if (!selectedAddress.isEmpty()) {
@@ -146,11 +150,29 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void initMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment)
-                getSupportFragmentManager().findFragmentById(R.id.mapFragment);
-        if (mapFragment != null) {
+        // ── Deferred fragment creation ────────────────────────────────────
+        // SupportMapFragment is NOT declared in XML on purpose.
+        //
+        // When the fragment is in XML, setContentView() creates it
+        // synchronously which immediately triggers the Maps SDK native
+        // library load (~30 000 page faults).  That load runs while
+        // Android is trying to send FocusEvent(hasFocus=false) to
+        // ProfilePage, stalling the shared main thread for >5 s → ANR.
+        //
+        // By adding the fragment programmatically after a short delay we
+        // let the activity enter-transition complete first (≈300 ms) so
+        // ProfilePage has already received and processed its FocusEvent
+        // before the heavy load begins.
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (isDestroyed() || isFinishing()) return;
+
+            SupportMapFragment mapFragment = new SupportMapFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.mapContainer, mapFragment)
+                    .commitAllowingStateLoss();
             mapFragment.getMapAsync(this);
-        }
+        }, 400); // 400 ms > typical enter-transition duration (≈300 ms)
     }
 
     // ── Google Map ───────────────────────────────────────────────────────
@@ -158,6 +180,9 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
+
+        // Map is ready – hide the loading overlay
+        if (mapLoadingOverlay != null) mapLoadingOverlay.setVisibility(View.GONE);
 
         // Restrict map panning to Sri Lanka
         googleMap.setLatLngBoundsForCameraTarget(SRI_LANKA_BOUNDS);

@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Deal {
     private String id;
+    private String userId;   // owner's userId (== shopId)
     private String title;
     private String shopName;
     private String discount;
@@ -29,7 +30,12 @@ public class Deal {
         this.updatedAt = updatedAt;
     }
 
-    public String getId() { return id; }
+    public String getId()          { return id; }
+    public void   setId(String id) { this.id = id; }
+
+    public String getUserId()              { return userId != null ? userId : ""; }
+    public void   setUserId(String userId) { this.userId = userId; }
+
     public String getTitle() { return title; }
     public String getShopName() { return shopName; }
     public String getDiscount() { return discount; }
@@ -40,13 +46,14 @@ public class Deal {
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("title", title);
-        map.put("shopName", shopName);
-        map.put("discount", discount);
+        map.put("userId",      userId != null ? userId : "");
+        map.put("title",       title);
+        map.put("shopName",    shopName);
+        map.put("discount",    discount);
         map.put("description", description);
-        map.put("validity", validity);
-        map.put("createdAt", createdAt);
-        map.put("updatedAt", updatedAt);
+        map.put("validity",    validity);
+        map.put("createdAt",   createdAt);
+        map.put("updatedAt",   updatedAt);
         return map;
     }
 
@@ -54,7 +61,7 @@ public class Deal {
         if (map == null) {
             return null;
         }
-        return new Deal(
+        Deal deal = new Deal(
                 id,
                 value(map.get("title")),
                 value(map.get("shopName")),
@@ -64,6 +71,8 @@ public class Deal {
                 longValue(map.get("createdAt")),
                 longValue(map.get("updatedAt"))
         );
+        deal.userId = value(map.get("userId"));
+        return deal;
     }
 
     private static String value(Object object) {
@@ -84,4 +93,3 @@ public class Deal {
         return 0L;
     }
 }
-

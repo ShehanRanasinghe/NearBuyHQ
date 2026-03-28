@@ -222,10 +222,10 @@ public class Dashboard extends AppCompatActivity {
     // ── Stats loading ─────────────────────────────────────────────────────
 
     private void loadDashboardStats() {
-        String shopId = session.getShopId();
+        String userId = session.getUserId();
 
         // Products count
-        productRepository.getProductsByShopId(shopId, "All",
+        productRepository.getProductsByShopId(userId, "All",
                 new DataCallback<List<ProductItem>>() {
                     @Override
                     public void onSuccess(List<ProductItem> items) {
@@ -255,8 +255,9 @@ public class Dashboard extends AppCompatActivity {
         long[] range = getDateRange(currentFilter);
         long from = range[0];
         long to   = range[1];
+        String userId = session.getUserId();
 
-        orderRepository.getOrdersByDateRange(from, to, new DataCallback<List<Order>>() {
+        orderRepository.getOrdersByShopIdAndDateRange(userId, from, to, new DataCallback<List<Order>>() {
             @Override
             public void onSuccess(List<Order> orders) {
                 int    count   = orders.size();
@@ -276,7 +277,7 @@ public class Dashboard extends AppCompatActivity {
             }
             @Override public void onError(Exception e) {
                 // Fallback to all-orders query if date-range fails (e.g. missing index)
-                orderRepository.getOrders(new DataCallback<List<Order>>() {
+                orderRepository.getOrdersByShopId(userId, new DataCallback<List<Order>>() {
                     @Override
                     public void onSuccess(List<Order> orders) {
                         int cnt = orders.size();

@@ -7,6 +7,7 @@ public class Order {
     private String orderId, customerName, status, orderDate;
     private String customerPhone;
     private String customerAddress;
+    private String shopId;
     private double orderTotal;
     private long createdAt;
     private long updatedAt;
@@ -30,15 +31,17 @@ public class Order {
         this.updatedAt = updatedAt;
     }
 
-    public String getOrderId()      { return orderId; }
-    public String getCustomerName() { return customerName; }
-    public String getStatus()       { return status; }
-    public double getOrderTotal()   { return orderTotal; }
-    public String getOrderDate()    { return orderDate; }
-    public String getCustomerPhone() { return customerPhone; }
+    public String getOrderId()         { return orderId; }
+    public String getCustomerName()    { return customerName; }
+    public String getStatus()          { return status; }
+    public double getOrderTotal()      { return orderTotal; }
+    public String getOrderDate()       { return orderDate; }
+    public String getCustomerPhone()   { return customerPhone; }
     public String getCustomerAddress() { return customerAddress; }
-    public long getCreatedAt() { return createdAt; }
-    public long getUpdatedAt() { return updatedAt; }
+    public long   getCreatedAt()       { return createdAt; }
+    public long   getUpdatedAt()       { return updatedAt; }
+    public String getShopId()          { return shopId == null ? "" : shopId; }
+    public void   setShopId(String shopId) { this.shopId = shopId; }
 
     public void setStatus(String status) {
         this.status = status;
@@ -47,23 +50,22 @@ public class Order {
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("customerName", customerName);
-        map.put("status", status);
-        map.put("orderTotal", orderTotal);
-        map.put("total", orderTotal);
-        map.put("orderDate", orderDate);
-        map.put("customerPhone", customerPhone);
+        map.put("customerName",    customerName);
+        map.put("status",          status);
+        map.put("orderTotal",      orderTotal);
+        map.put("total",           orderTotal);
+        map.put("orderDate",       orderDate);
+        map.put("customerPhone",   customerPhone);
         map.put("customerAddress", customerAddress);
-        map.put("createdAt", createdAt);
-        map.put("updatedAt", updatedAt);
+        map.put("shopId",          shopId == null ? "" : shopId);
+        map.put("createdAt",       createdAt);
+        map.put("updatedAt",       updatedAt);
         return map;
     }
 
     public static Order fromMap(String id, Map<String, Object> map) {
-        if (map == null) {
-            return null;
-        }
-        return new Order(
+        if (map == null) return null;
+        Order o = new Order(
                 id,
                 value(map.get("customerName")),
                 defaultIfEmpty(value(map.get("status")), "Pending"),
@@ -74,6 +76,8 @@ public class Order {
                 longValue(map.get("createdAt")),
                 longValue(map.get("updatedAt"))
         );
+        o.setShopId(value(map.get("shopId")));
+        return o;
     }
 
     private static String value(Object o) {

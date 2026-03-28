@@ -15,6 +15,7 @@ public class Promotion {
     public static final String TYPE_CUSTOM     = "Custom";
 
     private String id;
+    private String userId;  // ← owner's userId (== shopId)
     private String title;
     private String type;
     private int    discountPercentage;
@@ -86,16 +87,17 @@ public class Promotion {
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("title", title);
-        map.put("type", type);
+        map.put("userId",             userId != null ? userId : "");
+        map.put("title",              title);
+        map.put("type",               type);
         map.put("discountPercentage", discountPercentage);
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
-        map.put("productName", productName);
-        map.put("originalPrice", originalPrice);
-        map.put("isActive", isActive);
-        map.put("createdAt", createdAt);
-        map.put("updatedAt", updatedAt);
+        map.put("startDate",          startDate);
+        map.put("endDate",            endDate);
+        map.put("productName",        productName);
+        map.put("originalPrice",      originalPrice);
+        map.put("isActive",           isActive);
+        map.put("createdAt",          createdAt);
+        map.put("updatedAt",          updatedAt);
         return map;
     }
 
@@ -103,7 +105,7 @@ public class Promotion {
         if (map == null) {
             return null;
         }
-        return new Promotion(
+        Promotion p = new Promotion(
                 id,
                 value(map.get("title")),
                 value(map.get("type")),
@@ -116,6 +118,8 @@ public class Promotion {
                 longValue(map.get("createdAt")),
                 longValue(map.get("updatedAt"))
         );
+        p.userId = value(map.get("userId"));
+        return p;
     }
 
     // ── Derived helpers ─────────────────────────────────────────────────────
@@ -166,6 +170,9 @@ public class Promotion {
 
     public long getCreatedAt() { return createdAt; }
     public long getUpdatedAt() { return updatedAt; }
+
+    public String getUserId()              { return userId != null ? userId : ""; }
+    public void   setUserId(String userId) { this.userId = userId; }
 
     private static String value(Object value) {
         return value == null ? "" : String.valueOf(value).trim();

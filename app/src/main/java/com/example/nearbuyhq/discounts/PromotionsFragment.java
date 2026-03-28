@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.example.nearbuyhq.data.repository.OperationCallback;
@@ -60,7 +61,9 @@ public class PromotionsFragment extends Fragment {
                         .setTitle("Delete Promotion")
                         .setMessage("Remove \"" + p.getTitle() + "\"?\nThis cannot be undone.")
                         .setPositiveButton("Delete", (d, w) -> {
-                            discountRepository.deletePromotion(p.getId(), new OperationCallback() {
+                            discountRepository.deletePromotion(p.getId(),
+                                    SessionManager.getInstance(requireContext()).getUserId(),
+                                    new OperationCallback() {
                                 @Override
                                 public void onSuccess() {
                                     promotionList.remove(position);
@@ -95,7 +98,8 @@ public class PromotionsFragment extends Fragment {
     }
 
     private void loadPromotions() {
-        discountRepository.getPromotions(new DataCallback<List<Promotion>>() {
+        String userId = SessionManager.getInstance(requireContext()).getUserId();
+        discountRepository.getPromotionsByUserId(userId, new DataCallback<List<Promotion>>() {
             @Override
             public void onSuccess(List<Promotion> data) {
                 promotionList.clear();

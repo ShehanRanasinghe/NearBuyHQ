@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.example.nearbuyhq.data.repository.OperationCallback;
@@ -251,8 +252,8 @@ public class AddEditPromotion extends AppCompatActivity {
     // ── Load existing promotion for editing ──────────────────────────────────
 
     private void loadForEditing(String promoId) {
-
-        discountRepository.getPromotion(promoId, new DataCallback<Promotion>() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        discountRepository.getPromotion(promoId, userId, new DataCallback<Promotion>() {
             @Override
             public void onSuccess(Promotion data) {
                 editing = data;
@@ -326,6 +327,12 @@ public class AddEditPromotion extends AppCompatActivity {
         String id = (editing != null) ? editing.getId() : UUID.randomUUID().toString();
         Promotion p = new Promotion(id, title, type, discount,
                 startDate, endDate, product, originalPrice, active);
+
+        // Attach owner's userId so the repository can dual-write to the subcollection
+        String userId = (editing != null && !editing.getUserId().isEmpty())
+                ? editing.getUserId()
+                : SessionManager.getInstance(this).getUserId();
+        p.setUserId(userId);
 
 
         setSaving(true);

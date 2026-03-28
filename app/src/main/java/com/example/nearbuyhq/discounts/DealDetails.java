@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
 import com.example.nearbuyhq.data.repository.OperationCallback;
@@ -55,7 +56,8 @@ public class DealDetails extends AppCompatActivity {
         if (validity != null) dealValidity.setText(validity);
 
         if (dealId != null && !dealId.trim().isEmpty()) {
-            discountRepository.getDeal(dealId, new DataCallback<Deal>() {
+            String userId = SessionManager.getInstance(this).getUserId();
+            discountRepository.getDeal(dealId, userId, new DataCallback<Deal>() {
                 @Override
                 public void onSuccess(Deal data) {
                     if (data == null) {
@@ -94,7 +96,8 @@ public class DealDetails extends AppCompatActivity {
                 Toast.makeText(this, "Missing deal ID", Toast.LENGTH_SHORT).show();
                 return;
             }
-            discountRepository.deleteDeal(dealId, new OperationCallback() {
+            String userId = SessionManager.getInstance(this).getUserId();
+            discountRepository.deleteDeal(dealId, userId, new OperationCallback() {
                 @Override
                 public void onSuccess() {
                     Toast.makeText(DealDetails.this, "Deal Deleted", Toast.LENGTH_SHORT).show();

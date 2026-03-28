@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.data.repository.ProductRepository;
@@ -149,7 +150,8 @@ public class Products_List extends AppCompatActivity {
     }
 
     private void loadProducts() {
-        productRepository.getProducts("All", new DataCallback<List<ProductItem>>() {
+        String userId = com.example.nearbuyhq.core.SessionManager.getInstance(this).getUserId();
+        productRepository.getProductsByShopId(userId, "All", new DataCallback<List<ProductItem>>() {
             @Override
             public void onSuccess(List<ProductItem> data) {
                 allProducts.clear();
@@ -216,7 +218,8 @@ public class Products_List extends AppCompatActivity {
     }
 
     private void deleteProduct(ProductItem item) {
-        productRepository.deleteProduct(item.getId(), new OperationCallback() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        productRepository.deleteProduct(item.getId(), userId, new OperationCallback() {
             @Override
             public void onSuccess() {
                 Toast.makeText(Products_List.this, "Product deleted", Toast.LENGTH_SHORT).show();

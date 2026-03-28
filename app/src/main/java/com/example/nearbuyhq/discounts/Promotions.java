@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.DiscountRepository;
@@ -69,7 +70,8 @@ public class Promotions extends AppCompatActivity {
                             if (!FirebaseConfig.isFirebaseEnabled()) {
                                 return;
                             }
-                            discountRepository.deletePromotion(p.getId(), new OperationCallback() {
+                            String userId = SessionManager.getInstance(Promotions.this).getUserId();
+                            discountRepository.deletePromotion(p.getId(), userId, new OperationCallback() {
                                 @Override
                                 public void onSuccess() {
                                     promotionList.remove(position);
@@ -112,7 +114,8 @@ public class Promotions extends AppCompatActivity {
             return;
         }
 
-        discountRepository.getPromotions(new DataCallback<List<Promotion>>() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        discountRepository.getPromotionsByUserId(userId, new DataCallback<List<Promotion>>() {
             @Override
             public void onSuccess(List<Promotion> data) {
                 promotionList.clear();

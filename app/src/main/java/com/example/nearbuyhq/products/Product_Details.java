@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.OperationCallback;
 import com.example.nearbuyhq.data.repository.ProductRepository;
 
@@ -114,7 +115,8 @@ public class Product_Details extends AppCompatActivity {
             return;
         }
 
-        productRepository.deleteProduct(productId, new OperationCallback() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        productRepository.deleteProduct(productId, userId, new OperationCallback() {
             @Override
             public void onSuccess() {
                 Toast.makeText(Product_Details.this, "Product deleted", Toast.LENGTH_SHORT).show();

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nearbuyhq.R;
+import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.DataCallback;
 import com.example.nearbuyhq.data.repository.ReportRepository;
 
@@ -81,7 +82,8 @@ public class Reports extends AppCompatActivity {
     // ── Load from Firestore ───────────────────────────────────────────────
 
     private void loadReports() {
-        reportRepository.getAllReports(new DataCallback<List<Map<String, Object>>>() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        reportRepository.getReportsByShop(userId, new DataCallback<List<Map<String, Object>>>() {
             @Override
             public void onSuccess(List<Map<String, Object>> data) {
                 allReports.clear();

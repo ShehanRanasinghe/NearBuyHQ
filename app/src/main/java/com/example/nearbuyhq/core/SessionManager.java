@@ -98,10 +98,15 @@ public class SessionManager {
 
     /**
      * Get the shopId for the currently logged-in owner.
-     * Returns empty string if no shop has been created yet.
+     * Because userId == shopId (registering an account also creates the shop),
+     * this falls back to getUserId() when no explicit shopId has been stored yet.
      */
     public String getShopId() {
-        return prefs.getString(KEY_SHOP_ID, "");
+        String shopId = prefs.getString(KEY_SHOP_ID, "");
+        if (shopId == null || shopId.trim().isEmpty()) {
+            return getUserId(); // userId IS the shopId
+        }
+        return shopId;
     }
 
     /** Returns true if the user has already created their shop. */
