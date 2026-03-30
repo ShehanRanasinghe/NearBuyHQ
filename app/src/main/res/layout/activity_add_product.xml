@@ -93,28 +93,55 @@
                     android:layout_marginBottom="12dp"
                     android:gravity="center_horizontal">
 
-                    <LinearLayout
+                <FrameLayout
                         android:id="@+id/layout_image_upload"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        android:orientation="vertical"
                         android:background="@drawable/bg_image_upload"
-                        android:gravity="center"
-                        android:layout_marginBottom="10dp">
+                        android:layout_marginBottom="10dp"
+                        android:clickable="true"
+                        android:focusable="true">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="📷"
-                            android:textSize="32sp" />
+                        <!-- Placeholder shown before an image is chosen -->
+                        <LinearLayout
+                            android:id="@+id/upload_placeholder"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Upload"
-                            android:textColor="#9AA0AC"
-                            android:textSize="11sp" />
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="📷"
+                                android:textSize="32sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upload"
+                                android:textColor="#9AA0AC"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+
+                        <!-- Preview of the selected / uploaded image -->
+                        <ImageView
+                            android:id="@+id/img_product_preview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:visibility="gone"
+                            android:contentDescription="Product image preview" />
+
+                        <!-- Upload-in-progress spinner -->
+                        <ProgressBar
+                            android:id="@+id/upload_progress"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_gravity="center"
+                            android:visibility="gone" />
+
+                    </FrameLayout>
 
                     <TextView
                         android:layout_width="wrap_content"

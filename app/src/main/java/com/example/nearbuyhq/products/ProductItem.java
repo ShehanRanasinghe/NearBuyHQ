@@ -18,6 +18,7 @@ public class ProductItem {
     private String status;
     private long createdAt;
     private long updatedAt;
+    private String imageUrl;   // Supabase Storage public URL (may be null)
 
     public ProductItem(String id, String shopId, String name, String description, String category,
                        String unit, double price, int quantity, String status, long createdAt, long updatedAt) {
@@ -48,6 +49,8 @@ public class ProductItem {
 
     public void setId(String id) { this.id = id; }
     public void setUpdatedAt(long updatedAt) { this.updatedAt = updatedAt; }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public boolean isOutOfStock() {
         return quantity <= 0;
@@ -76,6 +79,9 @@ public class ProductItem {
         map.put("status", status);
         map.put("createdAt", createdAt);
         map.put("updatedAt", updatedAt);
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            map.put("imageUrl", imageUrl);
+        }
         return map;
     }
 
@@ -117,6 +123,11 @@ public class ProductItem {
         }
         if (item.updatedAt == 0L) {
             item.updatedAt = item.createdAt;
+        }
+
+        String imageUrl = stringValue(map.get("imageUrl"));
+        if (!imageUrl.isEmpty()) {
+            item.setImageUrl(imageUrl);
         }
 
         return item;
