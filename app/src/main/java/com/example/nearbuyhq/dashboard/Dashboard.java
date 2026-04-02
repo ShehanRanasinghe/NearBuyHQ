@@ -273,7 +273,9 @@ public class Dashboard extends AppCompatActivity {
                 int    count   = orders.size();
                 double revenue = 0;
                 for (Order o : orders) {
-                    if ("Delivered".equalsIgnoreCase(o.getStatus())) {
+                    // Sum all orders except explicitly cancelled/rejected ones
+                    String s = o.getStatus();
+                    if (!"Cancelled".equalsIgnoreCase(s) && !"Rejected".equalsIgnoreCase(s)) {
                         revenue += o.getOrderTotal();
                     }
                 }
@@ -293,12 +295,16 @@ public class Dashboard extends AppCompatActivity {
                         int    cnt = 0;
                         double rev = 0;
                         for (Order o : orders) {
-                            long created = o.getCreatedAt();
+                            long created = o.getCreatedAt() != 0 ? o.getCreatedAt() : o.getUpdatedAt();
                             // For Lifetime the range is 0..MAX so everything passes;
                             // for other filters only orders within the window are counted.
                             if (created >= from && created <= to) {
                                 cnt++;
-                                if ("Delivered".equalsIgnoreCase(o.getStatus())) rev += o.getOrderTotal();
+                                // Sum all orders except explicitly cancelled/rejected ones
+                                String s = o.getStatus();
+                                if (!"Cancelled".equalsIgnoreCase(s) && !"Rejected".equalsIgnoreCase(s)) {
+                                    rev += o.getOrderTotal();
+                                }
                             }
                         }
                         final double finalRev = rev;
