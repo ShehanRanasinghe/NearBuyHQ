@@ -59,7 +59,7 @@ public class Dashboard extends AppCompatActivity {
     private ImageView btnSearch, btnNotifications;
 
     // ── Stats TextViews ───────────────────────────────────────────────────
-    private TextView tvAdminName, tvShopName, tvShopStatus;
+    private TextView tvAdminName, tvShopName;
     private TextView tvTotalProducts, tvLowStock, tvTotalOrders, tvTotalRevenue;
 
     // ── Business Overview filter button ──────────────────────────────────
@@ -182,7 +182,6 @@ public class Dashboard extends AppCompatActivity {
 
         tvAdminName    = findViewById(R.id.tvAdminName);
         tvShopName     = findViewById(R.id.tvShopName);
-        tvShopStatus   = findViewById(R.id.tvShopStatus);
         tvTotalProducts = findViewById(R.id.tvTotalProducts);
         tvLowStock     = findViewById(R.id.tvLowStock);
         tvTotalOrders  = findViewById(R.id.tvTotalOrders);
@@ -198,7 +197,6 @@ public class Dashboard extends AppCompatActivity {
         String shop = session.getShopName();
         if (tvAdminName  != null) tvAdminName.setText(name.isEmpty() ? "Shop Owner" : name);
         if (tvShopName   != null) tvShopName.setText(shop.isEmpty()  ? "My Shop"    : shop);
-        if (tvShopStatus != null) tvShopStatus.setText("● OPEN");
     }
 
     /**
@@ -270,12 +268,13 @@ public class Dashboard extends AppCompatActivity {
         orderRepository.getOrdersByShopIdAndDateRange(userId, from, to, new DataCallback<List<Order>>() {
             @Override
             public void onSuccess(List<Order> orders) {
-                int    count   = orders.size();
+                int    count   = 0;
                 double revenue = 0;
                 for (Order o : orders) {
-                    // Sum all orders except explicitly cancelled/rejected ones
+                    // Only count + sum non-cancelled/non-rejected orders
                     String s = o.getStatus();
                     if (!"Cancelled".equalsIgnoreCase(s) && !"Rejected".equalsIgnoreCase(s)) {
+                        count++;
                         revenue += o.getOrderTotal();
                     }
                 }
@@ -296,13 +295,12 @@ public class Dashboard extends AppCompatActivity {
                         double rev = 0;
                         for (Order o : orders) {
                             long created = o.getCreatedAt() != 0 ? o.getCreatedAt() : o.getUpdatedAt();
-                            // For Lifetime the range is 0..MAX so everything passes;
-                            // for other filters only orders within the window are counted.
+                            // Normalize: some apps store timestamps in seconds instead of milliseconds
+                            if (created > 0 && created < 100_000_000_000L) created *= 1000L;
                             if (created >= from && created <= to) {
-                                cnt++;
-                                // Sum all orders except explicitly cancelled/rejected ones
                                 String s = o.getStatus();
                                 if (!"Cancelled".equalsIgnoreCase(s) && !"Rejected".equalsIgnoreCase(s)) {
+                                    cnt++;
                                     rev += o.getOrderTotal();
                                 }
                             }

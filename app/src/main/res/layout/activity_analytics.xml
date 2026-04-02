@@ -328,7 +328,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
 
                     <View
                         android:layout_width="8dp"
@@ -346,6 +347,38 @@
 
                     <TextView
                         android:id="@+id/txtCancelledOrders"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        android:textColor="@color/text_dark_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Processing Orders -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/bg_dot_blue" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/processing_orders"
+                        android:textColor="@color/text_dark_primary"
+                        android:textSize="14sp"
+                        android:layout_marginStart="12dp" />
+
+                    <TextView
+                        android:id="@+id/txtProcessingOrders"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="—"

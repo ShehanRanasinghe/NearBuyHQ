@@ -31,8 +31,8 @@
     <string name="low_stock">Low Stock</string>
     <string name="low_stock_items">Low Stock Items</string>
     <string name="orders">Orders</string>
-    <string name="todays_orders">Today\'s Orders</string>
-    <string name="todays_revenue">Today\'s Revenue</string>
+    <string name="todays_orders">Orders</string>
+    <string name="todays_revenue">Revenue</string>
 
     <!-- Quick Actions -->
     <string name="add_product">Add Product</string>
@@ -107,6 +107,7 @@
     <string name="top_selling">Top Selling</string>
     <string name="top_category">Top Category</string>
     <string name="pending_orders">Pending Orders</string>
+    <string name="processing_orders">Processing Orders</string>
     <string name="completed_orders">Completed Orders</string>
     <string name="cancelled_orders">Cancelled Orders</string>
     <string name="this_week">This Week</string>

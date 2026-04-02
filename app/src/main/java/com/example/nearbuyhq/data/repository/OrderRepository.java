@@ -120,9 +120,11 @@ public class OrderRepository {
                     List<Order> orders = new ArrayList<>();
                     for (DocumentSnapshot doc : snaps.getDocuments()) {
                         Order o = Order.fromMap(doc.getId(), doc.getData());
-                        if (o == null) continue;
-                        long ts = o.getCreatedAt() != 0 ? o.getCreatedAt() : o.getUpdatedAt();
-                        if (ts >= fromMs && ts <= toMs) orders.add(o);
+                    if (o == null) continue;
+                    long ts = o.getCreatedAt() != 0 ? o.getCreatedAt() : o.getUpdatedAt();
+                    // Normalize: some apps store timestamps in seconds instead of milliseconds
+                    if (ts > 0 && ts < 100_000_000_000L) ts *= 1000L;
+                    if (ts >= fromMs && ts <= toMs) orders.add(o);
                     }
                     Collections.sort(orders, (a, b) -> Long.compare(b.getCreatedAt(), a.getCreatedAt()));
                     callback.onSuccess(orders);

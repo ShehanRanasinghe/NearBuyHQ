@@ -46,6 +46,7 @@ public class Analytics extends AppCompatActivity {
 
     // ── Stat TextViews ────────────────────────────────────────────────────
     private TextView txtTotalRevenue, txtTotalSales;
+    private TextView txtCompletedOrders, txtPendingOrders, txtCancelledOrders, txtProcessingOrders;
 
     // ── Sales Bar Chart ───────────────────────────────────────────────────
     private BarChart salesBarChart;
@@ -67,8 +68,12 @@ public class Analytics extends AppCompatActivity {
         orderRepository = new OrderRepository();
 
         // Stat cards
-        txtTotalRevenue = findViewById(R.id.txtTotalRevenue);
-        txtTotalSales   = findViewById(R.id.txtTotalSales);
+        txtTotalRevenue    = findViewById(R.id.txtTotalRevenue);
+        txtTotalSales      = findViewById(R.id.txtTotalSales);
+        txtCompletedOrders  = findViewById(R.id.txtCompletedOrders);
+        txtPendingOrders    = findViewById(R.id.txtPendingOrders);
+        txtCancelledOrders  = findViewById(R.id.txtCancelledOrders);
+        txtProcessingOrders = findViewById(R.id.txtProcessingOrders);
 
         // Bar chart
         salesBarChart = findViewById(R.id.salesBarChart);
@@ -122,8 +127,12 @@ public class Analytics extends AppCompatActivity {
         orderRepository.getOrdersByShopId(userId, new DataCallback<List<Order>>() {
             @Override
             public void onSuccess(List<Order> orders) {
-                double totalRevenue = 0;
-                int    deliveredCount = 0;
+                double totalRevenue    = 0;
+                int    totalSales      = 0;
+                int    completedCount  = 0;
+                int    pendingCount    = 0;
+                int    processingCount = 0;
+                int    cancelledCount  = 0;
 
                 // --- compute start-of-week (Monday 00:00:00) in millis ---
                 Calendar weekCal = Calendar.getInstance();
@@ -142,12 +151,33 @@ public class Analytics extends AppCompatActivity {
                 float[] dailyRevenue = new float[7];
 
                 for (Order o : orders) {
-                    if ("Delivered".equalsIgnoreCase(o.getStatus())) {
-                        totalRevenue += o.getOrderTotal();
-                        deliveredCount++;
+                    String status = o.getStatus();
+                    boolean isCancelled = "Cancelled".equalsIgnoreCase(status)
+                            || "Rejected".equalsIgnoreCase(status);
+                    boolean isDelivered = "Delivered".equalsIgnoreCase(status)
+                            || "Completed".equalsIgnoreCase(status);
+
+                    // Order statistics counters
+                    if (isDelivered) {
+                        completedCount++;
+                    } else if (isCancelled) {
+                        cancelledCount++;
+                    } else if ("Processing".equalsIgnoreCase(status)) {
+                        processingCount++;
+                    } else {
+                        pendingCount++; // Pending, Open, etc.
                     }
+
+                    // Total revenue + sales = all non-cancelled orders
+                    if (!isCancelled) {
+                        totalRevenue += o.getOrderTotal();
+                        totalSales++;
+                    }
+
+                    // Weekly chart — skip cancelled orders, normalize timestamp
                     long ts = o.getCreatedAt();
-                    if (ts > 0 && ts >= weekStart && ts < weekEnd) {
+                    if (ts > 0 && ts < 100_000_000_000L) ts *= 1000L;
+                    if (!isCancelled && ts >= weekStart && ts < weekEnd) {
                         Calendar oc = Calendar.getInstance();
                         oc.setTimeInMillis(ts);
                         // Calendar.SUNDAY=1, MONDAY=2 … SATURDAY=7
@@ -157,15 +187,27 @@ public class Analytics extends AppCompatActivity {
                     }
                 }
 
-                final double revenue = totalRevenue;
-                final int    sales   = deliveredCount;
+                final double revenue    = totalRevenue;
+                final int    sales      = totalSales;
+                final int    completed  = completedCount;
+                final int    pending    = pendingCount;
+                final int    processing = processingCount;
+                final int    cancelled  = cancelledCount;
                 final float[] weeklyData = dailyRevenue;
 
                 runOnUiThread(() -> {
-                    if (txtTotalRevenue != null)
+                    if (txtTotalRevenue    != null)
                         txtTotalRevenue.setText(String.format(Locale.US, "Rs. %.0f", revenue));
-                    if (txtTotalSales != null)
+                    if (txtTotalSales      != null)
                         txtTotalSales.setText(String.valueOf(sales));
+                    if (txtCompletedOrders != null)
+                        txtCompletedOrders.setText(String.valueOf(completed));
+                    if (txtPendingOrders   != null)
+                        txtPendingOrders.setText(String.valueOf(pending));
+                    if (txtProcessingOrders != null)
+                        txtProcessingOrders.setText(String.valueOf(processing));
+                    if (txtCancelledOrders != null)
+                        txtCancelledOrders.setText(String.valueOf(cancelled));
                     renderBarChart(weeklyData);
                 });
             }
