@@ -16,6 +16,7 @@ public class Order {
     private String customerPhone;
     private String customerAddress;
     private String shopId;
+    private String customerId;   // UID of the customer who placed the order
     private double orderTotal;
     private long createdAt;
     private long updatedAt;
@@ -57,6 +58,8 @@ public class Order {
     public long   getUpdatedAt()       { return updatedAt; }
     public String getShopId()          { return shopId == null ? "" : shopId; }
     public void   setShopId(String shopId) { this.shopId = shopId; }
+    public String getCustomerId()      { return customerId == null ? "" : customerId; }
+    public void   setCustomerId(String customerId) { this.customerId = customerId; }
     public List<Map<String, Object>> getItems() { return items; }
     public String getItemsSummary()    { return itemsSummary == null ? "" : itemsSummary; }
 
@@ -145,6 +148,12 @@ public class Order {
                 updatedAt
         );
         o.setShopId(firstNonEmpty(value(map.get("shopId")), value(map.get("shop_id"))));
+        o.setCustomerId(firstNonEmpty(
+                value(map.get("customerId")),
+                value(map.get("customer_id")),
+                value(map.get("userId")),
+                value(map.get("user_id"))
+        ));
 
         // Extract items list – try common field names used by customer apps
         Object rawItems = firstNonNullFrom(map, "items", "orderItems", "products", "cartItems", "lineItems");

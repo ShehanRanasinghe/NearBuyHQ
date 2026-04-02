@@ -11,8 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * All order data lives under NearBuyHQ/{shopId}/orders.
@@ -140,12 +142,59 @@ public class OrderRepository {
 
     // ── Update ────────────────────────────────────────────────────────────
 
+    /**
+     * Updates the order status in the admin's shop collection AND, if a customerId is
+     * stored on the order, also mirrors the change into the customer's own orders
+     * collection at: customers/{customerId}/orders/{orderId}.
+     */
     public void updateOrderStatus(String orderId, String shopId, String status, OperationCallback callback) {
         if (!FirebaseConfig.isFirebaseEnabled()) { callback.onError(new IllegalStateException("Firebase is disabled")); return; }
 
+        Map<String, Object> update = new HashMap<>();
+        update.put("status", status);
+        update.put("updatedAt", System.currentTimeMillis());
+
+        // Step 1: update admin copy
         ordersRef(shopId).document(orderId)
-                .update("status", status, "updatedAt", System.currentTimeMillis())
-                .addOnSuccessListener(unused -> callback.onSuccess())
+                .update(update)
+                .addOnSuccessListener(unused -> {
+                    // Step 2: look up customerId stored in the admin order document,
+                    // then mirror the status into the customer's collection
+                    ordersRef(shopId).document(orderId).get()
+                            .addOnSuccessListener(doc -> {
+                                if (doc.exists()) {
+                                    String customerId = null;
+                                    for (String key : new String[]{"customerId", "customer_id", "userId", "user_id"}) {
+                                        Object v = doc.get(key);
+                                        if (v != null && !String.valueOf(v).trim().isEmpty()) {
+                                            customerId = String.valueOf(v).trim();
+                                            break;
+                                        }
+                                    }
+                                    if (customerId != null && !customerId.isEmpty()) {
+                                        // Mirror to customer's collection
+                                        db.collection("NearBuy")
+                                                .document(customerId)
+                                                .collection("orders")
+                                                .document(orderId)
+                                                .update(update)
+                                                .addOnSuccessListener(u -> callback.onSuccess())
+                                                .addOnFailureListener(e -> {
+                                                    // Customer copy update failed – admin copy already updated,
+                                                    // so still report success but log the failure.
+                                                    android.util.Log.w("OrderRepository",
+                                                            "Customer order status sync failed: " + e.getMessage());
+                                                    callback.onSuccess();
+                                                });
+                                    } else {
+                                        callback.onSuccess(); // no customerId – nothing to mirror
+                                    }
+                                } else {
+                                    callback.onSuccess();
+                                }
+                            })
+                            .addOnFailureListener(e -> callback.onSuccess()); // admin update already done
+                })
                 .addOnFailureListener(callback::onError);
     }
 

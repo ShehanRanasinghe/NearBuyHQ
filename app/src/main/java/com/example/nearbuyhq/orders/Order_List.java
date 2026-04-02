@@ -40,7 +40,7 @@ public class Order_List extends AppCompatActivity {
     private List<Order> allOrders;
     private ImageView btnBack;
     private TextView tvTotalOrders, tvPendingCount, tvDeliveredCount;
-    private TextView tabAll, tabPending, tabProcessing, tabDelivered;
+    private TextView tabAll, tabPending, tabProcessing, tabDelivered, tabCancelled;
     private OrderRepository orderRepository;
     private String activeFilter = "All";
     private String searchQuery = "";
@@ -75,6 +75,7 @@ public class Order_List extends AppCompatActivity {
         tabPending = findViewById(R.id.tab_pending);
         tabProcessing = findViewById(R.id.tab_processing);
         tabDelivered = findViewById(R.id.tab_delivered);
+        tabCancelled = findViewById(R.id.tab_cancelled);
 
         orderRepository = new OrderRepository();
         allOrders = new ArrayList<>();
@@ -209,6 +210,7 @@ public class Order_List extends AppCompatActivity {
         tabPending.setOnClickListener(v -> setFilter("Pending"));
         tabProcessing.setOnClickListener(v -> setFilter("Processing"));
         tabDelivered.setOnClickListener(v -> setFilter("Delivered"));
+        tabCancelled.setOnClickListener(v -> setFilter("Cancelled"));
     }
 
     private void setFilter(String filter) {

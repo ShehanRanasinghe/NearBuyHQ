@@ -97,6 +97,8 @@ public class Order_details extends AppCompatActivity {
             selectedStatus = "Processing"; applyStatusText(); });
         findViewById(R.id.btn_delivered).setOnClickListener(v -> {
             selectedStatus = "Delivered"; applyStatusText(); });
+        findViewById(R.id.btn_cancelled).setOnClickListener(v -> {
+            selectedStatus = "Cancelled"; applyStatusText(); });
     }
 
     private void applyStatusText() {

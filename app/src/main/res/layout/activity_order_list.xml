@@ -147,6 +147,11 @@
                     android:layout_width="wrap_content" android:layout_height="36dp"
                     android:text="Delivered" android:textColor="#9AA0AC" android:textSize="13sp"
                     android:gravity="center" android:paddingHorizontal="20dp"
+                    android:background="@drawable/bg_tab_inactive" android:layout_marginEnd="8dp" />
+                <TextView android:id="@+id/tab_cancelled"
+                    android:layout_width="wrap_content" android:layout_height="36dp"
+                    android:text="Cancelled" android:textColor="#9AA0AC" android:textSize="13sp"
+                    android:gravity="center" android:paddingHorizontal="20dp"
                     android:background="@drawable/bg_tab_inactive" />
             </LinearLayout>
         </HorizontalScrollView>
