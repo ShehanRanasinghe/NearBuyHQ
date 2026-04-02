@@ -43,16 +43,42 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportVi
     @Override
     public void onBindViewHolder(@NonNull ReportViewHolder holder, int position) {
         Report report = reportsList.get(position);
-        holder.reportType.setText(report.getType());
-        holder.reportSubject.setText(report.getSubject());
-        holder.reportDescription.setText(report.getDescription());
-        holder.reportStatus.setText(report.getStatus());
 
-        // Set status color
-        if ("Pending".equals(report.getStatus())) {
-            holder.reportStatus.setTextColor(holder.itemView.getContext().getColor(R.color.warning_orange));
+        // Type badge
+        String type = report.getType();
+        holder.reportType.setText(type == null || type.isEmpty() ? "Feedback" : type);
+
+        // Report text (main content from Firestore "reportText")
+        String desc = report.getDescription();
+        holder.reportDescription.setText(desc == null || desc.isEmpty() ? "—" : desc);
+
+        // Customer name
+        String customer = report.getCustomerName();
+        holder.tvCustomerName.setText(customer == null || customer.isEmpty() ? "—" : customer);
+
+        // Order reference (show short form)
+        String orderRef = report.getOrderRef();
+        if (orderRef == null || orderRef.isEmpty()) {
+            holder.tvOrderRef.setText("—");
         } else {
-            holder.reportStatus.setTextColor(holder.itemView.getContext().getColor(R.color.success_green));
+            // Show first 16 chars of the order ID to keep it compact
+            holder.tvOrderRef.setText(orderRef.length() > 16 ? orderRef.substring(0, 16) + "…" : orderRef);
+        }
+
+        // Status badge
+        String status = report.getStatus();
+        if (status == null || status.isEmpty()) status = "Open";
+        holder.reportStatus.setText(status);
+
+        if ("Resolved".equalsIgnoreCase(status) || "Closed".equalsIgnoreCase(status)) {
+            holder.reportStatus.setTextColor(0xFF27AE60);
+            holder.reportStatus.setBackgroundResource(R.drawable.bg_status_delivered);
+        } else if ("Processing".equalsIgnoreCase(status)) {
+            holder.reportStatus.setTextColor(0xFF2980B9);
+            holder.reportStatus.setBackgroundResource(R.drawable.bg_status_processing);
+        } else {
+            holder.reportStatus.setTextColor(0xFFF5A623);
+            holder.reportStatus.setBackgroundResource(R.drawable.bg_status_pending);
         }
 
         holder.itemView.setOnClickListener(v -> listener.onReportClick(report));
@@ -64,15 +90,15 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportVi
     }
 
     static class ReportViewHolder extends RecyclerView.ViewHolder {
-        TextView reportType, reportSubject, reportDescription, reportStatus;
+        TextView reportType, reportDescription, reportStatus, tvCustomerName, tvOrderRef;
 
         public ReportViewHolder(@NonNull View itemView) {
             super(itemView);
-            reportType = itemView.findViewById(R.id.reportType);
-            reportSubject = itemView.findViewById(R.id.reportSubject);
+            reportType        = itemView.findViewById(R.id.reportType);
             reportDescription = itemView.findViewById(R.id.reportDescription);
-            reportStatus = itemView.findViewById(R.id.reportStatus);
+            reportStatus      = itemView.findViewById(R.id.reportStatus);
+            tvCustomerName    = itemView.findViewById(R.id.tv_customer_name);
+            tvOrderRef        = itemView.findViewById(R.id.tv_order_ref);
         }
     }
 }
-

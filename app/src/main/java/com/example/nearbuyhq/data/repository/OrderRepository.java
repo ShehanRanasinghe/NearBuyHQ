@@ -6,10 +6,10 @@ import com.example.nearbuyhq.orders.Order;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -63,14 +63,22 @@ public class OrderRepository {
     public void getOrdersByShopId(String shopId, DataCallback<List<Order>> callback) {
         if (!FirebaseConfig.isFirebaseEnabled()) { callback.onError(new IllegalStateException("Firebase is disabled")); return; }
 
-        ordersRef(shopId).orderBy("updatedAt", Query.Direction.DESCENDING)
-                .get()
+        // NOTE: We intentionally avoid orderBy("updatedAt") here because Firestore silently
+        // excludes any document that doesn't have the sorted field.  Orders created by the
+        // customer app may not have 'updatedAt', so we fetch ALL documents and sort client-side.
+        ordersRef(shopId).get()
                 .addOnSuccessListener(snaps -> {
                     List<Order> orders = new ArrayList<>();
                     for (DocumentSnapshot doc : snaps.getDocuments()) {
                         Order o = Order.fromMap(doc.getId(), doc.getData());
                         if (o != null) orders.add(o);
                     }
+                    // Sort newest-first by updatedAt (falls back to createdAt then 0)
+                    Collections.sort(orders, (a, b) -> {
+                        long ta = a.getUpdatedAt() != 0 ? a.getUpdatedAt() : a.getCreatedAt();
+                        long tb = b.getUpdatedAt() != 0 ? b.getUpdatedAt() : b.getCreatedAt();
+                        return Long.compare(tb, ta);
+                    });
                     callback.onSuccess(orders);
                 })
                 .addOnFailureListener(callback::onError);
@@ -105,17 +113,18 @@ public class OrderRepository {
                                               DataCallback<List<Order>> callback) {
         if (!FirebaseConfig.isFirebaseEnabled()) { callback.onError(new IllegalStateException("Firebase is disabled")); return; }
 
-        ordersRef(shopId)
-                .whereGreaterThanOrEqualTo("createdAt", fromMs)
-                .whereLessThanOrEqualTo("createdAt", toMs)
-                .orderBy("createdAt", Query.Direction.DESCENDING)
-                .get()
+        // Fetch all orders and filter by date client-side to avoid Firestore composite-index
+        // requirements and the silent exclusion of docs that lack 'createdAt'.
+        ordersRef(shopId).get()
                 .addOnSuccessListener(snaps -> {
                     List<Order> orders = new ArrayList<>();
                     for (DocumentSnapshot doc : snaps.getDocuments()) {
                         Order o = Order.fromMap(doc.getId(), doc.getData());
-                        if (o != null) orders.add(o);
+                        if (o == null) continue;
+                        long ts = o.getCreatedAt() != 0 ? o.getCreatedAt() : o.getUpdatedAt();
+                        if (ts >= fromMs && ts <= toMs) orders.add(o);
                     }
+                    Collections.sort(orders, (a, b) -> Long.compare(b.getCreatedAt(), a.getCreatedAt()));
                     callback.onSuccess(orders);
                 })
                 .addOnFailureListener(callback::onError);

@@ -88,13 +88,31 @@ public class Reports extends AppCompatActivity {
             public void onSuccess(List<Map<String, Object>> data) {
                 allReports.clear();
                 for (Map<String, Object> map : data) {
-                    allReports.add(new Report(
-                            stringFrom(map, "id"),
-                            stringFrom(map, "type"),
-                            stringFrom(map, "subject"),
-                            stringFrom(map, "description"),
-                            stringFrom(map, "status")
-                    ));
+                    // Support multiple field-naming conventions used by different apps
+                    String id   = firstFrom(map, "id", "reportId", "report_id");
+
+                    // Main report text – Firestore stores it as "reportText"
+                    String desc = firstFrom(map, "reportText", "description", "reportDescription",
+                            "reportMessage", "details", "message", "body", "report_description");
+
+                    // No dedicated subject field in Firestore – derive from reportText
+                    String subj = firstFrom(map, "subject", "reportSubject", "reportTitle", "title");
+                    if (subj.isEmpty() && !desc.isEmpty()) {
+                        subj = desc.length() > 45 ? desc.substring(0, 45) + "…" : desc;
+                    }
+
+                    // No type field in Firestore – default to "Feedback"
+                    String type = firstFrom(map, "type", "reportType", "report_type", "category");
+                    if (type.isEmpty()) type = "Feedback";
+
+                    // No status field in Firestore – default to "Open"
+                    String status = firstFrom(map, "status", "state", "reportStatus");
+                    if (status.isEmpty()) status = "Open";
+
+                    String customerName = firstFrom(map, "customerName", "customer_name", "name");
+                    String orderRef     = firstFrom(map, "orderId", "order_id", "orderRef");
+
+                    allReports.add(new Report(id, type, subj, desc, status, customerName, orderRef));
                 }
                 applySearch();
             }
@@ -135,15 +153,29 @@ public class Reports extends AppCompatActivity {
 
     private void onReportClick(Report report) {
         Intent intent = new Intent(this, ReportDetails.class);
-        intent.putExtra("report_id",          report.getId());
-        intent.putExtra("report_type",        report.getType());
-        intent.putExtra("report_subject",     report.getSubject());
-        intent.putExtra("report_description", report.getDescription());
-        intent.putExtra("report_status",      report.getStatus());
+        intent.putExtra("report_id",            report.getId());
+        intent.putExtra("report_type",          report.getType());
+        intent.putExtra("report_subject",       report.getSubject());
+        intent.putExtra("report_description",   report.getDescription());
+        intent.putExtra("report_status",        report.getStatus());
+        intent.putExtra("report_customer_name", report.getCustomerName());
+        intent.putExtra("report_order_ref",     report.getOrderRef());
         startActivity(intent);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────
+
+    /** Return the first non-empty value found under any of the given keys. */
+    private String firstFrom(Map<String, Object> map, String... keys) {
+        for (String key : keys) {
+            Object val = map.get(key);
+            if (val != null) {
+                String s = String.valueOf(val).trim();
+                if (!s.isEmpty()) return s;
+            }
+        }
+        return "";
+    }
 
     private String stringFrom(Map<String, Object> map, String key) {
         Object val = map.get(key);

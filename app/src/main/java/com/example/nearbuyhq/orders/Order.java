@@ -1,6 +1,13 @@
 package com.example.nearbuyhq.orders;
 
+import com.google.firebase.Timestamp;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 // Order data model – represents a single customer order stored in NearBuyHQ/{shopId}/orders.
@@ -12,6 +19,9 @@ public class Order {
     private double orderTotal;
     private long createdAt;
     private long updatedAt;
+    private String itemsSummary;   // e.g. "Apples x1" – used when no items array exists
+    // Items list (product name + quantity rows) populated from Firestore
+    private List<Map<String, Object>> items = new ArrayList<>();
 
     // Short constructor used when only the key order fields are available (e.g. from UI intent)
     public Order(String orderId, String customerName, String status,
@@ -47,6 +57,8 @@ public class Order {
     public long   getUpdatedAt()       { return updatedAt; }
     public String getShopId()          { return shopId == null ? "" : shopId; }
     public void   setShopId(String shopId) { this.shopId = shopId; }
+    public List<Map<String, Object>> getItems() { return items; }
+    public String getItemsSummary()    { return itemsSummary == null ? "" : itemsSummary; }
 
     // ── Status update ─────────────────────────────────────────────────────
 
@@ -74,21 +86,96 @@ public class Order {
         return map;
     }
 
-    // Deserialize a Firestore document snapshot into an Order object
+    // Deserialize a Firestore document snapshot into an Order object.
+    // Supports both camelCase (admin app) and alternative field names (customer app).
     public static Order fromMap(String id, Map<String, Object> map) {
         if (map == null) return null;
+
+        // Support many naming conventions for the order total.
+        // totalAmountRaw is the clean numeric value; totalAmount may be a string like "Rs.340"
+        double total = doubleValue(
+                map.get("totalAmountRaw"), map.get("totalAmount"),
+                map.get("orderTotal"),     map.get("total"),
+                map.get("amount"),         map.get("grandTotal"),
+                map.get("subtotal"),       map.get("price"));
+
+        // Support multiple naming conventions for date
+        String date = firstNonEmpty(
+                value(map.get("orderDate")),
+                value(map.get("order_date")),
+                value(map.get("date"))
+        );
+        if (date.isEmpty()) {
+            long ts = longValue(map.get("createdAt"), map.get("created_at"), map.get("timestamp"));
+            if (ts > 0) {
+                date = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(new Date(ts));
+            }
+        }
+
+        String customerName = firstNonEmpty(
+                value(map.get("customerName")),
+                value(map.get("customer_name")),
+                value(map.get("name"))
+        );
+
+        String phone = firstNonEmpty(
+                value(map.get("customerPhone")),
+                value(map.get("customer_phone")),
+                value(map.get("phone"))
+        );
+
+        String address = firstNonEmpty(
+                value(map.get("customerAddress")),
+                value(map.get("customer_address")),
+                value(map.get("address"))
+        );
+
+        long createdAt = longValue(map.get("createdAt"), map.get("created_at"), map.get("timestamp"));
+        long updatedAt = longValue(map.get("updatedAt"), map.get("updated_at"), map.get("timestamp"));
+
         Order o = new Order(
                 id,
-                value(map.get("customerName")),
+                customerName,
                 defaultIfEmpty(value(map.get("status")), "Pending"),
-                doubleValue(map.get("orderTotal"), map.get("total")),
-                value(map.get("orderDate")),
-                value(map.get("customerPhone")),
-                value(map.get("customerAddress")),
-                longValue(map.get("createdAt")),
-                longValue(map.get("updatedAt"))
+                total,
+                date,
+                phone,
+                address,
+                createdAt,
+                updatedAt
         );
-        o.setShopId(value(map.get("shopId")));
+        o.setShopId(firstNonEmpty(value(map.get("shopId")), value(map.get("shop_id"))));
+
+        // Extract items list – try common field names used by customer apps
+        Object rawItems = firstNonNullFrom(map, "items", "orderItems", "products", "cartItems", "lineItems");
+        if (rawItems instanceof List) {
+            for (Object item : (List<?>) rawItems) {
+                if (item instanceof Map) {
+                    //noinspection unchecked
+                    o.items.add((Map<String, Object>) item);
+                }
+            }
+        }
+
+        // Fallback: build a synthetic item row from itemsSummary ("Apples x1") when no items array exists
+        String summary = firstNonEmpty(
+                value(map.get("itemsSummary")),
+                value(map.get("items_summary")),
+                value(map.get("orderSummary")));
+        o.itemsSummary = summary;
+        if (o.items.isEmpty() && !summary.isEmpty()) {
+            // Parse "Product Name x{qty}" pattern
+            Map<String, Object> syntheticItem = new HashMap<>();
+            int xIdx = summary.lastIndexOf(" x");
+            if (xIdx > 0) {
+                syntheticItem.put("name",     summary.substring(0, xIdx).trim());
+                syntheticItem.put("quantity", summary.substring(xIdx + 2).trim());
+            } else {
+                syntheticItem.put("name", summary);
+            }
+            if (total > 0) syntheticItem.put("price", total);
+            o.items.add(syntheticItem);
+        }
         return o;
     }
 
@@ -100,25 +187,59 @@ public class Order {
         return value.isEmpty() ? fallback : value;
     }
 
-    private static double doubleValue(Object primary, Object secondary) {
-        if (primary instanceof Number) {
-            return ((Number) primary).doubleValue();
+    private static String firstNonEmpty(String... candidates) {
+        for (String c : candidates) {
+            if (c != null && !c.isEmpty()) return c;
         }
-        if (secondary instanceof Number) {
-            return ((Number) secondary).doubleValue();
+        return "";
+    }
+
+    private static Object firstNonNullFrom(Map<String, Object> map, String... keys) {
+        for (String key : keys) {
+            Object val = map.get(key);
+            if (val != null) return val;
+        }
+        return null;
+    }
+
+    // Accepts any number of candidate values; returns the first non-zero numeric result.
+    // Also handles String values like "Rs.340" by stripping non-numeric characters.
+    private static double doubleValue(Object... candidates) {
+        for (Object v : candidates) {
+            if (v instanceof Number) {
+                double d = ((Number) v).doubleValue();
+                if (d != 0) return d;
+            }
+            if (v instanceof String) {
+                try {
+                    // Strip currency symbols, letters, spaces – keep digits and dot
+                    String s = ((String) v).replaceAll("[^0-9.]", "").trim();
+                    if (!s.isEmpty()) {
+                        double d = Double.parseDouble(s);
+                        if (d != 0) return d;
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
         }
         return 0d;
     }
 
-    private static long longValue(Object value) {
-        if (value instanceof Number) {
-            return ((Number) value).longValue();
-        }
-        if (value instanceof String) {
-            try {
-                return Long.parseLong((String) value);
-            } catch (NumberFormatException ignored) {
-                return 0L;
+    private static long longValue(Object... candidates) {
+        for (Object value : candidates) {
+            if (value == null) continue;
+            if (value instanceof Number) {
+                long v = ((Number) value).longValue();
+                if (v != 0) return v;
+            }
+            if (value instanceof Timestamp) {
+                long v = ((Timestamp) value).toDate().getTime();
+                if (v != 0) return v;
+            }
+            if (value instanceof String) {
+                try {
+                    long v = Long.parseLong((String) value);
+                    if (v != 0) return v;
+                } catch (NumberFormatException ignored) {}
             }
         }
         return 0L;

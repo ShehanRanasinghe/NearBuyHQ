@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  Single product row used inside activity_order_details.xml container_items  -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingVertical="6dp">
+
+    <!-- Bullet / icon -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🛒"
+        android:textSize="14sp"
+        android:layout_marginEnd="8dp" />
+
+    <!-- Product name + qty -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#1B2D4F"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_product_qty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#9AA0AC"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <!-- Unit price -->
+    <TextView
+        android:id="@+id/tv_product_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#1B2D4F"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
+

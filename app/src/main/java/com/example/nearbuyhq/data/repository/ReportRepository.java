@@ -2,12 +2,13 @@ package com.example.nearbuyhq.data.repository;
 
 import com.example.nearbuyhq.core.firebase.FirebaseConfig;
 import com.example.nearbuyhq.data.remote.firebase.FirebaseCollections;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,8 +68,10 @@ public class ReportRepository {
             return;
         }
 
-        reportsRef(shopId).orderBy("createdAt", Query.Direction.DESCENDING)
-                .get()
+        // NOTE: We intentionally avoid orderBy("createdAt") here because Firestore silently
+        // excludes any document that doesn't have the sorted field.  Reports created by the
+        // customer app may not have 'createdAt', so we fetch ALL documents and sort client-side.
+        reportsRef(shopId).get()
                 .addOnSuccessListener(snaps -> {
                     List<Map<String, Object>> list = new ArrayList<>();
                     for (DocumentSnapshot doc : snaps.getDocuments()) {
@@ -78,9 +81,25 @@ public class ReportRepository {
                             list.add(item);
                         }
                     }
+                    // Sort newest-first using createdAt / created_at / timestamp fields
+                    Collections.sort(list, (a, b) -> {
+                        long ta = resolveTimestamp(a, "createdAt", "created_at", "timestamp");
+                        long tb = resolveTimestamp(b, "createdAt", "created_at", "timestamp");
+                        return Long.compare(tb, ta);
+                    });
                     callback.onSuccess(list);
                 })
                 .addOnFailureListener(callback::onError);
+    }
+
+    /** Resolve a millisecond timestamp from a map, checking multiple possible field names. */
+    private static long resolveTimestamp(Map<String, Object> map, String... keys) {
+        for (String key : keys) {
+            Object val = map.get(key);
+            if (val instanceof Number) return ((Number) val).longValue();
+            if (val instanceof Timestamp) return ((Timestamp) val).toDate().getTime();
+        }
+        return 0L;
     }
 
     /** @deprecated pass shopId; use getReportsByShop(shopId, cb) */
