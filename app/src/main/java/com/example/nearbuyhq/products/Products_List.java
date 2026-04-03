@@ -208,13 +208,15 @@ public class Products_List extends AppCompatActivity {
 
     private void openDetails(ProductItem item) {
         Intent intent = new Intent(this, Product_Details.class);
-        intent.putExtra("product_id", item.getId());
-        intent.putExtra("product_name", item.getName());
+        intent.putExtra("product_id",          item.getId());
+        intent.putExtra("product_name",        item.getName());
         intent.putExtra("product_description", item.getDescription());
-        intent.putExtra("product_category", item.getCategory());
-        intent.putExtra("product_price", item.getPrice());
-        intent.putExtra("product_unit", item.getUnit());
-        intent.putExtra("product_quantity", item.getQuantity());
+        intent.putExtra("product_category",    item.getCategory());
+        intent.putExtra("product_price",       item.getPrice());
+        intent.putExtra("product_unit",        item.getUnit());
+        intent.putExtra("product_quantity",    item.getQuantity());
+        intent.putExtra("product_created_at",  item.getCreatedAt());
+        intent.putExtra("product_image_url",   item.getImageUrl());  // ← Step 8
         startActivity(intent);
     }
 

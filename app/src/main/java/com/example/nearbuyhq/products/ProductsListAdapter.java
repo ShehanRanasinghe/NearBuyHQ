@@ -1,15 +1,18 @@
 package com.example.nearbuyhq.products;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.nearbuyhq.R;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class ProductsListAdapter extends RecyclerView.Adapter<ProductsListAdapte
 
     private List<ProductItem> items;
     private final ProductActionListener listener;
+    private Context context;
 
     public ProductsListAdapter(List<ProductItem> items, ProductActionListener listener) {
         this.items = new ArrayList<>(items);
@@ -40,7 +44,8 @@ public class ProductsListAdapter extends RecyclerView.Adapter<ProductsListAdapte
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item_product, parent, false);
+        context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.activity_item_product, parent, false);
         return new ProductViewHolder(view);
     }
 
@@ -70,6 +75,19 @@ public class ProductsListAdapter extends RecyclerView.Adapter<ProductsListAdapte
         holder.cardRoot.setOnClickListener(v -> listener.onOpen(item));
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(item));
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(item));
+
+        // Load product image with Glide
+        String imageUrl = item.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.ic_eco_leaf)
+                    .error(R.drawable.ic_eco_leaf)
+                    .centerCrop()
+                    .into(holder.ivProductImage);
+        } else {
+            holder.ivProductImage.setImageResource(R.drawable.ic_eco_leaf);
+        }
     }
 
     @Override
@@ -88,20 +106,21 @@ public class ProductsListAdapter extends RecyclerView.Adapter<ProductsListAdapte
         View vStockDot;
         View btnEdit;
         View btnDelete;
+        ImageView ivProductImage;
 
         ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            cardRoot = itemView.findViewById(R.id.cardRoot);
-            tvProductName = itemView.findViewById(R.id.tvProductName);
-            tvCategory = itemView.findViewById(R.id.tvCategory);
-            tvPrice = itemView.findViewById(R.id.tvPrice);
-            tvUnit = itemView.findViewById(R.id.tvUnit);
-            tvStock = itemView.findViewById(R.id.tvStock);
-            llStockBadge = itemView.findViewById(R.id.llStockBadge);
-            vStockDot = itemView.findViewById(R.id.vStockDot);
-            btnEdit = itemView.findViewById(R.id.btnEdit);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            cardRoot       = itemView.findViewById(R.id.cardRoot);
+            tvProductName  = itemView.findViewById(R.id.tvProductName);
+            tvCategory     = itemView.findViewById(R.id.tvCategory);
+            tvPrice        = itemView.findViewById(R.id.tvPrice);
+            tvUnit         = itemView.findViewById(R.id.tvUnit);
+            tvStock        = itemView.findViewById(R.id.tvStock);
+            llStockBadge   = itemView.findViewById(R.id.llStockBadge);
+            vStockDot      = itemView.findViewById(R.id.vStockDot);
+            btnEdit        = itemView.findViewById(R.id.btnEdit);
+            btnDelete      = itemView.findViewById(R.id.btnDelete);
+            ivProductImage = itemView.findViewById(R.id.ivProductImage);
         }
     }
 }
-

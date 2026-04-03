@@ -2,6 +2,8 @@ package com.example.nearbuyhq.products;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.nearbuyhq.R;
 import com.example.nearbuyhq.core.SessionManager;
 import com.example.nearbuyhq.data.repository.OperationCallback;
@@ -30,8 +33,9 @@ public class Product_Details extends AppCompatActivity {
     private String productCategory;
     private double productPrice;
     private String productUnit;
-    private int productQuantity;
-    private long productCreatedAt;
+    private int    productQuantity;
+    private long   productCreatedAt;
+    private String productImageUrl;   // Supabase image URL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +54,15 @@ public class Product_Details extends AppCompatActivity {
     }
 
     private void bindData() {
-        productId = getIntent().getStringExtra("product_id");
-        productName = getIntent().getStringExtra("product_name");
+        productId          = getIntent().getStringExtra("product_id");
+        productName        = getIntent().getStringExtra("product_name");
         productDescription = getIntent().getStringExtra("product_description");
-        productCategory = getIntent().getStringExtra("product_category");
-        productPrice = getIntent().getDoubleExtra("product_price", 0d);
-        productUnit = getIntent().getStringExtra("product_unit");
-        productQuantity = getIntent().getIntExtra("product_quantity", 0);
-        productCreatedAt = getIntent().getLongExtra("product_created_at", 0L);
+        productCategory    = getIntent().getStringExtra("product_category");
+        productPrice       = getIntent().getDoubleExtra("product_price", 0d);
+        productUnit        = getIntent().getStringExtra("product_unit");
+        productQuantity    = getIntent().getIntExtra("product_quantity", 0);
+        productCreatedAt   = getIntent().getLongExtra("product_created_at", 0L);
+        productImageUrl    = getIntent().getStringExtra("product_image_url");
 
         ((TextView) findViewById(R.id.tv_product_name)).setText(productName == null ? "Product" : productName);
         ((TextView) findViewById(R.id.tv_product_description)).setText(productDescription == null ? "No description" : productDescription);
@@ -86,6 +91,22 @@ public class Product_Details extends AppCompatActivity {
             stockStatus.setTextColor(getColor(R.color.success_green));
         }
 
+        // Load product image — show real photo if URL exists, emoji otherwise
+        TextView tvEmoji    = findViewById(R.id.tv_product_emoji);
+        ImageView ivProduct = findViewById(R.id.iv_product_image);
+        if (productImageUrl != null && !productImageUrl.isEmpty()) {
+            tvEmoji.setVisibility(View.GONE);
+            ivProduct.setVisibility(View.VISIBLE);
+            Glide.with(this)
+                    .load(productImageUrl)
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .error(android.R.drawable.ic_menu_report_image)
+                    .centerCrop()
+                    .into(ivProduct);
+        } else {
+            tvEmoji.setVisibility(View.VISIBLE);
+            ivProduct.setVisibility(View.GONE);
+        }
     }
 
     private void setupActions() {
@@ -93,15 +114,16 @@ public class Product_Details extends AppCompatActivity {
 
         findViewById(R.id.btn_edit).setOnClickListener(v -> {
             Intent intent = new Intent(this, Add_Product.class);
-            intent.putExtra("is_edit", true);
-            intent.putExtra("product_id", productId);
-            intent.putExtra("product_name", productName);
-            intent.putExtra("product_description", productDescription);
-            intent.putExtra("product_category", productCategory);
-            intent.putExtra("product_price", productPrice);
-            intent.putExtra("product_unit", productUnit);
-            intent.putExtra("product_quantity", productQuantity);
-            intent.putExtra("product_created_at", productCreatedAt);
+            intent.putExtra("is_edit",              true);
+            intent.putExtra("product_id",           productId);
+            intent.putExtra("product_name",         productName);
+            intent.putExtra("product_description",  productDescription);
+            intent.putExtra("product_category",     productCategory);
+            intent.putExtra("product_price",        productPrice);
+            intent.putExtra("product_unit",         productUnit);
+            intent.putExtra("product_quantity",     productQuantity);
+            intent.putExtra("product_created_at",   productCreatedAt);
+            intent.putExtra("product_image_url",    productImageUrl);  // ← Step 8
             startActivity(intent);
             finish();
         });

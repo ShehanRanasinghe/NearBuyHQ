@@ -60,6 +60,7 @@ public class Inventory extends AppCompatActivity {
         String category;
         String unit;
         String description;
+        String imageUrl;   // ← Supabase image URL
         double price;
         long   createdAt;
         int    currentStock;
@@ -67,16 +68,18 @@ public class Inventory extends AppCompatActivity {
         int    iconRes;
 
         InventoryItem(String productId, String name, String brand, String category,
-                      String unit, String description, double price, long createdAt,
+                      String unit, String description, String imageUrl,
+                      double price, long createdAt,
                       int currentStock, int totalStock, int iconRes) {
-            this.productId   = productId;
-            this.name        = name;
-            this.brand       = brand;
-            this.category    = category;
-            this.unit        = unit;
-            this.description = description;
-            this.price       = price;
-            this.createdAt   = createdAt;
+            this.productId    = productId;
+            this.name         = name;
+            this.brand        = brand;
+            this.category     = category;
+            this.unit         = unit;
+            this.description  = description;
+            this.imageUrl     = imageUrl;
+            this.price        = price;
+            this.createdAt    = createdAt;
             this.currentStock = currentStock;
             this.totalStock   = totalStock;
             this.iconRes      = iconRes;
@@ -182,6 +185,7 @@ public class Inventory extends AppCompatActivity {
                             item.getCategory(),
                             item.getUnit(),
                             item.getDescription() != null ? item.getDescription() : "",
+                            item.getImageUrl() != null ? item.getImageUrl() : "",
                             item.getPrice(),
                             item.getCreatedAt(),
                             current,
@@ -369,6 +373,7 @@ public class Inventory extends AppCompatActivity {
         intent.putExtra("product_unit",        item.unit);
         intent.putExtra("product_quantity",    item.currentStock);
         intent.putExtra("product_created_at",  item.createdAt);
+        intent.putExtra("product_image_url",   item.imageUrl);  // ← Step 8
         startActivity(intent);
     }
 }

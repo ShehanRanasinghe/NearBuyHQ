@@ -86,12 +86,22 @@
                         android:background="@drawable/bg_product_image_circle"
                         android:gravity="center">
 
+                        <!-- Shown when no image URL is available -->
                         <TextView
                             android:id="@+id/tv_product_emoji"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="🍚"
                             android:textSize="60sp" />
+
+                        <!-- Shown when a Supabase image URL is available -->
+                        <ImageView
+                            android:id="@+id/iv_product_image"
+                            android:layout_width="130dp"
+                            android:layout_height="130dp"
+                            android:scaleType="centerCrop"
+                            android:visibility="gone"
+                            android:contentDescription="Product image" />
                     </LinearLayout>
 
                     <!-- Category badge -->
