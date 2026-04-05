@@ -16,11 +16,12 @@ public class ProductItem {
     private double price;
     private int quantity;
     private String status;
+    private String expiryDate;
     private long createdAt;
     private long updatedAt;
 
     public ProductItem(String id, String shopId, String name, String description, String category,
-                       String unit, double price, int quantity, String status, long createdAt, long updatedAt) {
+                       String unit, double price, int quantity, String status, String expiryDate, long createdAt, long updatedAt) {
         this.id = id;
         this.shopId = shopId;
         this.name = name;
@@ -30,6 +31,7 @@ public class ProductItem {
         this.price = price;
         this.quantity = quantity;
         this.status = status;
+        this.expiryDate = expiryDate;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -43,6 +45,7 @@ public class ProductItem {
     public double getPrice() { return price; }
     public int getQuantity() { return quantity; }
     public String getStatus() { return status; }
+    public String getExpiryDate() { return expiryDate; }
     public long getCreatedAt() { return createdAt; }
     public long getUpdatedAt() { return updatedAt; }
 
@@ -74,6 +77,7 @@ public class ProductItem {
         map.put("quantity", quantity);
         map.put("stockQuantity", quantity);
         map.put("status", status);
+        map.put("expiryDate", defaultIfBlank(expiryDate, ""));
         map.put("createdAt", createdAt);
         map.put("updatedAt", updatedAt);
         return map;
@@ -108,6 +112,7 @@ public class ProductItem {
                 doubleValue(map.get("price")),
                 quantity,
                 defaultIfBlank(stringValue(map.get("status")), resolveStatus(quantity)),
+                stringValue(map.get("expiryDate")),
                 longValue(map.get("createdAt")),
                 longValue(map.get("updatedAt"))
         );

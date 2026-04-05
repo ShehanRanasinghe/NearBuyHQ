@@ -12,7 +12,7 @@ import com.example.nearbuyhq.R;
 
 import java.util.List;
 
-public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportViewHolder> {
+public class  ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportViewHolder> {
 
     private List<Report> reportsList;
     private OnReportClickListener listener;

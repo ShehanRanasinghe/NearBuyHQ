@@ -31,6 +31,7 @@ public class Product_Details extends AppCompatActivity {
     private double productPrice;
     private String productUnit;
     private int productQuantity;
+    private String productExpiryDate;
     private long productCreatedAt;
 
     @Override
@@ -57,6 +58,7 @@ public class Product_Details extends AppCompatActivity {
         productPrice = getIntent().getDoubleExtra("product_price", 0d);
         productUnit = getIntent().getStringExtra("product_unit");
         productQuantity = getIntent().getIntExtra("product_quantity", 0);
+        productExpiryDate = getIntent().getStringExtra("product_expiry_date");
         productCreatedAt = getIntent().getLongExtra("product_created_at", 0L);
 
         ((TextView) findViewById(R.id.tv_product_name)).setText(productName == null ? "Product" : productName);
@@ -101,6 +103,7 @@ public class Product_Details extends AppCompatActivity {
             intent.putExtra("product_price", productPrice);
             intent.putExtra("product_unit", productUnit);
             intent.putExtra("product_quantity", productQuantity);
+            intent.putExtra("product_expiry_date", productExpiryDate);
             intent.putExtra("product_created_at", productCreatedAt);
             startActivity(intent);
             finish();

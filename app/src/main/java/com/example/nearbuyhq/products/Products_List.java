@@ -215,6 +215,8 @@ public class Products_List extends AppCompatActivity {
         intent.putExtra("product_price", item.getPrice());
         intent.putExtra("product_unit", item.getUnit());
         intent.putExtra("product_quantity", item.getQuantity());
+        intent.putExtra("product_expiry_date", item.getExpiryDate());
+        intent.putExtra("product_created_at", item.getCreatedAt());
         startActivity(intent);
     }
 

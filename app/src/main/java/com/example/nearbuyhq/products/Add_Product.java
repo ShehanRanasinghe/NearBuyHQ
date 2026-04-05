@@ -1,5 +1,6 @@
 package com.example.nearbuyhq.products;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -22,6 +23,9 @@ import com.example.nearbuyhq.data.repository.ProductRepository;
 import com.example.nearbuyhq.orders.Order_List;
 import com.example.nearbuyhq.settings.ProfilePage;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 // Add/Edit product screen – validates form inputs, assigns a category, then saves to NearBuyHQ/{userId}/products.
 public class Add_Product extends AppCompatActivity {
 
@@ -32,6 +36,7 @@ public class Add_Product extends AppCompatActivity {
     private EditText etStock;
     private TextView btnSave;
     private TextView btnCancel;
+    private TextView tvExpiryDate;
     private TextView catVegetables;
     private TextView catFruits;
     private TextView catGrains;
@@ -47,6 +52,7 @@ public class Add_Product extends AppCompatActivity {
 
     private ProductRepository productRepository;
     private String selectedCategory = "Vegetables";
+    private String selectedExpiryDate = "";
     private boolean editMode;
     private String editingProductId;
     private long originalCreatedAt;
@@ -81,6 +87,7 @@ public class Add_Product extends AppCompatActivity {
         etStock = findViewById(R.id.et_stock);
         btnSave = findViewById(R.id.btn_save);
         btnCancel = findViewById(R.id.btn_cancel);
+        tvExpiryDate = findViewById(R.id.tv_product_expiry_date);
         catVegetables = findViewById(R.id.btn_cat_vegetables);
         catFruits     = findViewById(R.id.btn_cat_fruits);
         catGrains     = findViewById(R.id.btn_cat_grains);
@@ -98,6 +105,7 @@ public class Add_Product extends AppCompatActivity {
     private void setupActions() {
         btnCancel.setOnClickListener(v -> finish());
         btnSave.setOnClickListener(v -> saveProduct());
+        tvExpiryDate.setOnClickListener(v -> openExpiryDatePicker());
     }
 
     private void setupCategories() {
@@ -189,6 +197,7 @@ public class Add_Product extends AppCompatActivity {
                 price,
                 stock,
                 ProductItem.resolveStatus(stock),
+                selectedExpiryDate,
                 createdAt,
                 now
         );
@@ -215,6 +224,21 @@ public class Add_Product extends AppCompatActivity {
         } else {
             productRepository.createProduct(item, callback);
         }
+    }
+
+    private void openExpiryDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog picker = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    selectedExpiryDate = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth);
+                    tvExpiryDate.setText(selectedExpiryDate);
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        picker.show();
     }
 
     private void setSaving(boolean saving) {
@@ -247,6 +271,12 @@ public class Add_Product extends AppCompatActivity {
         String incomingCategory = getIntent().getStringExtra("product_category");
         if (incomingCategory != null && !incomingCategory.trim().isEmpty()) {
             selectedCategory = incomingCategory;
+        }
+
+        String incomingExpiryDate = getIntent().getStringExtra("product_expiry_date");
+        if (incomingExpiryDate != null && !incomingExpiryDate.trim().isEmpty()) {
+            selectedExpiryDate = incomingExpiryDate;
+            tvExpiryDate.setText(selectedExpiryDate);
         }
         updateCategoryStyles();
         btnSave.setText("Update Product");
