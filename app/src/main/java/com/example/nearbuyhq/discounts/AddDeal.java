@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +30,21 @@ import java.util.Locale;
 // Add/Edit deal screen – creates or updates a shop-wide deal stored in NearBuyHQ/{userId}/deals.
 public class AddDeal extends AppCompatActivity {
 
+    private static final int MAX_DEALS = 5;   // maximum deals a shop can have
+
     private EditText dealTitle, dealDescription, dealValidity;
     private TextView btnSubmit, btnCancel;
     private DiscountRepository discountRepository;
     private boolean editMode;
     private String editDealId;
     private long originalCreatedAt;
+    private boolean limitReached = false;
+
+    // Deal-limit card views
+    private TextView   tvCurrentDealCount;
+    private TextView   tvMaxDealCount;
+    private ProgressBar progressDealLimit;
+    private TextView   tvDealLimitInfo;
 
     // Bottom navigation
     private LinearLayout navDashboard, navProducts, navOrders, navAnalytics, navProfile;
@@ -56,6 +66,14 @@ public class AddDeal extends AppCompatActivity {
         btnSubmit = findViewById(R.id.btnSubmit);
         btnCancel = findViewById(R.id.btnCancel);
         discountRepository = new DiscountRepository();
+
+        // Deal-limit card
+        tvCurrentDealCount = findViewById(R.id.tvCurrentDealCount);
+        tvMaxDealCount     = findViewById(R.id.tvMaxDealCount);
+        progressDealLimit  = findViewById(R.id.progressDealLimit);
+        tvDealLimitInfo    = findViewById(R.id.tvDealLimitInfo);
+        tvMaxDealCount.setText(String.valueOf(MAX_DEALS));
+        progressDealLimit.setMax(MAX_DEALS);
 
         // Bottom navigation
         navDashboard = findViewById(R.id.navDashboard);
@@ -89,11 +107,18 @@ public class AddDeal extends AppCompatActivity {
         });
 
         bindEditPayload();
+        loadDealLimitCard();   // fetch current deal count and update the limit card
 
         ImageView btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> finish());
 
         btnSubmit.setOnClickListener(v -> {
+            if (limitReached && !editMode) {
+                Toast.makeText(this,
+                        "Deal limit reached (" + MAX_DEALS + "). Delete an existing deal to create a new one.",
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
             if (validateInputs()) {
                 saveDeal();
             }
@@ -102,6 +127,52 @@ public class AddDeal extends AppCompatActivity {
         btnCancel.setOnClickListener(v -> finish());
 
         setupBottomNavigation();
+    }
+
+    // ── Deal limit card ───────────────────────────────────────────────────────
+
+    private void loadDealLimitCard() {
+        String userId = SessionManager.getInstance(this).getUserId();
+        if (userId == null || userId.isEmpty()) {
+            tvDealLimitInfo.setText("Could not load deal count.");
+            return;
+        }
+
+        discountRepository.getDealsByUserId(userId, new com.example.nearbuyhq.data.repository.DataCallback<java.util.List<Deal>>() {
+            @Override
+            public void onSuccess(java.util.List<Deal> deals) {
+                int current = deals != null ? deals.size() : 0;
+                int remaining = MAX_DEALS - current;
+                limitReached = current >= MAX_DEALS;
+
+                tvCurrentDealCount.setText(String.valueOf(current));
+                progressDealLimit.setProgress(current);
+
+                if (limitReached) {
+                    tvDealLimitInfo.setText(
+                            "You have reached the maximum of " + MAX_DEALS + " deals. "
+                            + "Please delete an existing deal before creating a new one.");
+                    tvDealLimitInfo.setTextColor(0xFFE03B2F);   // red warning
+                    progressDealLimit.setProgressTintList(
+                            android.content.res.ColorStateList.valueOf(0xFFE03B2F));
+                    if (!editMode) {
+                        btnSubmit.setEnabled(false);
+                        btnSubmit.setAlpha(0.5f);
+                    }
+                } else {
+                    tvDealLimitInfo.setText(
+                            "You can create up to " + MAX_DEALS + " deals. "
+                            + remaining + " slot" + (remaining == 1 ? "" : "s") + " remaining.");
+                    tvDealLimitInfo.setTextColor(0xFF6B7A8D);
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                tvCurrentDealCount.setText("?");
+                tvDealLimitInfo.setText("Could not load deal count.");
+            }
+        });
     }
 
     private void setupBottomNavigation() {
