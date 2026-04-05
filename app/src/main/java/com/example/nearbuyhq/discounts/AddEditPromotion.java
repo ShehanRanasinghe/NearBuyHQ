@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,6 +51,11 @@ public class AddEditPromotion extends AppCompatActivity {
     private TextView  tvStartDate, tvEndDate, tvDiscountedPrice, tvFormTitle;
     private Switch    switchActive;
     private Button    btnSave;
+
+    // ── Promotion Guide (explanation section) ───────────────────────────
+    private TextView tvPromoTypeEmoji;   // large emoji in the type banner
+    private TextView tvPromoTypeName;    // e.g. "Ramadan"
+    private TextView tvPromoTypeDesc;    // one-line description for the selected type
 
     // Bottom navigation
     private LinearLayout navDashboard, navProducts, navOrders, navAnalytics, navProfile;
@@ -96,11 +102,30 @@ public class AddEditPromotion extends AppCompatActivity {
         btnSave           = findViewById(R.id.btnSavePromotion);
         discountRepository = new DiscountRepository();
 
+        // ── Promotion Guide view bindings ────────────────────────────────
+        tvPromoTypeEmoji = findViewById(R.id.tvPromoTypeEmoji);
+        tvPromoTypeName  = findViewById(R.id.tvPromoTypeName);
+        tvPromoTypeDesc  = findViewById(R.id.tvPromoTypeDesc);
+
         // ── Spinner setup ────────────────────────────────────────────────
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, TYPES);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerType.setAdapter(typeAdapter);
+
+        // Update the explanation card whenever the user picks a different type
+        spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateTypeExplanation(TYPES[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { /* no-op */ }
+        });
+
+        // Show explanation for the default selection immediately
+        updateTypeExplanation(TYPES[0]);
 
         // ── Default dates (today) ────────────────────────────────────────
         String today = sdf.format(new Date());
@@ -154,6 +179,45 @@ public class AddEditPromotion extends AppCompatActivity {
         // Wire back and save buttons
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         btnSave.setOnClickListener(v -> savePromotion());
+    }
+
+    // ── Promotion Guide – type explanation ──────────────────────────────────
+
+    /**
+     * Refreshes the three promotion-guide views (emoji, type name, description)
+     * whenever the user changes the Occasion / Type spinner selection.
+     */
+    private void updateTypeExplanation(String type) {
+        // Reuse the emoji logic that already lives in Promotion
+        Promotion temp = new Promotion();
+        temp.setType(type);
+        tvPromoTypeEmoji.setText(temp.getTypeEmoji());
+        tvPromoTypeName.setText(type);
+
+        final String desc;
+        switch (type) {
+            case Promotion.TYPE_RAMADAN:
+                desc = "Perfect for Ramadan season — celebrate with special iftar deals, "
+                        + "bulk discounts on food items, and family bundle offers.";
+                break;
+            case Promotion.TYPE_CHRISTMAS:
+                desc = "Spread festive cheer with Christmas deals. Great for gift bundles, "
+                        + "seasonal products, holiday specials, and end-of-year clearances.";
+                break;
+            case Promotion.TYPE_NEW_YEAR:
+                desc = "Kick off the New Year with exciting offers to attract fresh customers "
+                        + "and reward loyal ones. Works well for all categories.";
+                break;
+            case Promotion.TYPE_THAI_PONGAL:
+                desc = "Celebrate the Thai Pongal harvest festival with special discounts on "
+                        + "traditional produce, sweets, and seasonal goods.";
+                break;
+            default: // TYPE_CUSTOM
+                desc = "Create a fully custom promotion for any occasion, flash sale, "
+                        + "product launch, or clearance event — no restrictions.";
+                break;
+        }
+        tvPromoTypeDesc.setText(desc);
     }
 
     // ── Bottom Navigation ────────────────────────────────────────────────────
@@ -286,6 +350,9 @@ public class AddEditPromotion extends AppCompatActivity {
                 break;
             }
         }
+
+        // Refresh the explanation card to match the loaded type
+        updateTypeExplanation(editing.getType());
         recalcDiscount();
     }
 
@@ -335,7 +402,6 @@ public class AddEditPromotion extends AppCompatActivity {
                 ? editing.getUserId()
                 : SessionManager.getInstance(this).getUserId();
         p.setUserId(userId);
-
 
         setSaving(true);
         discountRepository.savePromotion(p, new OperationCallback() {

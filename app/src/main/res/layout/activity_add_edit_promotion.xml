@@ -27,7 +27,6 @@
             android:padding="8dp"
             android:layout_marginEnd="12dp" />
 
-        <!-- App Logo & Name -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -74,7 +73,6 @@
             android:padding="20dp">
 
             <!-- SECTION: Basic Info ─────────────────────────────────────── -->
-
 
             <!-- Card wrapping basic fields -->
             <LinearLayout
@@ -151,6 +149,349 @@
                     android:textSize="14sp"
                     android:inputType="textCapSentences" />
             </LinearLayout>
+
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- SECTION: Promotion Guide / Explanation ─────────────────── -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PROMOTION GUIDE"
+                android:textColor="@color/coral_primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.12"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="10dp" />
+
+            <LinearLayout
+                android:id="@+id/cardPromoGuide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_order_card"
+                android:padding="16dp"
+                android:elevation="2dp"
+                android:layout_marginBottom="16dp">
+
+                <!-- ── Dynamic Type Banner ─────────────────────────────── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_promo_card"
+                    android:padding="14dp"
+                    android:layout_marginBottom="14dp">
+
+                    <!-- Occasion Emoji -->
+                    <TextView
+                        android:id="@+id/tvPromoTypeEmoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🏷️"
+                        android:textSize="32sp"
+                        android:layout_marginEnd="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- Type name label -->
+                        <TextView
+                            android:id="@+id/tvPromoTypeName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Custom"
+                            android:textColor="@color/coral_primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <!-- Type description (changes with spinner) -->
+                        <TextView
+                            android:id="@+id/tvPromoTypeDesc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Create a fully custom promotion for any occasion or product launch."
+                            android:textColor="@color/text_dark_secondary"
+                            android:textSize="12sp"
+                            android:lineSpacingMultiplier="1.35" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ── Divider ─────────────────────────────────────────── -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider_dark"
+                    android:layout_marginBottom="14dp" />
+
+                <!-- ── How it works — static info rows ────────────────── -->
+
+                <!-- Info header -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="How this promotion works"
+                    android:textColor="@color/text_dark_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Info Row 1: Visibility -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="top"
+                    android:layout_marginBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:gravity="center"
+                        android:background="@drawable/bg_promo_card"
+                        android:layout_marginEnd="12dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📣"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Visible to nearby customers"
+                            android:textColor="@color/text_dark_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="2dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Once active, this promotion is shown to customers browsing shops near your location."
+                            android:textColor="@color/text_dark_secondary"
+                            android:textSize="11sp"
+                            android:lineSpacingMultiplier="1.35" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Info Row 2: Auto-Expiry -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="top"
+                    android:layout_marginBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:gravity="center"
+                        android:background="@drawable/bg_promo_card"
+                        android:layout_marginEnd="12dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📅"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Auto-expires on end date"
+                            android:textColor="@color/text_dark_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="2dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="The promotion is automatically marked as expired after the end date passes. No manual action needed."
+                            android:textColor="@color/text_dark_secondary"
+                            android:textSize="11sp"
+                            android:lineSpacingMultiplier="1.35" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Info Row 3: Price calculation -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="top"
+                    android:layout_marginBottom="14dp">
+
+                    <LinearLayout
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:gravity="center"
+                        android:background="@drawable/bg_promo_card"
+                        android:layout_marginEnd="12dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🏷️"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Live discounted price preview"
+                            android:textColor="@color/text_dark_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="2dp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Enter the original price and discount % below to instantly see the final price customers will pay."
+                            android:textColor="@color/text_dark_secondary"
+                            android:textSize="11sp"
+                            android:lineSpacingMultiplier="1.35" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ── Divider ─────────────────────────────────────────── -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider_dark"
+                    android:layout_marginBottom="14dp" />
+
+                <!-- ── Tips for better results ─────────────────────────── -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💡  Tips for better results"
+                    android:textColor="@color/text_dark_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Tip 1 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="top"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="✅"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Set a clear start and end date so customers know exactly when to act."
+                        android:textColor="@color/text_dark_secondary"
+                        android:textSize="11sp"
+                        android:lineSpacingMultiplier="1.35" />
+                </LinearLayout>
+
+                <!-- Tip 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="top"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="✅"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Discounts between 10–30% attract the most customers without hurting your profit margin."
+                        android:textColor="@color/text_dark_secondary"
+                        android:textSize="11sp"
+                        android:lineSpacingMultiplier="1.35" />
+                </LinearLayout>
+
+                <!-- Tip 3 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="top"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="✅"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Schedule promotions in advance — set the dates, toggle Active on, and it goes live automatically."
+                        android:textColor="@color/text_dark_secondary"
+                        android:textSize="11sp"
+                        android:lineSpacingMultiplier="1.35" />
+                </LinearLayout>
+
+                <!-- Tip 4 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="top">
+
+                    <TextView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:text="✅"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Name your promotion clearly (e.g. \"Ramadan Iftar Bundle\") so it stands out in customer listings."
+                    android:textColor="@color/text_dark_secondary"
+                    android:textSize="11sp"
+                    android:lineSpacingMultiplier="1.35" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <!-- ── END: Promotion Guide ───────────────────────────────── -->
 
             <!-- SECTION: Pricing ────────────────────────────────────────── -->
             <TextView
