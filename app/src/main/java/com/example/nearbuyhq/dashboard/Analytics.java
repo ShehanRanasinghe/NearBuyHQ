@@ -45,7 +45,7 @@ import java.util.Locale;
 public class Analytics extends AppCompatActivity {
 
     // ── Stat TextViews ────────────────────────────────────────────────────
-    private TextView txtTotalRevenue, txtTotalSales;
+    private TextView txtTotalRevenue, txtTotalSales, txtCancelledRevenue, txtCancelledRevenueTrend;
     private TextView txtCompletedOrders, txtPendingOrders, txtCancelledOrders, txtProcessingOrders;
 
     // ── Sales Bar Chart ───────────────────────────────────────────────────
@@ -68,9 +68,11 @@ public class Analytics extends AppCompatActivity {
         orderRepository = new OrderRepository();
 
         // Stat cards
-        txtTotalRevenue    = findViewById(R.id.txtTotalRevenue);
-        txtTotalSales      = findViewById(R.id.txtTotalSales);
-        txtCompletedOrders  = findViewById(R.id.txtCompletedOrders);
+        txtTotalRevenue      = findViewById(R.id.txtTotalRevenue);
+        txtTotalSales        = findViewById(R.id.txtTotalSales);
+        txtCancelledRevenue  = findViewById(R.id.txtCancelledRevenue);
+        txtCancelledRevenueTrend = findViewById(R.id.txtCancelledRevenueTrend);
+        txtCompletedOrders   = findViewById(R.id.txtCompletedOrders);
         txtPendingOrders    = findViewById(R.id.txtPendingOrders);
         txtCancelledOrders  = findViewById(R.id.txtCancelledOrders);
         txtProcessingOrders = findViewById(R.id.txtProcessingOrders);
@@ -133,6 +135,7 @@ public class Analytics extends AppCompatActivity {
                 int    pendingCount    = 0;
                 int    processingCount = 0;
                 int    cancelledCount  = 0;
+                double cancelledRevenue = 0;
 
                 // --- compute start-of-week (Monday 00:00:00) in millis ---
                 Calendar weekCal = Calendar.getInstance();
@@ -172,6 +175,9 @@ public class Analytics extends AppCompatActivity {
                     if (!isCancelled) {
                         totalRevenue += o.getOrderTotal();
                         totalSales++;
+                    } else {
+                        // Accumulate the monetary value lost to cancellations
+                        cancelledRevenue += o.getOrderTotal();
                     }
 
                     // Weekly chart — skip cancelled orders, normalize timestamp
@@ -187,19 +193,24 @@ public class Analytics extends AppCompatActivity {
                     }
                 }
 
-                final double revenue    = totalRevenue;
-                final int    sales      = totalSales;
-                final int    completed  = completedCount;
-                final int    pending    = pendingCount;
-                final int    processing = processingCount;
-                final int    cancelled  = cancelledCount;
-                final float[] weeklyData = dailyRevenue;
+                final double revenue        = totalRevenue;
+                final int    sales          = totalSales;
+                final int    completed      = completedCount;
+                final int    pending        = pendingCount;
+                final int    processing     = processingCount;
+                final int    cancelled      = cancelledCount;
+                final double cancelledRev   = cancelledRevenue;
+                final float[] weeklyData    = dailyRevenue;
 
                 runOnUiThread(() -> {
                     if (txtTotalRevenue    != null)
                         txtTotalRevenue.setText(String.format(Locale.US, "Rs. %.0f", revenue));
                     if (txtTotalSales      != null)
                         txtTotalSales.setText(String.valueOf(sales));
+                    if (txtCancelledRevenue != null)
+                        txtCancelledRevenue.setText(String.format(Locale.US, "Rs. %.0f", cancelledRev));
+                    if (txtCancelledRevenueTrend != null)
+                        txtCancelledRevenueTrend.setText(cancelled + " order" + (cancelled == 1 ? "" : "s"));
                     if (txtCompletedOrders != null)
                         txtCompletedOrders.setText(String.valueOf(completed));
                     if (txtPendingOrders   != null)

@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2"
+                android:weightSum="3"
                 android:layout_marginBottom="16dp">
 
                 <!-- Total Revenue Card -->
@@ -111,8 +111,8 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:background="@drawable/bg_stat_card_green"
-                    android:padding="16dp"
-                    android:layout_marginEnd="8dp">
+                    android:padding="12dp"
+                    android:layout_marginEnd="4dp">
 
                     <ImageView
                         android:layout_width="32dp"
@@ -128,8 +128,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/total_revenue"
                         android:textColor="@color/text_dark_secondary"
-                        android:textSize="12sp"
-                        android:layout_marginTop="12dp" />
+                        android:textSize="11sp"
+                        android:layout_marginTop="10dp" />
 
                     <TextView
                         android:id="@+id/txtTotalRevenue"
@@ -137,7 +137,7 @@
                         android:layout_height="wrap_content"
                         android:text="—"
                         android:textColor="@color/text_dark_primary"
-                        android:textSize="24sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp" />
 
@@ -153,6 +153,56 @@
 
                 </LinearLayout>
 
+                <!-- Cancelled Order Revenue Card -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_stat_card_red"
+                    android:padding="12dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@android:drawable/ic_menu_close_clear_cancel"
+                        android:padding="6dp"
+                        android:background="@drawable/bg_stat_icon_red"
+                        app:tint="@color/stat_red"
+                        android:contentDescription="@string/cancelled_revenue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cancelled_revenue"
+                        android:textColor="@color/text_dark_secondary"
+                        android:textSize="11sp"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:id="@+id/txtCancelledRevenue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        android:textColor="@color/text_dark_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp" />
+
+                    <TextView
+                        android:id="@+id/txtCancelledRevenueTrend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/stat_red"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
                 <!-- Total Sales Card -->
                 <LinearLayout
                     android:layout_width="0dp"
@@ -160,8 +210,8 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:background="@drawable/bg_stat_card_blue"
-                    android:padding="16dp"
-                    android:layout_marginStart="8dp">
+                    android:padding="12dp"
+                    android:layout_marginStart="4dp">
 
                     <ImageView
                         android:layout_width="32dp"
@@ -177,8 +227,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/total_sales"
                         android:textColor="@color/text_dark_secondary"
-                        android:textSize="12sp"
-                        android:layout_marginTop="12dp" />
+                        android:textSize="11sp"
+                        android:layout_marginTop="10dp" />
 
                     <TextView
                         android:id="@+id/txtTotalSales"
@@ -186,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:text="—"
                         android:textColor="@color/text_dark_primary"
-                        android:textSize="24sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp" />
 

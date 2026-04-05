@@ -99,6 +99,7 @@
     <string name="revenue_summary">Revenue Summary</string>
     <string name="total_sales">Total Sales</string>
     <string name="total_revenue">Total Revenue</string>
+    <string name="cancelled_revenue">Cancelled Revenue</string>
     <string name="avg_order_value">Avg Order Value</string>
     <string name="total_customers">Total Customers</string>
     <string name="daily_sales">Daily Sales</string>
